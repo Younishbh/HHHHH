@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مشاهدة المسلسل</title>
+  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      text-align: center;
+      font-family: sans-serif;
+    }
+    .video-container {
+      max-width: 800px;
+      margin: 20px auto;
+    }
+    .controls {
+      margin-top: 10px;
+    }
+    .controls button {
+      background: #e91e63;
+      color: #fff;
+      border: none;
+      padding: 8px 15px;
+      margin: 5px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🎬 مشاهدة المسلسل</h2>
+
+  <div class="video-container">
+    <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="auto">
+      <source src="https://hls1-cdn49.cloudlionscdn.com/hls/rLnM1IPCsaMvsRE8VCABEw5leL6LaV/index_854x480.m3u8" type="application/x-mpegURL" />
+    </video>
+  </div>
+
+  <div class="controls">
+    <button onclick="setQuality('480')">دقة 480p</button>
+    <button onclick="setQuality('720')">دقة 720p</button>
+    <button onclick="rotateVideo()">🔄 تدوير</button>
+    <button onclick="toggleFullscreen()">⛶ تكبير الشاشة</button>
+  </div>
+
+  <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+  <script>
+    var player = videojs('my-video');
+    var currentRotation = 0;
+
+    function setQuality(q) {
+      if (q === '480') {
+        player.src({ src: "https://hls1-cdn49.cloudlionscdn.com/hls/rLnM1IPCsaMvsRE8VCABEw5leL6LaV/index_854x480.m3u8", type: "application/x-mpegURL" });
+      } else if (q === '720') {
+        player.src({ src: "https://hls1-cdn49.cloudlionscdn.com/hls/rLnM1IPCsaMvsRE8VCABEw5leL6LaV/index_1280x720.m3u8", type: "application/x-mpegURL" });
+      }
+      player.play();
+    }
+
+    function rotateVideo() {
+      currentRotation = (currentRotation + 90) % 360;
+      document.querySelector('#my-video').style.transform = "rotate(" + currentRotation + "deg)";
+    }
+
+    function toggleFullscreen() {
+      if (player.isFullscreen()) {
+        player.exitFullscreen();
+      } else {
+        player.requestFullscreen();
+      }
+    }
+  </script>
+
+</body>
+</html>
