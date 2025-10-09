@@ -1,84 +1,203 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>مشاهدة المسلسل</title>
-  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>موقعي للأفلام</title>
   <style>
-    body {
-      background: #111;
-      color: #fff;
-      text-align: center;
-      font-family: sans-serif;
-    }
-    .video-container {
-      max-width: 800px;
-      margin: 20px auto;
-    }
-    .controls {
-      margin-top: 10px;
-    }
-    .controls button {
-      background: #e91e63;
-      color: #fff;
-      border: none;
-      padding: 8px 15px;
-      margin: 5px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+    :root{ --bg:#0b0b0f; --card:#0f1720; --accent:#ff6b6b; --muted:#9aa3b2; }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:Tahoma, Arial, sans-serif; background:linear-gradient(180deg,#05060a, #0b0b0f); color:#eef2ff; direction:rtl}
+    header{padding:18px 20px; display:flex; gap:16px; align-items:center; justify-content:space-between}
+    h1{margin:0;font-size:20px}
+    .container{max-width:1100px;margin:18px auto;padding:0 18px}
+    .layout{display:grid;grid-template-columns:340px 1fr;gap:18px}
+    .card{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,0.6)}
+    .player-wrap{border-radius:10px;overflow:hidden}
+    video{width:100%;height:520px;background:#000;display:block}
+    .meta{margin-top:12px}
+    .meta h2{margin:0 0 6px 0}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:8px;cursor:pointer}
+    .btn.primary{background:var(--accent);border:0;color:#111}
+    .search{display:flex;gap:8px;margin-bottom:12px}
+    input[type=text], input[type=url]{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+    .movie-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    .movie-item{display:flex;gap:8px;align-items:center;padding:8px;border-radius:8px;cursor:pointer}
+    .movie-item:hover{background:rgba(255,255,255,0.02)}
+    .poster{width:64px;height:40px;background:#111;border-radius:6px;flex:0 0 64px;object-fit:cover}
+    .title{font-size:14px}
+    .small{font-size:12px;color:var(--muted)}
+    footer{padding:18px;text-align:center;color:var(--muted)}
+    @media (max-width:900px){.layout{grid-template-columns:1fr;}.player-wrap video{height:260px}}
   </style>
 </head>
 <body>
+  <header>
+    <h1>موقعي للأفلام</h1>
+    <div class="small">مشغل HLS بسيط • أضف روابط m3u8 وشغّل</div>
+  </header>  <main class="container">
+    <div class="layout">
+      <aside class="card">
+        <div class="search">
+          <input type="text" id="search" placeholder="ابحث باسم الفيلم أو الوصف">
+        </div><div>
+      <label>أضف فيلم جديد (عنوان + رابط m3u8)</label>
+      <input type="text" id="title" placeholder="عنوان الفيلم">
+      <input type="url" id="url" placeholder="https://.../index.m3u8" style="margin-top:8px">
+      <input type="url" id="poster" placeholder="رابط صورة غلاف (اختياري)" style="margin-top:8px">
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn primary" id="addBtn">أضف +</button>
+        <button class="btn" id="clearBtn">امسح القائمة</button>
+      </div>
+      <div class="small" style="margin-top:10px">يمكن حفظ القائمة محليًا في المتصفح (localStorage).</div>
+    </div>
 
-  <h2>🎬 مشاهدة المسلسل</h2>
+    <div class="movie-list" id="movieList" style="margin-top:12px"></div>
 
-  <div class="video-container">
-    <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="auto">
-      <source src="https://s1-hls1-cdn54.strmupcdn.cc/hls/U3yy9GCGPDUibEAswx18yRWSjdQsGf/index_1280x720.m3u8?token=f3d51a94a24d1f29e20c89f26b4f6c7d-1760000736-2a09%3Abac5%3A41b2%3A2682%3A%3A3d6%3Ae-09d42d55a2d6d8a879191837e9c3970fccaae3200d4d062f61025b66e4737a5d" type="application/x-mpegURL" />
-    </video>
-  </div>
+  </aside>
 
-  <div class="controls">
-    <button onclick="setQuality('720')">🎥 دقة 720p</button>
-    <button onclick="setQuality('1080')">🎥 دقة 1080p</button>
-    <button onclick="rotateVideo()">🔄 تدوير</button>
-    <button onclick="toggleFullscreen()">⛶ تكبير الشاشة</button>
-  </div>
+  <section>
+    <div class="card player-wrap">
+      <video id="player" controls playsinline crossorigin="anonymous"></video>
+    </div>
 
-  <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-  <script>
-    var player = videojs('my-video');
-    var currentRotation = 0;
+    <div class="card meta">
+      <h2 id="nowTitle">لا يوجد فيديو مُشغل</h2>
+      <div class="small" id="nowUrl"></div>
+      <div class="controls">
+        <button class="btn" id="openBtn">افتح بمثال المتصفح</button>
+        <button class="btn" id="copyBtn">انسخ رابط الفيديو</button>
+        <button class="btn" id="downloadBtn">تحميل (قد لا يعمل لكل الروابط)</button>
+      </div>
+    </div>
 
-    function setQuality(q) {
-      if (q === '720') {
-        player.src({ 
-          src: "https://s1-hls1-cdn54.strmupcdn.cc/hls/U3yy9GCGPDUibEAswx18yRWSjdQsGf/index_1280x720.m3u8?token=f3d51a94a24d1f29e20c89f26b4f6c7d-1760000736-2a09%3Abac5%3A41b2%3A2682%3A%3A3d6%3Ae-09d42d55a2d6d8a879191837e9c3970fccaae3200d4d062f61025b66e4737a5d", 
-          type: "application/x-mpegURL" 
-        });
-      } else if (q === '1080') {
-        player.src({ 
-          src: "https://s1-hls1-cdn54.strmupcdn.cc/hls/U3yy9GCGPDUibEAswx18yRWSjdQsGf/index_1920x1080.m3u8?token=f3d51a94a24d1f29e20c89f26b4f6c7d-1760000736-2a09%3Abac5%3A41b2%3A2682%3A%3A3d6%3Ae-09d42d55a2d6d8a879191837e9c3970fccaae3200d4d062f61025b66e4737a5d", 
-          type: "application/x-mpegURL" 
-        });
-      }
-      player.play();
+    <div class="card" style="margin-top:12px">
+      <h3 style="margin:0 0 8px 0">ملاحظات مهمة</h3>
+      <ul style="margin:0;padding-left:18px;color:var(--muted);">
+        <li>بعض روابط m3u8 تحتوي توكن مؤقت أو حماية CORS — قد لا تعمل عند الاستضافة على دومين آخر.</li>
+        <li>اذا لم يعمل الفيديو: جرّب فتح الرابط مباشرة في المتصفح أو في برنامج يدعم HLS (VLC).</li>
+        <li>لا نتحمل مسؤولية حقوق الملكية — تأكد من أن لديك حق عرض المحتوى.</li>
+      </ul>
+    </div>
+
+  </section>
+</div>
+
+  </main>  <footer>مصمم بواسطة موقعي — ملف واحد (index.html)</footer>  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>  <script>
+    // عناصر
+    const player = document.getElementById('player');
+    const movieListEl = document.getElementById('movieList');
+    const addBtn = document.getElementById('addBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const titleIn = document.getElementById('title');
+    const urlIn = document.getElementById('url');
+    const posterIn = document.getElementById('poster');
+    const nowTitle = document.getElementById('nowTitle');
+    const nowUrl = document.getElementById('nowUrl');
+    const searchIn = document.getElementById('search');
+    const copyBtn = document.getElementById('copyBtn');
+    const openBtn = document.getElementById('openBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    // مثال مبدئي: استخدم الرابط الذي أرسلته
+    const starter = [{
+      title: 'فيلم تجريبي',
+      url: 'https://s1-hls1-cdn54.strmupcdn.cc/hls/U3yy9GCGPDUibEAswx18yRWSjdQsGf/index_1920x1080.m3u8?token=ff1ce19edf4cf5e9a46d95260eaf7a33-1760000587-2a09%3Abac5%3A41b2%3A2682%3A%3A3d6%3Ae-e384109e896b5c1799ecbed0b42c34c794ad66535c02727239a886545e31adf3',
+      poster: ''
+    }];
+
+    // إدارة القائمة مع localStorage
+    function loadList(){
+      try{
+        const raw = localStorage.getItem('movies_v1');
+        if(raw) return JSON.parse(raw);
+      }catch(e){console.warn(e)}
+      return starter.slice();
+    }
+    function saveList(list){ localStorage.setItem('movies_v1', JSON.stringify(list)); }
+
+    let movies = loadList();
+
+    function renderList(filter=''){
+      movieListEl.innerHTML='';
+      const filtered = movies.filter(m => (m.title||'').toLowerCase().includes(filter.toLowerCase()));
+      if(filtered.length===0){ movieListEl.innerHTML='<div class="small">لم يتم العثور على أفلام</div>'; return; }
+      filtered.forEach((m,idx)=>{
+        const it = document.createElement('div'); it.className='movie-item card';
+        it.innerHTML = `\n          <img src="${m.poster||'data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'120\\'><rect width=\\'100%\\' height=\\'100%\\' fill=\\'%230a0a0a\\'/></svg>'}" alt="poster" class="poster">\n          <div style=\"flex:1\">\n            <div class='title'>${m.title||'بدون عنوان'}</div>\n            <div class='small'>${short(m.url)}</div>\n          </div>\n        `;
+        it.addEventListener('click', ()=>playMovie(m));
+        movieListEl.appendChild(it);
+      });
     }
 
-    function rotateVideo() {
-      currentRotation = (currentRotation + 90) % 360;
-      document.querySelector('#my-video').style.transform = "rotate(" + currentRotation + "deg)";
-    }
+    function short(u){ if(!u) return ''; return u.length>50? u.slice(0,48)+'...':u }
 
-    function toggleFullscreen() {
-      if (player.isFullscreen()) {
-        player.exitFullscreen();
+    // تشغيل HLS بأفضل شكل
+    let hls = null;
+    function playMovie(m){
+      if(hls){ try{ hls.destroy(); }catch(e){} hls = null; }
+      const src = m.url;
+      nowTitle.textContent = m.title || 'بدون عنوان';
+      nowUrl.textContent = src;
+
+      if(player.canPlayType('application/vnd.apple.mpegurl')){
+        player.src = src;
+        player.play().catch(()=>{});
+      } else if (Hls.isSupported()){
+        hls = new Hls();
+        hls.loadSource(src);
+        hls.attachMedia(player);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() { player.play().catch(()=>{}); });
+        hls.on(Hls.Events.ERROR, function(event, data){
+          console.warn('HLS error', data);
+        });
       } else {
-        player.requestFullscreen();
+        alert('المتصفح لا يدعم تشغيل HLS');
       }
     }
-  </script>
 
-</body>
+    // أحداث الأزرار
+    addBtn.addEventListener('click', ()=>{
+      const t = titleIn.value.trim();
+      const u = urlIn.value.trim();
+      if(!u){ alert('ضع رابط m3u8'); return; }
+      movies.unshift({title:t||'فيلم جديد', url:u, poster: posterIn.value.trim()});
+      saveList(movies); renderList(searchIn.value);
+      titleIn.value=''; urlIn.value=''; posterIn.value='';
+    });
+
+    clearBtn.addEventListener('click', ()=>{
+      if(!confirm('هل تريد حذف كل الأفلام (سيحذف محليًا)؟')) return;
+      movies = starter.slice(); saveList(movies); renderList();
+    });
+
+    searchIn.addEventListener('input', ()=> renderList(searchIn.value));
+
+    copyBtn.addEventListener('click', ()=>{
+      const u = nowUrl.textContent.trim(); if(!u) return alert('لا يوجد رابط مشغل');
+      navigator.clipboard.writeText(u).then(()=>alert('تم نسخ الرابط'));
+    });
+
+    openBtn.addEventListener('click', ()=>{
+      const u = nowUrl.textContent.trim(); if(!u) return alert('لا يوجد رابط مشغل');
+      window.open(u, '_blank');
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      const u = nowUrl.textContent.trim(); if(!u) return alert('لا يوجد رابط مشغل');
+      // محاولة تنزيل (سيتبعها المتصفح مباشرة أو يُعرض النص)
+      const a = document.createElement('a'); a.href = u; a.download = '';
+      a.target = '_blank'; a.rel='noopener'; document.body.appendChild(a); a.click(); a.remove();
+    });
+
+    // تشغيل أول فيلم تلقائياً
+    renderList();
+    if(movies.length>0) setTimeout(()=>playMovie(movies[0]), 300);
+
+    // حفظ قبل الإغلاق (اختياري)
+    window.addEventListener('beforeunload', ()=> saveList(movies));
+  </script></body>
 </html>
