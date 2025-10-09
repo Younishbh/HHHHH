@@ -35,13 +35,13 @@
 
   <div class="video-container">
     <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="100%" height="auto">
-      <source src="https://hls1-cdn49.cloudlionscdn.com/hls/rLnM1IPCsaMvsRE8VCABEw5leL6LaV/index_854x480.m3u8" type="application/x-mpegURL" />
+      <source src="https://s1-hls1-cdn54.strmupcdn.cc/hls/U3yy9GCGPDUibEAswx18yRWSjdQsGf/index_1280x720.m3u8?token=f3d51a94a24d1f29e20c89f26b4f6c7d-1760000736-2a09%3Abac5%3A41b2%3A2682%3A%3A3d6%3Ae-09d42d55a2d6d8a879191837e9c3970fccaae3200d4d062f61025b66e4737a5d" type="application/x-mpegURL" />
     </video>
   </div>
 
   <div class="controls">
-    <button onclick="setQuality('480')">دقة 480p</button>
-    <button onclick="setQuality('720')">دقة 720p</button>
+    <button onclick="setQuality('720')">🎥 دقة 720p</button>
+    <button onclick="setQuality('1080')">🎥 دقة 1080p</button>
     <button onclick="rotateVideo()">🔄 تدوير</button>
     <button onclick="toggleFullscreen()">⛶ تكبير الشاشة</button>
   </div>
@@ -52,10 +52,16 @@
     var currentRotation = 0;
 
     function setQuality(q) {
-      if (q === '480') {
-        player.src({ src: "https://hls1-cdn49.cloudlionscdn.com/hls/rLnM1IPCsaMvsRE8VCABEw5leL6LaV/index_854x480.m3u8", type: "application/x-mpegURL" });
-      } else if (q === '720') {
-        player.src({ src: "https://hls1-cdn49.cloudlionscdn.com/hls/rLnM1IPCsaMvsRE8VCABEw5leL6LaV/index_1280x720.m3u8", type: "application/x-mpegURL" });
+      if (q === '720') {
+        player.src({ 
+          src: "https://s1-hls1-cdn54.strmupcdn.cc/hls/U3yy9GCGPDUibEAswx18yRWSjdQsGf/index_1280x720.m3u8?token=f3d51a94a24d1f29e20c89f26b4f6c7d-1760000736-2a09%3Abac5%3A41b2%3A2682%3A%3A3d6%3Ae-09d42d55a2d6d8a879191837e9c3970fccaae3200d4d062f61025b66e4737a5d", 
+          type: "application/x-mpegURL" 
+        });
+      } else if (q === '1080') {
+        player.src({ 
+          src: "https://s1-hls1-cdn54.strmupcdn.cc/hls/U3yy9GCGPDUibEAswx18yRWSjdQsGf/index_1920x1080.m3u8?token=f3d51a94a24d1f29e20c89f26b4f6c7d-1760000736-2a09%3Abac5%3A41b2%3A2682%3A%3A3d6%3Ae-09d42d55a2d6d8a879191837e9c3970fccaae3200d4d062f61025b66e4737a5d", 
+          type: "application/x-mpegURL" 
+        });
       }
       player.play();
     }
