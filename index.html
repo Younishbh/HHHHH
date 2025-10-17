@@ -133,6 +133,20 @@
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 10px;
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
         }
         
         .item-name {
@@ -428,102 +442,85 @@
                 <h3 class="category-title">برجر دجاج</h3>
                 <div class="menu-items">
                     <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+دجاج" alt="برجر دجاج" class="item-image">
+                        <div class="item-image">
+                            🍔
+                        </div>
                         <div class="item-name">بوكر دجاج</div>
                         <div class="item-description">برجر دجاج طازج مع الخضار والصلصة الخاصة</div>
                         <div class="item-price">2.000 د.ع</div>
                         <button class="add-to-cart" data-id="1" data-name="بوكر دجاج" data-price="2">أضف إلى الطلب</button>
                     </div>
                     <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+دجاج+بالجبن" alt="برجر دجاج بالجبن" class="item-image">
+                        <div class="item-image">
+                            🍔🧀
+                        </div>
                         <div class="item-name">بوكر دجاج بالجبن</div>
                         <div class="item-description">برجر دجاج مع جبنة ذائبة والخضار الطازجة</div>
                         <div class="item-price">2.500 د.ع</div>
                         <button class="add-to-cart" data-id="2" data-name="بوكر دجاج بالجبن" data-price="2.5">أضف إلى الطلب</button>
                     </div>
                     <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=زنجر+كناسك" alt="زنجر كناسك" class="item-image">
+                        <div class="item-image">
+                            🍔🌟
+                        </div>
                         <div class="item-name">زنجر كناسك</div>
                         <div class="item-description">برجر دجاج بقرمشة خاصة وصلصة الكناسك</div>
                         <div class="item-price">2.500 د.ع</div>
                         <button class="add-to-cart" data-id="3" data-name="زنجر كناسك" data-price="2.5">أضف إلى الطلب</button>
                     </div>
                     <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=زنجر+بالجبن" alt="زنجر بالجبن" class="item-image">
+                        <div class="item-image">
+                            🍔🧀
+                        </div>
                         <div class="item-name">زنجر بالجبن</div>
                         <div class="item-description">برجر دجاج مع جبنة شيدر ذائبة</div>
                         <div class="item-price">3.000 د.ع</div>
                         <button class="add-to-cart" data-id="4" data-name="زنجر بالجبن" data-price="3">أضف إلى الطلب</button>
                     </div>
                     <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=زنجر+فرنسي" alt="زنجر فرنسي" class="item-image">
+                        <div class="item-image">
+                            🍔🇫🇷
+                        </div>
                         <div class="item-name">زنجر فرنسي</div>
                         <div class="item-description">برجر دجاج مع صلصة فرنسية خاصة</div>
                         <div class="item-price">3.000 د.ع</div>
                         <button class="add-to-cart" data-id="5" data-name="زنجر فرنسي" data-price="3">أضف إلى الطلب</button>
-                    </div>
-                    <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=زنجره+مدخن" alt="زنجره مدخن" class="item-image">
-                        <div class="item-name">زنجره مدخن</div>
-                        <div class="item-description">برجر دجاج مدخن بنكهة خاصة</div>
-                        <div class="item-price">3.000 د.ع</div>
-                        <button class="add-to-cart" data-id="6" data-name="زنجره مدخن" data-price="3">أضف إلى الطلب</button>
-                    </div>
-                    <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=زنجره+اكس" alt="زنجره اكس" class="item-image">
-                        <div class="item-name">زنجره اكس</div>
-                        <div class="item-description">برجر دجاج بحجم كبير مع مكونات إضافية</div>
-                        <div class="item-price">3.000 د.ع</div>
-                        <button class="add-to-cart" data-id="7" data-name="زنجره اكس" data-price="3">أضف إلى الطلب</button>
-                    </div>
-                    <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=صاح+زنجر" alt="صاح زنجر" class="item-image">
-                        <div class="item-name">صاح زنجر</div>
-                        <div class="item-description">برجر دجاج مع خبز صاج خاص</div>
-                        <div class="item-price">3.000 د.ع</div>
-                        <button class="add-to-cart" data-id="8" data-name="صاح زنجر" data-price="3">أضف إلى الطلب</button>
-                    </div>
-                    <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=سكالوب+دجاج" alt="سكالوب دجاج" class="item-image">
-                        <div class="item-name">سكالوب دجاج</div>
-                        <div class="item-description">شرائح دجاج مقرمشة مع الصلصة</div>
-                        <div class="item-price">2.500 د.ع</div>
-                        <button class="add-to-cart" data-id="9" data-name="سكالوب دجاج" data-price="2.5">أضف إلى الطلب</button>
-                    </div>
-                    <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=سكالوب+بالجبن" alt="سكالوب بالجبن" class="item-image">
-                        <div class="item-name">سكالوب بالجبن</div>
-                        <div class="item-description">شرائح دجاج مقرمشة مع الجبنة</div>
-                        <div class="item-price">3.000 د.ع</div>
-                        <button class="add-to-cart" data-id="10" data-name="سكالوب بالجبن" data-price="3">أضف إلى الطلب</button>
                     </div>
                 </div>
                 
                 <h3 class="category-title">شاورما</h3>
                 <div class="menu-items">
                     <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=شاورما+دجاج" alt="سندوش شاورما دجاج" class="item-image">
+                        <div class="item-image">
+                            🌯🐔
+                        </div>
                         <div class="item-name">سندوش شاورما دجاج</div>
                         <div class="item-description">شاورما دجاج طازجة مع الخضار والصلصة</div>
                         <div class="item-price">2.000 د.ع</div>
                         <button class="add-to-cart" data-id="11" data-name="سندوش شاورما دجاج" data-price="2">أضف إلى الطلب</button>
                     </div>
                     <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=شاورما+لحم" alt="سندوش شاورما لحم" class="item-image">
+                        <div class="item-image">
+                            🌯🥩
+                        </div>
                         <div class="item-name">سندوش شاورما لحم</div>
                         <div class="item-description">شاورما لحم طازجة مع الخضار والصلصة</div>
                         <div class="item-price">2.500 د.ع</div>
                         <button class="add-to-cart" data-id="12" data-name="سندوش شاورما لحم" data-price="2.5">أضف إلى الطلب</button>
                     </div>
                     <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=صاج+شاورما+دجاج" alt="صاج شاورما دجاج" class="item-image">
+                        <div class="item-image">
+                            🥙🐔
+                        </div>
                         <div class="item-name">صاج شاورما دجاج</div>
                         <div class="item-description">شاورما دجاج على الصاج مع الخضار</div>
                         <div class="item-price">2.500 د.ع</div>
                         <button class="add-to-cart" data-id="13" data-name="صاج شاورما دجاج" data-price="2.5">أضف إلى الطلب</button>
                     </div>
                     <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=صاج+شاورما+لحم" alt="صاج شاورما لحم" class="item-image">
+                        <div class="item-image">
+                            🥙🥩
+                        </div>
                         <div class="item-name">صاج شاورما لحم</div>
                         <div class="item-description">شاورما لحم على الصاج مع الخضار</div>
                         <div class="item-price">3.000 د.ع</div>
@@ -534,8 +531,58 @@
                 <h3 class="category-title">أطباق الأرز</h3>
                 <div class="menu-items">
                     <div class="menu-item">
-                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=ربزة+كناسك" alt="ربزة كناسك" class="item-image">
+                        <div class="item-image">
+                            🍚🐔
+                        </div>
                         <div class="item-name">ربزة كناسك</div>
                         <div class="item-description">طبق أرز مع دجاج كناسك والصلصة الخاصة</div>
                         <div class="item-price">5.000 د.ع</div>
-                        <button class="add-to-cart" data-id="15" data-name="ربزة كن
+                        <button class="add-to-cart" data-id="15" data-name="ربزة كناسك" data-price="5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-image">
+                            🍚🔥
+                        </div>
+                        <div class="item-name">ربزة مدخن</div>
+                        <div class="item-description">طبق أرز مع دجاج مدخن</div>
+                        <div class="item-price">5.000 د.ع</div>
+                        <button class="add-to-cart" data-id="16" data-name="ربزة مدخن" data-price="5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-image">
+                            🍚🍔
+                        </div>
+                        <div class="item-name">ريزة بركر لحم</div>
+                        <div class="item-description">طبق أرز مع برجر لحم</div>
+                        <div class="item-price">5.000 د.ع</div>
+                        <button class="add-to-cart" data-id="17" data-name="ريزة بركر لحم" data-price="5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-image">
+                            🍚🌯
+                        </div>
+                        <div class="item-name">ريزة شاورما دجاج</div>
+                        <div class="item-description">طبق أرز مع شاورما دجاج</div>
+                        <div class="item-price">4.500 د.ع</div>
+                        <button class="add-to-cart" data-id="18" data-name="ريزة شاورما دجاج" data-price="4.5">أضف إلى الطلب</button>
+                    </div>
+                </div>
+                
+                <h3 class="category-title">برجر لحم</h3>
+                <div class="menu-items">
+                    <div class="menu-item">
+                        <div class="item-image">
+                            🍔🥩
+                        </div>
+                        <div class="item-name">برجر لحم</div>
+                        <div class="item-description">برجر لحم طازج مع الخضار والصلصة</div>
+                        <div class="item-price">2.000 د.ع</div>
+                        <button class="add-to-cart" data-id="21" data-name="برجر لحم" data-price="2">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-image">
+                            🍔🌶️
+                        </div>
+                        <div class="item-name">برجر بابسب</div>
+                        <div class="item-description">برجر لحم مع صلصة خاصة</div>
+                        <div cla
