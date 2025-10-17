@@ -1,130 +1,886 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>متصفح الأفلام</title>
-  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
-  <style>
-    body {
-      background: #111;
-      color: #fff;
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      text-align: center;
-      padding: 1rem;
-      background: #222;
-      font-size: 1.5rem;
-    }
-    .movies {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 1rem;
-      padding: 1rem;
-    }
-    .movie {
-      background: #1c1c1c;
-      border-radius: 12px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-    .movie:hover {
-      transform: scale(1.05);
-    }
-    .movie img {
-      width: 100%;
-      height: 260px;
-      object-fit: cover;
-    }
-    .movie h3 {
-      margin: 0;
-      padding: 0.5rem;
-      font-size: 1.1rem;
-    }
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .modal.active {
-      display: flex;
-    }
-    .modal-content {
-      width: 90%;
-      max-width: 800px;
-      background: #000;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    video {
-      width: 100%;
-      height: auto;
-    }
-    .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 30px;
-      color: #fff;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مطعم طازج - طلب الطعام</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .menu-section {
+            flex: 2;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .order-section {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: #2e7d32;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .category-title {
+            font-size: 1.3rem;
+            color: #4caf50;
+            margin: 25px 0 15px 0;
+        }
+        
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .menu-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .item-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .item-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .item-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            flex-grow: 1;
+        }
+        
+        .item-price {
+            color: #2e7d32;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .add-to-cart {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        
+        .add-to-cart:hover {
+            background: #2e7d32;
+        }
+        
+        .cart-items {
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .cart-item-name {
+            flex: 2;
+        }
+        
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .quantity-btn {
+            background: #e0e0e0;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .remove-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .total-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            color: #2e7d32;
+        }
+        
+        .customer-info {
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .location-info {
+            background: #f1f8e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .get-location {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .submit-order {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .submit-order:hover {
+            background: #128C7E;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .whatsapp-info {
+            background: #dcf8c6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+            border: 1px solid #25D366;
+        }
+        
+        .whatsapp-info i {
+            color: #25D366;
+            margin-right: 5px;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>🎬 متصفح الأفلام</header>
-  <div class="movies" id="movies"></div>  <div class="modal" id="playerModal">
-    <div class="modal-content">
-      <span class="close-btn" id="closeModal">×</span>
-      <video id="videoPlayer" class="video-js vjs-default-skin" controls></video>
+    <header>
+        <div class="container">
+            <div class="logo">مطعم طازج</div>
+            <div class="tagline">أطباقنا طازجة ولذيذة، نقدمها لك أينما كنت</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="main-content">
+            <section class="menu-section">
+                <h2 class="section-title">قائمة الطعام</h2>
+                
+                <h3 class="category-title">برجر دجاج</h3>
+                <div class="menu-items">
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+دجاج" alt="برجر دجاج" class="item-image">
+                        <div class="item-name">بوكر دجاج</div>
+                        <div class="item-description">برجر دجاج طازج مع الخضار والصلصة الخاصة</div>
+                        <div class="item-price">2.000 د.ع</div>
+                        <button class="add-to-cart" data-id="1" data-name="بوكر دجاج" data-price="2">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+دجاج+بالجبن" alt="برجر دجاج بالجبن" class="item-image">
+                        <div class="item-name">بوكر دجاج بالجبن</div>
+                        <div class="item-description">برجر دجاج مع جبنة ذائبة والخضار الطازجة</div>
+                        <div class="item-price">2.500 د.ع</div>
+                        <button class="add-to-cart" data-id="2" data-name="بوكر دجاج بالجبن" data-price="2.5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=زنجر+كناسك" alt="زنجر كناسك" class="item-image">
+                        <div class="item-name">زنجر كناسك</div>
+                        <div class="item-description">برجر دجاج بقرمشة خاصة وصلصة الكناسك</div>
+                        <div class="item-price">2.500 د.ع</div>
+                        <button class="add-to-cart" data-id="3" data-name="زنجر كناسك" data-price="2.5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=زنجر+بالجبن" alt="زنجر بالجبن" class="item-image">
+                        <div class="item-name">زنجر بالجبن</div>
+                        <div class="item-description">برجر دجاج مع جبنة شيدر ذائبة</div>
+                        <div class="item-price">3.000 د.ع</div>
+                        <button class="add-to-cart" data-id="4" data-name="زنجر بالجبن" data-price="3">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=زنجر+فرنسي" alt="زنجر فرنسي" class="item-image">
+                        <div class="item-name">زنجر فرنسي</div>
+                        <div class="item-description">برجر دجاج مع صلصة فرنسية خاصة</div>
+                        <div class="item-price">3.000 د.ع</div>
+                        <button class="add-to-cart" data-id="5" data-name="زنجر فرنسي" data-price="3">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=زنجره+مدخن" alt="زنجره مدخن" class="item-image">
+                        <div class="item-name">زنجره مدخن</div>
+                        <div class="item-description">برجر دجاج مدخن بنكهة خاصة</div>
+                        <div class="item-price">3.000 د.ع</div>
+                        <button class="add-to-cart" data-id="6" data-name="زنجره مدخن" data-price="3">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=زنجره+اكس" alt="زنجره اكس" class="item-image">
+                        <div class="item-name">زنجره اكس</div>
+                        <div class="item-description">برجر دجاج بحجم كبير مع مكونات إضافية</div>
+                        <div class="item-price">3.000 د.ع</div>
+                        <button class="add-to-cart" data-id="7" data-name="زنجره اكس" data-price="3">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=صاح+زنجر" alt="صاح زنجر" class="item-image">
+                        <div class="item-name">صاح زنجر</div>
+                        <div class="item-description">برجر دجاج مع خبز صاج خاص</div>
+                        <div class="item-price">3.000 د.ع</div>
+                        <button class="add-to-cart" data-id="8" data-name="صاح زنجر" data-price="3">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=سكالوب+دجاج" alt="سكالوب دجاج" class="item-image">
+                        <div class="item-name">سكالوب دجاج</div>
+                        <div class="item-description">شرائح دجاج مقرمشة مع الصلصة</div>
+                        <div class="item-price">2.500 د.ع</div>
+                        <button class="add-to-cart" data-id="9" data-name="سكالوب دجاج" data-price="2.5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=سكالوب+بالجبن" alt="سكالوب بالجبن" class="item-image">
+                        <div class="item-name">سكالوب بالجبن</div>
+                        <div class="item-description">شرائح دجاج مقرمشة مع الجبنة</div>
+                        <div class="item-price">3.000 د.ع</div>
+                        <button class="add-to-cart" data-id="10" data-name="سكالوب بالجبن" data-price="3">أضف إلى الطلب</button>
+                    </div>
+                </div>
+                
+                <h3 class="category-title">شاورما</h3>
+                <div class="menu-items">
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=شاورما+دجاج" alt="سندوش شاورما دجاج" class="item-image">
+                        <div class="item-name">سندوش شاورما دجاج</div>
+                        <div class="item-description">شاورما دجاج طازجة مع الخضار والصلصة</div>
+                        <div class="item-price">2.000 د.ع</div>
+                        <button class="add-to-cart" data-id="11" data-name="سندوش شاورما دجاج" data-price="2">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=شاورما+لحم" alt="سندوش شاورما لحم" class="item-image">
+                        <div class="item-name">سندوش شاورما لحم</div>
+                        <div class="item-description">شاورما لحم طازجة مع الخضار والصلصة</div>
+                        <div class="item-price">2.500 د.ع</div>
+                        <button class="add-to-cart" data-id="12" data-name="سندوش شاورما لحم" data-price="2.5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=صاج+شاورما+دجاج" alt="صاج شاورما دجاج" class="item-image">
+                        <div class="item-name">صاج شاورما دجاج</div>
+                        <div class="item-description">شاورما دجاج على الصاج مع الخضار</div>
+                        <div class="item-price">2.500 د.ع</div>
+                        <button class="add-to-cart" data-id="13" data-name="صاج شاورما دجاج" data-price="2.5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=صاج+شاورما+لحم" alt="صاج شاورما لحم" class="item-image">
+                        <div class="item-name">صاج شاورما لحم</div>
+                        <div class="item-description">شاورما لحم على الصاج مع الخضار</div>
+                        <div class="item-price">3.000 د.ع</div>
+                        <button class="add-to-cart" data-id="14" data-name="صاج شاورما لحم" data-price="3">أضف إلى الطلب</button>
+                    </div>
+                </div>
+                
+                <h3 class="category-title">أطباق الأرز</h3>
+                <div class="menu-items">
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=ربزة+كناسك" alt="ربزة كناسك" class="item-image">
+                        <div class="item-name">ربزة كناسك</div>
+                        <div class="item-description">طبق أرز مع دجاج كناسك والصلصة الخاصة</div>
+                        <div class="item-price">5.000 د.ع</div>
+                        <button class="add-to-cart" data-id="15" data-name="ربزة كناسك" data-price="5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=ربزة+مدخن" alt="ربزة مدخن" class="item-image">
+                        <div class="item-name">ربزة مدخن</div>
+                        <div class="item-description">طبق أرز مع دجاج مدخن</div>
+                        <div class="item-price">5.000 د.ع</div>
+                        <button class="add-to-cart" data-id="16" data-name="ربزة مدخن" data-price="5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=ريزة+بركر+لحم" alt="ريزة بركر لحم" class="item-image">
+                        <div class="item-name">ريزة بركر لحم</div>
+                        <div class="item-description">طبق أرز مع برجر لحم</div>
+                        <div class="item-price">5.000 د.ع</div>
+                        <button class="add-to-cart" data-id="17" data-name="ريزة بركر لحم" data-price="5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=ريزة+شاورما+دجاج" alt="ريزة شاورما دجاج" class="item-image">
+                        <div class="item-name">ريزة شاورما دجاج</div>
+                        <div class="item-description">طبق أرز مع شاورما دجاج</div>
+                        <div class="item-price">4.500 د.ع</div>
+                        <button class="add-to-cart" data-id="18" data-name="ريزة شاورما دجاج" data-price="4.5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=ريزة+شاورما+لحم" alt="ريزة شاورما لحم" class="item-image">
+                        <div class="item-name">ريزة شاورما لحم</div>
+                        <div class="item-description">طبق أرز مع شاورما لحم</div>
+                        <div class="item-price">5.500 د.ع</div>
+                        <button class="add-to-cart" data-id="19" data-name="ريزة شاورما لحم" data-price="5.5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=ريزة+كرسبي+بالجبن" alt="ريزة كرسبي بالجبن" class="item-image">
+                        <div class="item-name">ريزة كرسبي بالجبن</div>
+                        <div class="item-description">طبق أرز مع دجاج مقرمش وجبنة</div>
+                        <div class="item-price">6.000 د.ع</div>
+                        <button class="add-to-cart" data-id="20" data-name="ريزة كرسبي بالجبن" data-price="6">أضف إلى الطلب</button>
+                    </div>
+                </div>
+                
+                <h3 class="category-title">برجر لحم</h3>
+                <div class="menu-items">
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+لحم" alt="برجر لحم" class="item-image">
+                        <div class="item-name">برجر لحم</div>
+                        <div class="item-description">برجر لحم طازج مع الخضار والصلصة</div>
+                        <div class="item-price">2.000 د.ع</div>
+                        <button class="add-to-cart" data-id="21" data-name="برجر لحم" data-price="2">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+بابسب" alt="برجر بابسب" class="item-image">
+                        <div class="item-name">برجر بابسب</div>
+                        <div class="item-description">برجر لحم مع صلصة خاصة</div>
+                        <div class="item-price">2.500 د.ع</div>
+                        <button class="add-to-cart" data-id="22" data-name="برجر بابسب" data-price="2.5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+لحم+صلح" alt="برجر لحم صلح" class="item-image">
+                        <div class="item-name">برجر لحم صلح</div>
+                        <div class="item-description">برجر لحم مع خضار إضافية</div>
+                        <div class="item-price">2.500 د.ع</div>
+                        <button class="add-to-cart" data-id="23" data-name="برجر لحم صلح" data-price="2.5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+بن+سلام" alt="برجر بن سلام" class="item-image">
+                        <div class="item-name">برجر بن سلام</div>
+                        <div class="item-description">برجر لحم مع صلصة سلامي</div>
+                        <div class="item-price">3.000 د.ع</div>
+                        <button class="add-to-cart" data-id="24" data-name="برجر بن سلام" data-price="3">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+ناخس" alt="برجر ناخس" class="item-image">
+                        <div class="item-name">برجر ناخس</div>
+                        <div class="item-description">برجر لحم مع مكونات خاصة</div>
+                        <div class="item-price">3.000 د.ع</div>
+                        <button class="add-to-cart" data-id="25" data-name="برجر ناخس" data-price="3">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+روم" alt="برجر روم" class="item-image">
+                        <div class="item-name">برجر روم</div>
+                        <div class="item-description">برجر لحم مع جبنة الرومي</div>
+                        <div class="item-price">3.000 د.ع</div>
+                        <button class="add-to-cart" data-id="26" data-name="برجر روم" data-price="3">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+رنس" alt="برجر رنس" class="item-image">
+                        <div class="item-name">برجر رنس</div>
+                        <div class="item-description">برجر لحم مع صلصة رنس</div>
+                        <div class="item-price">3.000 د.ع</div>
+                        <button class="add-to-cart" data-id="27" data-name="برجر رنس" data-price="3">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+فرنسي" alt="برجر فرنسي" class="item-image">
+                        <div class="item-name">برجر فرنسي</div>
+                        <div class="item-description">برجر لحم مع صلصة فرنسية</div>
+                        <div class="item-price">3.500 د.ع</div>
+                        <button class="add-to-cart" data-id="28" data-name="برجر فرنسي" data-price="3.5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+على+الفحم" alt="برجر على الفحم" class="item-image">
+                        <div class="item-name">برجر على الفحم</div>
+                        <div class="item-description">برجر لحم مشوي على الفحم</div>
+                        <div class="item-price">4.000 د.ع</div>
+                        <button class="add-to-cart" data-id="29" data-name="برجر على الفحم" data-price="4">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=مشروب+صغير" alt="مشروب صغير" class="item-image">
+                        <div class="item-name">مشروب صغير</div>
+                        <div class="item-description">مشروب غازي بحجم صغير</div>
+                        <div class="item-price">4.000 د.ع</div>
+                        <button class="add-to-cart" data-id="30" data-name="مشروب صغير" data-price="4">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+مشبك" alt="برجر مشبك" class="item-image">
+                        <div class="item-name">برجر مشبك</div>
+                        <div class="item-description">برجر لحم مع طبقات إضافية</div>
+                        <div class="item-price">4.500 د.ع</div>
+                        <button class="add-to-cart" data-id="31" data-name="برجر مشبك" data-price="4.5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=صوم+برجر" alt="صوم برجر" class="item-image">
+                        <div class="item-name">صوم برجر</div>
+                        <div class="item-description">برجر لحم بحجم كبير</div>
+                        <div class="item-price">5.500 د.ع</div>
+                        <button class="add-to-cart" data-id="32" data-name="صوم برجر" data-price="5.5">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+على+الفحم+كبير" alt="برجر على الفحم كبير" class="item-image">
+                        <div class="item-name">برجر على الفحم كبير</div>
+                        <div class="item-description">برجر لحم مشوي على الفحم بحجم كبير</div>
+                        <div class="item-price">6.000 د.ع</div>
+                        <button class="add-to-cart" data-id="33" data-name="برجر على الفحم كبير" data-price="6">أضف إلى الطلب</button>
+                    </div>
+                    <div class="menu-item">
+                        <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=برجر+طيب+برجر" alt="برجر طيب برجر" class="item-image">
+                        <div class="item-name">برجر طيب برجر</div>
+                        <div class="item-description">برجر لحم مع مكونات مميزة</div>
+                        <div class="item-price">6.000 د.ع</div>
+                        <button class="add-to-cart" data-id="34" data-name="برجر طيب برجر" data-price="6">أضف إلى الطلب</button>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="order-section">
+                <h2 class="section-title">طلبيتك</h2>
+                
+                <div class="cart-items" id="cart-items">
+                    <div class="empty-cart">لم تقم بإضافة أي عناصر بعد</div>
+                </div>
+                
+                <div class="total-price" id="total-price">المجموع: 0 د.ع</div>
+                
+                <div class="customer-info">
+                    <h2 class="section-title">معلومات التوصيل</h2>
+                    
+                    <div class="form-group">
+                        <label for="customer-name">الاسم الكامل</label>
+                        <input type="text" id="customer-name" placeholder="أدخل اسمك الكامل">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customer-phone">رقم الهاتف</label>
+                        <input type="tel" id="customer-phone" placeholder="أدخل رقم هاتفك">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customer-address">العنوان</label>
+                        <textarea id="customer-address" rows="3" placeholder="أدخل عنوانك بالتفصيل"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>موقعك الحالي (GPS)</label>
+                        <button class="get-location" id="get-location">الحصول على موقعي الحالي</button>
+                        <div class="location-info" id="location-info">لم يتم تحديد الموقع بعد</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="order-notes">ملاحظات إضافية</label>
+                        <textarea id="order-notes" rows="2" placeholder="ملاحظات حول الطلب (اختياري)"></textarea>
+                    </div>
+                    
+                    <div class="whatsapp-info">
+                        <i class="fab fa-whatsapp"></i>
+                        <strong>سيتم إرسال طلبك عبر واتساب إلى رقم المطعم: 07858644168</strong>
+                    </div>
+                    
+                    <button class="submit-order" id="submit-order">
+                        <i class="fab fa-whatsapp"></i> إرسال الطلب عبر واتساب
+                    </button>
+                </div>
+            </section>
+        </div>
     </div>
-  </div>  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>  <script>
-    const movies = [
-      {
-        title: 'فيلم تجريبي',
-        image: 'https://i.ibb.co/yq8hK1z/movie-poster.jpg',
-        src: 'https://s1-hls1-cdn54.strmupcdn.cc/hls/U3yy9GCGPDUibEAswx18yRWSjdQsGf/index_1920x1080.m3u8?token=ff1ce19edf4cf5e9a46d95260eaf7a33-1760000587-2a09%3Abac5%3A41b2%3A2682%3A%3A3d6%3Ae-e384109e896b5c1799ecbed0b42c34c794ad66535c02727239a886545e31adf3'
-      }
-    ];
+    
+    <footer>
+        <div class="container">
+            <p>مطعم طازج &copy; 2023 - جميع الحقوق محفوظة</p>
+            <p>هاتف: 07858644168 | البريد الإلكتروني: info@tazeg.com</p>
+        </div>
+    </footer>
 
-    const container = document.getElementById('movies');
-    const modal = document.getElementById('playerModal');
-    const videoPlayer = document.getElementById('videoPlayer');
-    const closeModal = document.getElementById('closeModal');
-
-    movies.forEach(movie => {
-      const div = document.createElement('div');
-      div.className = 'movie';
-      div.innerHTML = `<img src="${movie.image}" alt="${movie.title}"><h3>${movie.title}</h3>`;
-      div.onclick = () => openMovie(movie.src);
-      container.appendChild(div);
-    });
-
-    function openMovie(src) {
-      modal.classList.add('active');
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(src);
-        hls.attachMedia(videoPlayer);
-      } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-        videoPlayer.src = src;
-      }
-      videoPlayer.play();
-    }
-
-    closeModal.onclick = () => {
-      modal.classList.remove('active');
-      videoPlayer.pause();
-      videoPlayer.src = '';
-    };
-  </script></body>
+    <script>
+        // بيانات الطلب
+        let cart = [];
+        let customerLocation = null;
+        
+        // عناصر DOM
+        const cartItemsEl = document.getElementById('cart-items');
+        const totalPriceEl = document.getElementById('total-price');
+        const getLocationBtn = document.getElementById('get-location');
+        const locationInfoEl = document.getElementById('location-info');
+        const submitOrderBtn = document.getElementById('submit-order');
+        
+        // إضافة عنصر إلى السلة
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.getAttribute('data-id');
+                const name = button.getAttribute('data-name');
+                const price = parseFloat(button.getAttribute('data-price'));
+                
+                // التحقق إذا كان العنصر موجوداً مسبقاً في السلة
+                const existingItem = cart.find(item => item.id === id);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id,
+                        name,
+                        price,
+                        quantity: 1
+                    });
+                }
+                
+                updateCart();
+            });
+        });
+        
+        // تحديث عرض السلة
+        function updateCart() {
+            // مسح المحتوى الحالي
+            cartItemsEl.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItemsEl.innerHTML = '<div class="empty-cart">لم تقم بإضافة أي عناصر بعد</div>';
+                totalPriceEl.textContent = 'المجموع: 0 د.ع';
+                return;
+            }
+            
+            let total = 0;
+            
+            // إضافة كل عنصر في السلة
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                
+                const cartItemEl = document.createElement('div');
+                cartItemEl.className = 'cart-item';
+                cartItemEl.innerHTML = `
+                    <div class="cart-item-name">${item.name}</div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn minus" data-id="${item.id}">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="quantity-btn plus" data-id="${item.id}">+</button>
+                    </div>
+                    <div class="cart-item-price">${(item.price * item.quantity).toFixed(3)} د.ع</div>
+                    <button class="remove-btn" data-id="${item.id}">حذف</button>
+                `;
+                
+                cartItemsEl.appendChild(cartItemEl);
+            });
+            
+            // تحديث السعر الإجمالي
+            totalPriceEl.textContent = `المجموع: ${total.toFixed(3)} د.ع`;
+            
+            // إضافة مستمعي الأحداث للأزرار الجديدة
+            document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    const item = cart.find(item => item.id === id);
+                    
+                    if (item.quantity > 1) {
+                        item.quantity -= 1;
+                    } else {
+                        cart = cart.filter(item => item.id !== id);
+                    }
+                    
+                    updateCart();
+                });
+            });
+            
+            document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    const item = cart.find(item => item.id === id);
+                    item.quantity += 1;
+                    updateCart();
+                });
+            });
+            
+            document.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    cart = cart.filter(item => item.id !== id);
+                    updateCart();
+                });
+            });
+        }
+        
+        // الحصول على الموقع
+        getLocationBtn.addEventListener('click', () => {
+            if (navigator.geolocation) {
+                getLocationBtn.textContent = 'جاري الحصول على الموقع...';
+                getLocationBtn.disabled = true;
+                
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        
+                        customerLocation = { lat, lng };
+                        
+                        // استخدام خدمة عكسية للحصول على العنوان من الإحداثيات
+                        fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=ar`)
+                            .then(response => response.json())
+                            .then(data => {
+                                locationInfoEl.innerHTML = `
+                                    <strong>موقعك:</strong> ${data.locality}, ${data.city}, ${data.countryName}<br>
+                                    <strong>الإحداثيات:</strong> ${lat.toFixed(6)}, ${lng.toFixed(6)}
+                                `;
+                                
+                                // تعبئة حقل العنوان تلقائياً إذا كان فارغاً
+                                if (!document.getElementById('customer-address').value) {
+                                    document.getElementById('customer-address').value = `${data.locality}, ${data.city}, ${data.countryName}`;
+                                }
+                            })
+                            .catch(error => {
+                                locationInfoEl.innerHTML = `
+                                    <strong>الإحداثيات:</strong> ${lat.toFixed(6)}, ${lng.toFixed(6)}<br>
+                                    <em>تعذر الحصول على العنوان التفصيلي</em>
+                                `;
+                            });
+                        
+                        getLocationBtn.textContent = 'تم الحصول على الموقع';
+                        getLocationBtn.style.background = '#4caf50';
+                    },
+                    error => {
+                        let errorMessage;
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage = "تم رفض طلب الحصول على الموقع";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage = "معلومات الموقع غير متاحة";
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage = "انتهت مهلة طلب الموقع";
+                                break;
+                            default:
+                                errorMessage = "حدث خطأ غير معروف";
+                        }
+                        
+                        locationInfoEl.innerHTML = `<strong>خطأ:</strong> ${errorMessage}`;
+                        getLocationBtn.textContent = 'الحصول على موقعي الحالي';
+                        getLocationBtn.disabled = false;
+                    }
+                );
+            } else {
+                locationInfoEl.innerHTML = '<strong>خطأ:</strong> المتصفح لا يدعم تحديد الموقع';
+            }
+        });
+        
+        // تأكيد الطلب وإرساله عبر واتساب
+        submitOrderBtn.addEventListener('click', () => {
+            const customerName = document.getElementById('customer-name').value;
+            const customerPhone = document.getElementById('customer-phone').value;
+            const customerAddress = document.getElementById('customer-address').value;
+            const orderNotes = document.getElementById('order-notes').value;
+            
+            // التحقق من صحة البيانات
+            if (cart.length === 0) {
+                alert('الرجاء إضافة عناصر إلى الطلب أولاً');
+                return;
+            }
+            
+            if (!customerName || !customerPhone || !customerAddress) {
+                alert('الرجاء ملء جميع الحقول المطلوبة');
+                return;
+            }
+            
+            if (!customerLocation) {
+                alert('الرجاء الحصول على موقعك الحالي');
+                return;
+            }
+            
+            // تجميع بيانات الطلب
+            const order = {
+                customer: {
+                    name: customerName,
+                    phone: customerPhone,
+                    address: customerAddress,
+                    location: customerLocation
+                },
+                items: cart,
+                notes: orderNotes,
+                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                timestamp: new Date().toISOString()
+            };
+            
+            // إنشاء رسالة الطلب
+            let message = `🍔 طلب جديد من مطعم طازج 🍔\n\n`;
+            message += `👤 العميل: ${customerName}\n`;
+            message += `📞 الهاتف: ${customerPhone}\n`;
+            message += `📍 العنوان: ${customerAddress}\n\n`;
+            message += `📋 تفاصيل الطلب:\n`;
+            
+            order.items.forEach(item => {
+                message += `• ${item.name} - ${item.quantity} x ${item.price.toFixed(3)} د.ع = ${(item.price * item.quantity).toFixed(3)} د.ع\n`;
+            });
+            
+            message += `\n💰 المجموع: ${order.total.toFixed(3)} د.ع\n`;
+            
+            if (order.notes) {
+                message += `\n📝 ملاحظات: ${order.notes}\n`;
+            }
+            
+            message += `\n📍 الموقع: ${order.customer.location.lat.toFixed(6)}, ${order.customer.location.lng.toFixed(6)}`;
+            
+            // ترميز الرسالة للرابط
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappNumber = '07858644168';
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+            
+            // فتح واتساب
+            window.open(whatsappUrl, '_blank');
+            
+            // عرض تأكيد الطلب
+            alert(`تم فتح واتساب لإرسال طلبك!\n\nرقم الطلب: #${Math.floor(1000 + Math.random() * 9000)}`);
+            
+            // إعادة تعيين النموذج
+            cart = [];
+            updateCart();
+            document.getElementById('customer-name').value = '';
+            document.getElementById('customer-phone').value = '';
+            document.getElementById('customer-address').value = '';
+            document.getElementById('order-notes').value = '';
+            locationInfoEl.textContent = 'لم يتم تحديد الموقع بعد';
+            getLocationBtn.textContent = 'الحصول على موقعي الحالي';
+            getLocationBtn.disabled = false;
+            getLocationBtn.style.background = '#2196f3';
+        });
+    </script>
+</body>
 </html>
