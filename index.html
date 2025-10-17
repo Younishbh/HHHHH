@@ -320,6 +320,61 @@
             padding: 20px;
         }
         
+        /* أنماط جديدة من كود العطور */
+        .checkout-form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .form-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .form-section-title {
+            font-size: 1.2rem;
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .location-status {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(241, 248, 233, 0.8);
+            border-radius: 5px;
+        }
+        
+        .order-summary {
+            background: rgba(248, 249, 250, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+        
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #2e7d32;
+            padding-top: 10px;
+            border-top: 2px solid #e0e0e0;
+            margin-top: 10px;
+        }
+        
         @media (max-width: 768px) {
             .main-content {
                 flex-direction: column;
@@ -608,33 +663,49 @@
                 
                 <div class="total-price" id="total-price">المجموع: 0 د.ع</div>
                 
-                <div class="customer-info">
-                    <h2 class="section-title">معلومات التوصيل</h2>
+                <!-- نموذج الحجز المحسن -->
+                <div class="checkout-form" id="checkout-form">
+                    <h3 class="form-section-title">معلومات التوصيل</h3>
                     
                     <div class="form-group">
-                        <label for="customer-name">الاسم الكامل</label>
-                        <input type="text" id="customer-name" placeholder="أدخل اسمك الكامل">
+                        <label for="customer-name">👤 الاسم الكامل</label>
+                        <input type="text" id="customer-name" required placeholder="أدخل اسمك الكامل">
                     </div>
                     
                     <div class="form-group">
-                        <label for="customer-phone">رقم الهاتف</label>
-                        <input type="tel" id="customer-phone" placeholder="أدخل رقم هاتفك">
+                        <label for="customer-phone">📞 رقم الهاتف</label>
+                        <input type="tel" id="customer-phone" required placeholder="مثال: 0785xxxxxxx">
                     </div>
                     
                     <div class="form-group">
-                        <label for="customer-address">العنوان</label>
-                        <textarea id="customer-address" rows="3" placeholder="أدخل عنوانك بالتفصيل"></textarea>
+                        <label for="customer-address">🏠 العنوان</label>
+                        <textarea id="customer-address" rows="2" required placeholder="شارع/منطقة/مدينة"></textarea>
                     </div>
                     
                     <div class="form-group">
-                        <label>موقعك الحالي (GPS)</label>
-                        <button class="get-location" id="get-location">الحصول على موقعي الحالي</button>
-                        <div class="location-info" id="location-info">لم يتم تحديد الموقع بعد</div>
+                        <label for="customer-near">📍 أقرب نقطة دالة</label>
+                        <input type="text" id="customer-near" required placeholder="مثلاً: أمام مدرسة النور">
                     </div>
                     
                     <div class="form-group">
-                        <label for="order-notes">ملاحظات إضافية</label>
+                        <label>🗺️ تحديد الموقع</label>
+                        <button type="button" class="get-location" id="get-location">📍 تحديد موقعي الحالي</button>
+                        <div class="location-status" id="location-status">(إضافة الموقع اختيارية لكن تساعد في التوصيل)</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="order-notes">📝 ملاحظات إضافية</label>
                         <textarea id="order-notes" rows="2" placeholder="ملاحظات حول الطلب (اختياري)"></textarea>
+                    </div>
+                    
+                    <!-- ملخص الطلب -->
+                    <div class="order-summary">
+                        <h4 style="margin-bottom: 10px; color: #2e7d32;">ملخص الطلب</h4>
+                        <div id="order-summary-items"></div>
+                        <div class="summary-total">
+                            <span>المجموع الكلي:</span>
+                            <span id="summary-total">0 د.ع</span>
+                        </div>
                     </div>
                     
                     <div class="whatsapp-info">
@@ -661,13 +732,16 @@
         // بيانات الطلب
         let cart = [];
         let customerLocation = null;
+        let locationLink = '';
         
         // عناصر DOM
         const cartItemsEl = document.getElementById('cart-items');
         const totalPriceEl = document.getElementById('total-price');
         const getLocationBtn = document.getElementById('get-location');
-        const locationInfoEl = document.getElementById('location-info');
+        const locationStatusEl = document.getElementById('location-status');
         const submitOrderBtn = document.getElementById('submit-order');
+        const orderSummaryItemsEl = document.getElementById('order-summary-items');
+        const summaryTotalEl = document.getElementById('summary-total');
         
         // إضافة عنصر إلى السلة
         document.querySelectorAll('.add-to-cart').forEach(button => {
@@ -691,6 +765,7 @@
                 }
                 
                 updateCart();
+                updateOrderSummary();
             });
         });
         
@@ -743,6 +818,7 @@
                     }
                     
                     updateCart();
+                    updateOrderSummary();
                 });
             });
             
@@ -752,6 +828,7 @@
                     const item = cart.find(item => item.id === id);
                     item.quantity += 1;
                     updateCart();
+                    updateOrderSummary();
                 });
             });
             
@@ -760,79 +837,80 @@
                     const id = btn.getAttribute('data-id');
                     cart = cart.filter(item => item.id !== id);
                     updateCart();
+                    updateOrderSummary();
                 });
             });
         }
         
-        // الحصول على الموقع
-        getLocationBtn.addEventListener('click', () => {
-            if (navigator.geolocation) {
-                getLocationBtn.textContent = 'جاري الحصول على الموقع...';
-                getLocationBtn.disabled = true;
-                
-                navigator.geolocation.getCurrentPosition(
-                    position => {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-                        
-                        customerLocation = { lat, lng };
-                        
-                        // استخدام خدمة عكسية للحصول على العنوان من الإحداثيات
-                        fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=ar`)
-                            .then(response => response.json())
-                            .then(data => {
-                                locationInfoEl.innerHTML = `
-                                    <strong>موقعك:</strong> ${data.locality}, ${data.city}, ${data.countryName}<br>
-                                    <strong>الإحداثيات:</strong> ${lat.toFixed(6)}, ${lng.toFixed(6)}
-                                `;
-                                
-                                // تعبئة حقل العنوان تلقائياً إذا كان فارغاً
-                                if (!document.getElementById('customer-address').value) {
-                                    document.getElementById('customer-address').value = `${data.locality}, ${data.city}, ${data.countryName}`;
-                                }
-                            })
-                            .catch(error => {
-                                locationInfoEl.innerHTML = `
-                                    <strong>الإحداثيات:</strong> ${lat.toFixed(6)}, ${lng.toFixed(6)}<br>
-                                    <em>تعذر الحصول على العنوان التفصيلي</em>
-                                `;
-                            });
-                        
-                        getLocationBtn.textContent = 'تم الحصول على الموقع';
-                        getLocationBtn.style.background = '#4caf50';
-                    },
-                    error => {
-                        let errorMessage;
-                        switch(error.code) {
-                            case error.PERMISSION_DENIED:
-                                errorMessage = "تم رفض طلب الحصول على الموقع";
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                errorMessage = "معلومات الموقع غير متاحة";
-                                break;
-                            case error.TIMEOUT:
-                                errorMessage = "انتهت مهلة طلب الموقع";
-                                break;
-                            default:
-                                errorMessage = "حدث خطأ غير معروف";
-                        }
-                        
-                        locationInfoEl.innerHTML = `<strong>خطأ:</strong> ${errorMessage}`;
-                        getLocationBtn.textContent = 'الحصول على موقعي الحالي';
-                        getLocationBtn.disabled = false;
-                    }
-                );
-            } else {
-                locationInfoEl.innerHTML = '<strong>خطأ:</strong> المتصفح لا يدعم تحديد الموقع';
+        // تحديث ملخص الطلب
+        function updateOrderSummary() {
+            orderSummaryItemsEl.innerHTML = '';
+            
+            if (cart.length === 0) {
+                orderSummaryItemsEl.innerHTML = '<div style="text-align: center; color: #666; padding: 10px;">لا توجد عناصر</div>';
+                summaryTotalEl.textContent = '0 د.ع';
+                return;
             }
+            
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                const summaryItem = document.createElement('div');
+                summaryItem.className = 'summary-item';
+                summaryItem.innerHTML = `
+                    <span>${item.name} (${item.quantity})</span>
+                    <span>${itemTotal.toFixed(3)} د.ع</span>
+                `;
+                orderSummaryItemsEl.appendChild(summaryItem);
+            });
+            
+            summaryTotalEl.textContent = `${total.toFixed(3)} د.ع`;
+        }
+        
+        // الحصول على الموقع - نسخة محسنة من كود العطور
+        getLocationBtn.addEventListener('click', () => {
+            locationStatusEl.textContent = 'جاري تحديد الموقع...';
+            if (!navigator.geolocation) {
+                locationStatusEl.textContent = 'المتصفح لا يدعم خدمة تحديد الموقع.';
+                return;
+            }
+            
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    const { latitude, longitude } = position.coords;
+                    locationLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+                    locationStatusEl.textContent = '✅ تم تحديد الموقع. سيتم إلحاقه مع الطلب.';
+                    customerLocation = { lat: latitude, lng: longitude };
+                },
+                error => {
+                    let errorMessage = 'تعذّر تحديد الموقع — تأكد من السماح بالوصول.';
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage = "تم رفض طلب الحصول على الموقع";
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage = "معلومات الموقع غير متاحة";
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage = "انتهت مهلة طلب الموقع";
+                            break;
+                    }
+                    locationStatusEl.textContent = errorMessage;
+                },
+                { enableHighAccuracy: true, timeout: 15000 }
+            );
         });
         
-        // تأكيد الطلب وإرساله عبر واتساب
+        // تأكيد الطلب وإرساله عبر واتساب - نسخة محسنة
         submitOrderBtn.addEventListener('click', () => {
-            const customerName = document.getElementById('customer-name').value;
-            const customerPhone = document.getElementById('customer-phone').value;
-            const customerAddress = document.getElementById('customer-address').value;
-            const orderNotes = document.getElementById('order-notes').value;
+            const customerName = document.getElementById('customer-name').value.trim();
+            const customerPhone = document.getElementById('customer-phone').value.trim();
+            const customerAddress = document.getElementById('customer-address').value.trim();
+            const customerNear = document.getElementById('customer-near').value.trim();
+            const orderNotes = document.getElementById('order-notes').value.trim();
             
             // التحقق من صحة البيانات
             if (cart.length === 0) {
@@ -840,13 +918,8 @@
                 return;
             }
             
-            if (!customerName || !customerPhone || !customerAddress) {
-                alert('الرجاء ملء جميع الحقول المطلوبة');
-                return;
-            }
-            
-            if (!customerLocation) {
-                alert('الرجاء الحصول على موقعك الحالي');
+            if (!customerName || !customerPhone || !customerAddress || !customerNear) {
+                alert('يرجى تعبئة جميع الحقول المطلوبة.');
                 return;
             }
             
@@ -856,6 +929,7 @@
                     name: customerName,
                     phone: customerPhone,
                     address: customerAddress,
+                    near: customerNear,
                     location: customerLocation
                 },
                 items: cart,
@@ -864,15 +938,16 @@
                 timestamp: new Date().toISOString()
             };
             
-            // إنشاء رسالة الطلب
+            // إنشاء رسالة الطلب - نسخة محسنة من كود العطور
             let message = `🍔 طلب جديد من مطعم طازج 🍔\n\n`;
             message += `👤 العميل: ${customerName}\n`;
             message += `📞 الهاتف: ${customerPhone}\n`;
-            message += `📍 العنوان: ${customerAddress}\n\n`;
+            message += `🏠 العنوان: ${customerAddress}\n`;
+            message += `📍 أقرب نقطة دالة: ${customerNear}\n\n`;
             message += `📋 تفاصيل الطلب:\n`;
             
             order.items.forEach(item => {
-                message += `• ${item.name} - ${item.quantity} x ${item.price.toFixed(3)} د.ع = ${(item.price * item.quantity).toFixed(3)} د.ع\n`;
+                message += `- ${item.name} (x${item.quantity}) — ${(item.price * item.quantity).toFixed(3)} د.ع\n`;
             });
             
             message += `\n💰 المجموع: ${order.total.toFixed(3)} د.ع\n`;
@@ -881,7 +956,11 @@
                 message += `\n📝 ملاحظات: ${order.notes}\n`;
             }
             
-            message += `\n📍 الموقع: ${order.customer.location.lat.toFixed(6)}, ${order.customer.location.lng.toFixed(6)}`;
+            if (locationLink) {
+                message += `\n🗺️ الموقع: ${locationLink}\n`;
+            }
+            
+            message += `\n🔔 ملاحظة: جميع أطباقنا طازجة ومعدة بأعلى معايير الجودة والنظافة.`;
             
             // ترميز الرسالة للرابط
             const encodedMessage = encodeURIComponent(message);
@@ -897,15 +976,19 @@
             // إعادة تعيين النموذج
             cart = [];
             updateCart();
+            updateOrderSummary();
             document.getElementById('customer-name').value = '';
             document.getElementById('customer-phone').value = '';
             document.getElementById('customer-address').value = '';
+            document.getElementById('customer-near').value = '';
             document.getElementById('order-notes').value = '';
-            locationInfoEl.textContent = 'لم يتم تحديد الموقع بعد';
-            getLocationBtn.textContent = 'الحصول على موقعي الحالي';
-            getLocationBtn.disabled = false;
-            getLocationBtn.style.background = '#2196f3';
+            locationStatusEl.textContent = '(إضافة الموقع اختيارية لكن تساعد في التوصيل)';
+            locationLink = '';
+            customerLocation = null;
         });
+        
+        // تهيئة أولية
+        updateOrderSummary();
     </script>
 </body>
 </html>
