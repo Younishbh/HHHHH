@@ -14,9 +14,25 @@
         }
         
         body {
-            background-color: #f8f9fa;
+            background-image: url('https://a.top4top.io/p_3577u23yp0.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
             color: #333;
             line-height: 1.6;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            z-index: -1;
         }
         
         .container {
@@ -26,12 +42,13 @@
         }
         
         header {
-            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            background: linear-gradient(135deg, rgba(46, 125, 50, 0.9), rgba(76, 175, 80, 0.9));
             color: white;
             padding: 20px 0;
             text-align: center;
             border-radius: 0 0 15px 15px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
         }
         
         .logo {
@@ -54,21 +71,23 @@
         
         .menu-section {
             flex: 2;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
         }
         
         .order-section {
             flex: 1;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 20px;
             height: fit-content;
+            backdrop-filter: blur(5px);
         }
         
         .section-title {
@@ -92,18 +111,20 @@
         }
         
         .menu-item {
-            background: #f8f9fa;
+            background: rgba(248, 249, 250, 0.8);
             border-radius: 10px;
             padding: 15px;
             transition: transform 0.3s, box-shadow 0.3s;
             border: 1px solid #e0e0e0;
             display: flex;
             flex-direction: column;
+            backdrop-filter: blur(5px);
         }
         
         .menu-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.95);
         }
         
         .item-image {
@@ -223,10 +244,11 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
         }
         
         .location-info {
-            background: #f1f8e9;
+            background: rgba(241, 248, 233, 0.8);
             padding: 15px;
             border-radius: 5px;
             margin-top: 10px;
@@ -273,10 +295,13 @@
             padding: 20px;
             color: #666;
             border-top: 1px solid #e0e0e0;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px 15px 0 0;
+            backdrop-filter: blur(5px);
         }
         
         .whatsapp-info {
-            background: #dcf8c6;
+            background: rgba(220, 248, 198, 0.8);
             padding: 15px;
             border-radius: 8px;
             margin-top: 15px;
@@ -860,7 +885,7 @@
             
             // ترميز الرسالة للرابط
             const encodedMessage = encodeURIComponent(message);
-            const whatsappNumber = '07858644168';
+            const whatsappNumber = '9647858644168';
             const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
             
             // فتح واتساب
