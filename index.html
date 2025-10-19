@@ -502,7 +502,7 @@
             <div class="menu-items-container">
                 <!-- وجبات -->
                 <div id="meals" class="menu-category active">
-                    <div class="menu-item" data-price="5500" data-name="وجبة طازج" data-image="https://i.ibb.co/L5hY5Mh/burger-meal.jpg">
+                    <div class="menu-item" data-price="5500" data-name="وجبة طازج">
                         <img src="https://i.ibb.co/L5hY5Mh/burger-meal.jpg" alt="وجبة طازج" class="item-image">
                         <div class="item-details">
                             <h3>وجبة طازج</h3>
@@ -515,7 +515,7 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="4500" data-name="وجبة زنجر جبن" data-image="https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg">
+                    <div class="menu-item" data-price="4500" data-name="وجبة زنجر جبن">
                         <img src="https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg" alt="وجبة زنجر جبن" class="item-image">
                         <div class="item-details">
                             <h3>وجبة زنجر جبن</h3>
@@ -528,7 +528,7 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="4500" data-name="وجبة ماكس" data-image="https://i.ibb.co/jrbq2wz/max-meal.jpg">
+                    <div class="menu-item" data-price="4500" data-name="وجبة ماكس">
                         <img src="https://i.ibb.co/jrbq2wz/max-meal.jpg" alt="وجبة ماكس" class="item-image">
                         <div class="item-details">
                             <h3>وجبة ماكس</h3>
@@ -541,7 +541,7 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="6000" data-name="وجبة ريزو كلاسك" data-image="https://i.ibb.co/K2Jk53B/rezo-classic-meal.jpg">
+                    <div class="menu-item" data-price="6000" data-name="وجبة ريزو كلاسك">
                         <img src="https://i.ibb.co/K2Jk53B/rezo-classic-meal.jpg" alt="وجبة ريزو كلاسك" class="item-image">
                         <div class="item-details">
                             <h3>وجبة ريزو كلاسك</h3>
@@ -554,7 +554,7 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="4000" data-name="وجبه شاورما دجاج" data-image="https://i.ibb.co/gMwV9Gj/chicken-shawarma-meal.jpg">
+                    <div class="menu-item" data-price="4000" data-name="وجبه شاورما دجاج">
                         <img src="https://i.ibb.co/gMwV9Gj/chicken-shawarma-meal.jpg" alt="وجبه شاورما دجاج" class="item-image">
                         <div class="item-details">
                             <h3>وجبه شاورما دجاج</h3>
@@ -567,11 +567,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="5000" data-name="وجبه شاورما لحم" data-image="https://i.ibb.co/3sLdM7h/beef-shawarma-meal.jpg">
+                    <div class="menu-item" data-price="5000" data-name="وجبه شاورما لحم">
                         <img src="https://i.ibb.co/3sLdM7h/beef-shawarma-meal.jpg" alt="وجبه شاورما لحم" class="item-image">
                         <div class="item-details">
                             <h3>وجبه شاورما لحم</h3>
-                            <p>شاورما اللحم الغنية بالتوابل ملفوفة بالخبز العربي والطحينة.</p>
+                            <p>شاورما اللحم الغنية بالتوابل مع الطحينة والبقدونس.</p>
                         </div>
                         <span class="item-price">5,000 د.ع</span>
                         <div class="item-quantity">
@@ -580,95 +580,56 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="4000" data-name="وجبه كرسي" data-image="https://i.ibb.co/Q8Q41y4/korsy-meal.jpg">
-                        <img src="https://i.ibb.co/Q8Q41y4/korsy-meal.jpg" alt="وجبه كرسي" class="item-image">
-                        <div class="item-details">
-                            <h3>وجبه كرسي</h3>
-                            <p>وجبة الدجاج المقرمش مع الأرز المبهر ومرقة الخضار.</p>
-                        </div>
-                        <span class="item-price">4,000 د.ع</span>
-                        <div class="item-quantity">
-                            <button onclick="updateQuantity(this, -1)">-</button>
-                            <span class="quantity">0</span>
-                            <button onclick="updateQuantity(this, 1)">+</button>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- وجبات كيلو ونصف كيلو -->
+                <!-- كيلو / نصف كيلو -->
                 <div id="kilo-half-kilo" class="menu-category">
-                    <div class="menu-item" data-price="8000" data-name="نصف كيلو كرسي" data-image="https://i.ibb.co/Q8Q41y4/korsy-meal.jpg">
-                        <img src="https://i.ibb.co/Q8Q41y4/korsy-meal.jpg" alt="نصف كيلو كرسي" class="item-image">
+                    <div class="menu-item" data-price="12000" data-name="كيلو دجاج">
+                        <img src="https://i.ibb.co/k2Vqg3Z/chicken-kilo.jpg" alt="كيلو دجاج" class="item-image">
                         <div class="item-details">
-                            <h3>نصف كيلو كرسي</h3>
-                            <p>نصف كيلو من قطع الدجاج المقرمش والشهي.</p>
+                            <h3>كيلو دجاج</h3>
+                            <p>كيلو من الدجاج المشوي أو المقلي حسب اختيارك.</p>
                         </div>
-                        <span class="item-price">8,000 د.ع</span>
+                        <span class="item-price">12,000 د.ع</span>
                         <div class="item-quantity">
                             <button onclick="updateQuantity(this, -1)">-</button>
                             <span class="quantity">0</span>
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="16000" data-name="كيلو كرسي" data-image="https://i.ibb.co/Q8Q41y4/korsy-meal.jpg">
-                        <img src="https://i.ibb.co/Q8Q41y4/korsy-meal.jpg" alt="كيلو كرسي" class="item-image">
+                    <div class="menu-item" data-price="6000" data-name="نصف كيلو دجاج">
+                        <img src="https://i.ibb.co/k2Vqg3Z/chicken-kilo.jpg" alt="نصف كيلو دجاج" class="item-image">
                         <div class="item-details">
-                            <h3>كيلو كرسي</h3>
-                            <p>كيلو كامل من الدجاج المقرمش الغني بالنكهة.</p>
+                            <h3>نصف كيلو دجاج</h3>
+                            <p>نصف كيلو من الدجاج الطازج والمحضر بعناية.</p>
                         </div>
-                        <span class="item-price">16,000 د.ع</span>
+                        <span class="item-price">6,000 د.ع</span>
                         <div class="item-quantity">
                             <button onclick="updateQuantity(this, -1)">-</button>
                             <span class="quantity">0</span>
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="14000" data-name="كيلو شاورما دجاج" data-image="https://i.ibb.co/gMwV9Gj/chicken-shawarma-meal.jpg">
-                        <img src="https://i.ibb.co/gMwV9Gj/chicken-shawarma-meal.jpg" alt="كيلو شاورما دجاج" class="item-image">
+                    <div class="menu-item" data-price="18000" data-name="كيلو لحم">
+                        <img src="https://i.ibb.co/G03hP9R/beef-kilo.jpg" alt="كيلو لحم" class="item-image">
                         <div class="item-details">
-                            <h3>كيلو شاورما دجاج</h3>
-                            <p>كيلو شاورما دجاج متبلة ومقطعة جاهزة للتقديم.</p>
+                            <h3>كيلو لحم</h3>
+                            <p>كيلو من اللحم الطازج والمقطع حسب طلبك.</p>
                         </div>
-                        <span class="item-price">14,000 د.ع</span>
+                        <span class="item-price">18,000 د.ع</span>
                         <div class="item-quantity">
                             <button onclick="updateQuantity(this, -1)">-</button>
                             <span class="quantity">0</span>
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="7000" data-name="نصف كيلو شاورما دجاج" data-image="https://i.ibb.co/gMwV9Gj/chicken-shawarma-meal.jpg">
-                        <img src="https://i.ibb.co/gMwV9Gj/chicken-shawarma-meal.jpg" alt="نصف كيلو شاورما دجاج" class="item-image">
+                    <div class="menu-item" data-price="9000" data-name="نصف كيلو لحم">
+                        <img src="https://i.ibb.co/G03hP9R/beef-kilo.jpg" alt="نصف كيلو لحم" class="item-image">
                         <div class="item-details">
-                            <h3>نصف كيلو شاورما دجاج</h3>
-                            <p>نصف كيلو شاورما دجاج شهية.</p>
+                            <h3>نصف كيلو لحم</h3>
+                            <p>نصف كيلو من أجود أنواع اللحم، مثالي لوجبة فردية.</p>
                         </div>
-                        <span class="item-price">7,000 د.ع</span>
-                        <div class="item-quantity">
-                            <button onclick="updateQuantity(this, -1)">-</button>
-                            <span class="quantity">0</span>
-                            <button onclick="updateQuantity(this, 1)">+</button>
-                        </div>
-                    </div>
-                    <div class="menu-item" data-price="26000" data-name="كيلو شاورما لحم" data-image="https://i.ibb.co/3sLdM7h/beef-shawarma-meal.jpg">
-                        <img src="https://i.ibb.co/3sLdM7h/beef-shawarma-meal.jpg" alt="كيلو شاورما لحم" class="item-image">
-                        <div class="item-details">
-                            <h3>كيلو شاورما لحم</h3>
-                            <p>كيلو شاورما لحم فاخرة ومتبلة بعناية.</p>
-                        </div>
-                        <span class="item-price">26,000 د.ع</span>
-                        <div class="item-quantity">
-                            <button onclick="updateQuantity(this, -1)">-</button>
-                            <span class="quantity">0</span>
-                            <button onclick="updateQuantity(this, 1)">+</button>
-                        </div>
-                    </div>
-                    <div class="menu-item" data-price="13000" data-name="نصف كيلو شاورما لحم" data-image="https://i.ibb.co/3sLdM7h/beef-shawarma-meal.jpg">
-                        <img src="https://i.ibb.co/3sLdM7h/beef-shawarma-meal.jpg" alt="نصف كيلو شاورما لحم" class="item-image">
-                        <div class="item-details">
-                            <h3>نصف كيلو شاورما لحم</h3>
-                            <p>نصف كيلو شاورما لحم غنية بالنكهة.</p>
-                        </div>
-                        <span class="item-price">13,000 د.ع</span>
+                        <span class="item-price">9,000 د.ع</span>
                         <div class="item-quantity">
                             <button onclick="updateQuantity(this, -1)">-</button>
                             <span class="quantity">0</span>
@@ -679,52 +640,39 @@
 
                 <!-- برغر دجاج -->
                 <div id="chicken-burger" class="menu-category">
-                    <div class="menu-item" data-price="2000" data-name="برغر دجاج" data-image="https://i.ibb.co/y4L26F2/chicken-burger.jpg">
-                        <img src="https://i.ibb.co/y4L26F2/chicken-burger.jpg" alt="برغر دجاج" class="item-image">
+                    <div class="menu-item" data-price="3000" data-name="برغر دجاج كلاسيك">
+                        <img src="https://i.ibb.co/m0c0K2k/classic-chicken-burger.jpg" alt="برغر دجاج كلاسيك" class="item-image">
                         <div class="item-details">
-                            <h3>برغر دجاج</h3>
-                            <p>ساندويتش برجر الدجاج الكلاسيكي مع الخضار الطازجة.</p>
-                        </div>
-                        <span class="item-price">2,000 د.ع</span>
-                        <div class="item-quantity">
-                            <button onclick="updateQuantity(this, -1)">-</button>
-                            <span class="quantity">0</span>
-                            <button onclick="updateQuantity(this, 1)">+</button>
-                        </div>
-                    </div>
-                    <div class="menu-item" data-price="2500" data-name="برغر دجاج بالجبن" data-image="https://i.ibb.co/X2Y53Dq/chicken-cheese-burger.jpg">
-                        <img src="https://i.ibb.co/X2Y53Dq/chicken-cheese-burger.jpg" alt="برغر دجاج بالجبن" class="item-image">
-                        <div class="item-details">
-                            <h3>برغر دجاج بالجبن</h3>
-                            <p>برجر دجاج مع طبقة غنية من الجبن الذائب.</p>
-                        </div>
-                        <span class="item-price">2,500 د.ع</span>
-                        <div class="item-quantity">
-                            <button onclick="updateQuantity(this, -1)">-</button>
-                            <span class="quantity">0</span>
-                            <button onclick="updateQuantity(this, 1)">+</button>
-                        </div>
-                    </div>
-                    <div class="menu-item" data-price="2500" data-name="زنجر كلاسك" data-image="https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg">
-                        <img src="https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg" alt="زنجر كلاسك" class="item-image">
-                        <div class="item-details">
-                            <h3>زنجر كلاسك</h3>
-                            <p>ساندويتش زنجر الدجاج المقرمش الشهير.</p>
-                        </div>
-                        <span class="item-price">2,500 د.ع</span>
-                        <div class="item-quantity">
-                            <button onclick="updateQuantity(this, -1)">-</button>
-                            <span class="quantity">0</span>
-                            <button onclick="updateQuantity(this, 1)">+</button>
-                        </div>
-                    </div>
-                    <div class="menu-item" data-price="3000" data-name="زنجر بالجبن" data-image="https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg">
-                        <img src="https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg" alt="زنجر بالجبن" class="item-image">
-                        <div class="item-details">
-                            <h3>زنجر بالجبن</h3>
-                            <p>زنجر الدجاج مع إضافة الجبن الفاخر.</p>
+                            <h3>برغر دجاج كلاسيك</h3>
+                            <p>برجر دجاج كلاسيكي مع خس، طماطم، ومخلل.</p>
                         </div>
                         <span class="item-price">3,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="3500" data-name="برغر دجاج حار">
+                        <img src="https://i.ibb.co/F8Sg0z7/spicy-chicken-burger.jpg" alt="برغر دجاج حار" class="item-image">
+                        <div class="item-details">
+                            <h3>برغر دجاج حار</h3>
+                            <p>برجر دجاج بصلصة حارة لمحبي النكهات القوية.</p>
+                        </div>
+                        <span class="item-price">3,500 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="3800" data-name="برغر دجاج بالجبنة">
+                        <img src="https://i.ibb.co/d2d0j2M/cheese-chicken-burger.jpg" alt="برغر دجاج بالجبنة" class="item-image">
+                        <div class="item-details">
+                            <h3>برغر دجاج بالجبنة</h3>
+                            <p>برجر دجاج غني بطبقة من الجبن الذائب.</p>
+                        </div>
+                        <span class="item-price">3,800 د.ع</span>
                         <div class="item-quantity">
                             <button onclick="updateQuantity(this, -1)">-</button>
                             <span class="quantity">0</span>
@@ -738,227 +686,183 @@
         <section class="order-summary">
             <h2 class="section-title">إتمام الطلب</h2>
             <div class="customer-info">
-                <label for="customerName"><i class="fas fa-user"></i> الاسم الكامل:</label>
-                <input type="text" id="customerName" placeholder="الرجاء إدخال اسمك الكريم" required>
+                <label for="customer-name">الاسم:</label>
+                <input type="text" id="customer-name" placeholder="أدخل اسمك الكريم" required>
 
-                <label for="customerPhone"><i class="fas fa-phone"></i> رقم الهاتف:</label>
-                <input type="tel" id="customerPhone" placeholder="مثال: 07xxxxxxxx (مطلوب)" required>
+                <label for="customer-phone">رقم الهاتف:</label>
+                <input type="tel" id="customer-phone" placeholder="أدخل رقم هاتفك" required>
 
-                <label for="customerAddress"><i class="fas fa-map-marker-alt"></i> عنوان التوصيل:</label>
-                <input type="text" id="customerAddress" placeholder="الشارع، الحي، رقم المنزل، المدينة (مطلوب)" required>
-                
-                <label for="orderNotes"><i class="fas fa-comment-alt"></i> ملاحظات إضافية (اختياري):</label>
-                <textarea id="orderNotes" placeholder="أضف أي ملاحظات خاصة بالطلب هنا، مثل عدم إضافة بهارات، أو وقت التوصيل المفضل..."></textarea>
+                <label for="customer-address">العنوان التفصيلي:</label>
+                <textarea id="customer-address" placeholder="الشارع، رقم المنزل، تفاصيل إضافية"></textarea>
 
-                <div id="location-display" style="display: none;">
-                    <i class="fas fa-location-arrow"></i> <strong>موقعك الحالي:</strong> <span id="current-location"></span>
-                </div>
-                <button onclick="getLocation()" class="send-order-btn location-btn"><i class="fas fa-crosshairs"></i> تحديد الموقع الحالي تلقائياً</button>
+                <button class="send-order-btn location-btn" onclick="getLocation()"><i class="fas fa-map-marker-alt"></i> تحديد موقعي</button>
+                <div id="location-display" style="display: none;"><i class="fas fa-map-marker-alt"></i> <span id="location-text"></span></div>
             </div>
 
             <div class="total-price">
-                <i class="fas fa-money-bill-wave"></i> الإجمالي الكلي: <span id="total-price-display">0 د.ع</span>
+                الإجمالي: <span id="total-order-price">0 د.ع</span>
             </div>
 
-            <button class="send-order-btn" onclick="sendOrderViaWhatsApp()">
-                <i class="fab fa-whatsapp"></i> إرسال الطلب عبر الواتساب
-            </button>
+            <button class="send-order-btn" onclick="sendOrder()"><i class="fas fa-paper-plane"></i> إرسال الطلب</button>
             <div class="loading-spinner" id="loading-spinner"></div>
         </section>
     </div>
 
     <script>
-        // Set the WhatsApp number here
-        const WHATSAPP_NUMBER = "9647800000000"; // مثال: 07800000000 (تأكد من استخدام رمز الدولة بدون علامة +)
-
-        document.addEventListener('DOMContentLoaded', () => {
-            updateTotalPrice();
-            showCategory('meals', document.querySelector('.menu-category-buttons button.active'));
-        });
-
-        function updateQuantity(button, change) {
-            const quantitySpan = button.parentNode.querySelector('.quantity');
-            let quantity = parseInt(quantitySpan.textContent);
-            quantity += change;
-
-            if (quantity < 0) {
-                quantity = 0;
-            }
-            quantitySpan.textContent = quantity;
-            updateTotalPrice();
-        }
-
-        function updateTotalPrice() {
-            let total = 0;
-            document.querySelectorAll('.menu-item').forEach(item => {
-                const price = parseFloat(item.dataset.price);
-                const quantity = parseInt(item.querySelector('.quantity').textContent);
-                total += price * quantity;
-            });
-            document.getElementById('total-price-display').textContent = total.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 });
-        }
+        const categories = document.querySelectorAll('.menu-category');
+        const categoryButtons = document.querySelectorAll('.menu-category-buttons button');
+        let totalOrderPrice = 0;
+        let selectedLocation = ''; // To store the location string
 
         function showCategory(categoryId, clickedButton) {
-            document.querySelectorAll('.menu-category-buttons button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            clickedButton.classList.add('active');
-
-            document.querySelectorAll('.menu-category').forEach(category => {
+            categories.forEach(category => {
                 category.classList.remove('active');
             });
-
             document.getElementById(categoryId).classList.add('active');
+
+            categoryButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            clickedButton.classList.add('active');
+        }
+
+        function updateQuantity(button, change) {
+            const itemDiv = button.closest('.menu-item');
+            const quantitySpan = itemDiv.querySelector('.quantity');
+            const itemPrice = parseInt(itemDiv.dataset.price);
+            let currentQuantity = parseInt(quantitySpan.textContent);
+
+            currentQuantity += change;
+
+            if (currentQuantity < 0) {
+                currentQuantity = 0;
+            }
+
+            quantitySpan.textContent = currentQuantity;
+            updateTotal();
+        }
+
+        function updateTotal() {
+            totalOrderPrice = 0;
+            document.querySelectorAll('.menu-item').forEach(itemDiv => {
+                const price = parseInt(itemDiv.dataset.price);
+                const quantity = parseInt(itemDiv.querySelector('.quantity').textContent);
+                totalOrderPrice += price * quantity;
+            });
+            document.getElementById('total-order-price').textContent = totalOrderPrice.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 });
         }
 
         function getLocation() {
-            if (navigator.geolocation) {
-                document.querySelector('.location-btn').disabled = true;
-                document.querySelector('.location-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تحديد الموقع...';
-                navigator.geolocation.getCurrentPosition(showPosition, showError, {timeout: 10000, enableHighAccuracy: true});
-            } else {
-                alert("عذرًا، المتصفح الخاص بك لا يدعم تحديد الموقع الجغرافي.");
-                document.querySelector('.location-btn').disabled = false;
-                document.querySelector('.location-btn').innerHTML = '<i class="fas fa-crosshairs"></i> تحديد الموقع الحالي تلقائياً';
-            }
-        }
-
-        function showPosition(position) {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
             const locationDisplay = document.getElementById('location-display');
-            const currentLocationSpan = document.getElementById('current-location');
-            
-            currentLocationSpan.textContent = `خط العرض: ${latitude.toFixed(5)}, خط الطول: ${longitude.toFixed(5)}`;
-            locationDisplay.style.display = 'flex'; // Use flex for icon alignment
-            document.querySelector('.location-btn').disabled = false;
-            document.querySelector('.location-btn').innerHTML = '<i class="fas fa-check-circle"></i> تم تحديد الموقع';
-            document.querySelector('.location-btn').style.backgroundColor = var('--accent-color');
-            document.querySelector('.location-btn').style.color = 'white';
+            const locationText = document.getElementById('location-text');
+            const spinner = document.getElementById('loading-spinner');
+            locationDisplay.style.display = 'none'; // Hide previous location
 
-            // Optional: You could integrate a reverse geocoding API here to get a human-readable address.
-            // For example, using OpenStreetMap Nominatim API:
-            /*
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.display_name) {
-                        currentLocationSpan.textContent = data.display_name;
+            if (navigator.geolocation) {
+                spinner.style.display = 'block'; // Show spinner
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        selectedLocation = `https://www.google.com/maps?q=${lat},${lon}`;
+                        locationText.innerHTML = `تم تحديد الموقع بنجاح: <a href="${selectedLocation}" target="_blank">عرض على الخريطة</a>`;
+                        locationDisplay.style.display = 'flex';
+                        spinner.style.display = 'none'; // Hide spinner
+                    },
+                    (error) => {
+                        console.error("Error getting location:", error);
+                        if (error.code === error.PERMISSION_DENIED) {
+                            alert("الرجاء السماح لتحديد الموقع لتوصيل طلبك.");
+                        } else {
+                            alert("تعذر تحديد الموقع. الرجاء إدخال العنوان يدوياً أو المحاولة مرة أخرى.");
+                        }
+                        locationText.textContent = "فشل تحديد الموقع.";
+                        locationDisplay.style.display = 'flex';
+                        spinner.style.display = 'none'; // Hide spinner
+                        selectedLocation = ''; // Reset location on error
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
                     }
-                })
-                .catch(error => console.error('Error during reverse geocoding:', error));
-            */
-        }
-
-        function showError(error) {
-            let errorMessage = "";
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    errorMessage = "تم رفض طلب تحديد الموقع. يرجى السماح للمتصفح بالوصول إلى موقعك.";
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    errorMessage = "معلومات الموقع غير متوفرة حالياً.";
-                    break;
-                case error.TIMEOUT:
-                    errorMessage = "انتهت مهلة تحديد الموقع. يرجى المحاولة مرة أخرى.";
-                    break;
-                case error.UNKNOWN_ERROR:
-                    errorMessage = "حدث خطأ غير معروف أثناء تحديد الموقع.";
-                    break;
+                );
+            } else {
+                alert("متصفحك لا يدعم تحديد الموقع الجغرافي. الرجاء إدخال العنوان يدوياً.");
+                locationText.textContent = "المتصفح لا يدعم تحديد الموقع.";
+                locationDisplay.style.display = 'flex';
+                selectedLocation = ''; // Reset location if not supported
             }
-            alert("خطأ في تحديد الموقع: " + errorMessage);
-            document.querySelector('.location-btn').disabled = false;
-            document.querySelector('.location-btn').innerHTML = '<i class="fas fa-crosshairs"></i> تحديد الموقع الحالي تلقائياً';
-            document.querySelector('.location-btn').style.backgroundColor = ''; // Reset color
-            document.querySelector('.location-btn').style.color = ''; // Reset color
-            document.getElementById('location-display').style.display = 'none'; // Hide location display on error
         }
 
-        function sendOrderViaWhatsApp() {
-            const customerName = document.getElementById('customerName').value.trim();
-            const customerPhone = document.getElementById('customerPhone').value.trim();
-            const customerAddress = document.getElementById('customerAddress').value.trim();
-            const orderNotes = document.getElementById('orderNotes').value.trim();
-            const currentLocation = document.getElementById('current-location').textContent.trim();
+        function sendOrder() {
+            const customerName = document.getElementById('customer-name').value.trim();
+            const customerPhone = document.getElementById('customer-phone').value.trim();
+            const customerAddress = document.getElementById('customer-address').value.trim();
 
-            if (!customerName || !customerPhone || !customerAddress) {
-                alert("الرجاء تعبئة جميع معلومات العميل المطلوبة (الاسم الكامل، رقم الهاتف، عنوان التوصيل) قبل إرسال الطلب.");
+            if (!customerName || !customerPhone) {
+                alert("الرجاء إدخال الاسم ورقم الهاتف.");
                 return;
             }
 
-            const orderedItems = [];
-            document.querySelectorAll('.menu-item').forEach(item => {
-                const quantity = parseInt(item.querySelector('.quantity').textContent);
+            if (!customerAddress && !selectedLocation) {
+                alert("الرجاء إدخال العنوان التفصيلي أو تحديد موقعك.");
+                return;
+            }
+
+            let orderDetails = `*طلب جديد من مطعم طازج:*\n\n`;
+            orderDetails += `*الاسم:* ${customerName}\n`;
+            orderDetails += `*رقم الهاتف:* ${customerPhone}\n`;
+            orderDetails += `*العنوان:* ${customerAddress ? customerAddress : 'لم يتم إدخال عنوان يدوي'}\n`;
+            if (selectedLocation) {
+                orderDetails += `*الموقع:* ${selectedLocation}\n`;
+            }
+            orderDetails += `\n*تفاصيل الطلب:*\n`;
+
+            let itemsOrdered = false;
+            document.querySelectorAll('.menu-item').forEach(itemDiv => {
+                const quantity = parseInt(itemDiv.querySelector('.quantity').textContent);
                 if (quantity > 0) {
-                    orderedItems.push({
-                        name: item.dataset.name,
-                        price: parseFloat(item.dataset.price),
-                        quantity: quantity
-                    });
+                    const itemName = itemDiv.dataset.name;
+                    const itemPrice = parseInt(itemDiv.dataset.price);
+                    orderDetails += `- ${itemName} (الكمية: ${quantity}) - السعر الإجمالي للمنتج: ${(itemPrice * quantity).toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}\n`;
+                    itemsOrdered = true;
                 }
             });
 
-            if (orderedItems.length === 0) {
+            if (!itemsOrdered) {
                 alert("الرجاء اختيار بعض المنتجات قبل إرسال الطلب.");
                 return;
             }
 
-            const total = document.getElementById('total-price-display').textContent;
+            orderDetails += `\n*الإجمالي الكلي:* ${totalOrderPrice.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}`;
 
-            let orderMessage = `🚀 *طلب جديد من مطعم طازج الفاخر*\n\n`;
-            orderMessage += `*معلومات العميل:*\n`;
-            orderMessage += `الاسم: *${customerName}*\n`;
-            orderMessage += `رقم الهاتف: *${customerPhone}*\n`;
-            orderMessage += `عنوان التوصيل: *${customerAddress}*\n`;
-            if (currentLocation && currentLocation !== 'غير محدد') {
-                orderMessage += `الموقع الحالي (تقريبي): ${currentLocation}\n`;
-            }
-            if (orderNotes) {
-                orderMessage += `ملاحظات إضافية: ${orderNotes}\n\n`;
-            }
-            
-            orderMessage += `*المنتجات المطلوبة:*\n`;
-            orderedItems.forEach(item => {
-                orderMessage += `• ${item.name} (الكمية: ${item.quantity}) - السعر: ${(item.price * item.quantity).toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}\n`;
-            });
-            orderMessage += `\n*الإجمالي الكلي: ${total}*\n\n`;
-            orderMessage += `نتطلع لخدمتك! 🌟`;
+            // Replace with your WhatsApp number
+            const whatsappNumber = '9647xxxxxxxx'; //  تأكد من استبدال هذا برقم واتساب الصحيح
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(orderDetails)}`;
 
-            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(orderMessage)}`;
-            window.open(whatsappUrl, '_blank');
+            window.open(whatsappURL, '_blank');
 
-            // Optionally, clear the form after sending
-            // document.getElementById('customerName').value = '';
-            // document.getElementById('customerPhone').value = '';
-            // document.getElementById('customerAddress').value = '';
-            // document.getElementById('orderNotes').value = '';
-            // document.getElementById('current-location').textContent = '';
-            // document.getElementById('location-display').style.display = 'none';
-            // document.querySelectorAll('.quantity').forEach(span => span.textContent = '0');
-            // updateTotalPrice();
+            // Reset form after sending
+            alert("تم إرسال طلبك بنجاح! سيتم تحويلك إلى واتساب لإتمام الطلب.");
+            resetOrderForm();
         }
 
-        // Placeholder images
-        document.querySelectorAll('.item-image[src^="رابط_صورة_"]').forEach(img => {
-            const altText = img.alt;
-            const placeholderUrl = `https://via.placeholder.com/100/A0522D/FFFFFF?text=${encodeURIComponent(altText.replace(/ /g, '_'))}`;
-            img.src = placeholderUrl;
-        });
+        function resetOrderForm() {
+            document.getElementById('customer-name').value = '';
+            document.getElementById('customer-phone').value = '';
+            document.getElementById('customer-address').value = '';
+            document.getElementById('location-display').style.display = 'none';
+            document.getElementById('location-text').textContent = '';
+            selectedLocation = '';
+            document.querySelectorAll('.quantity').forEach(span => {
+                span.textContent = '0';
+            });
+            updateTotal();
+        }
 
-        // Some sample professional images from ImgBB for better appearance (replace with your actual images)
-        // I've directly used these in the HTML for simplicity, but you could have a JS array.
-        // Example:
-        // const mealImages = {
-        //     "وجبة طازج": "https://i.ibb.co/L5hY5Mh/burger-meal.jpg",
-        //     "وجبة زنجر جبن": "https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg",
-        //     // ... and so on
-        // };
-        // document.querySelectorAll('.menu-item').forEach(item => {
-        //     const itemName = item.dataset.name;
-        //     if (mealImages[itemName]) {
-        //         item.querySelector('.item-image').src = mealImages[itemName];
-        //     }
-        // });
+        // Initialize total on page load
+        document.addEventListener('DOMContentLoaded', updateTotal);
     </script>
 </body>
 </html>
