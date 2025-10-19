@@ -73,6 +73,47 @@
             border-radius: 5px;
         }
 
+        .menu-category-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu-category-buttons button {
+            background-color: #e0e0e0;
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .menu-category-buttons button.active,
+        .menu-category-buttons button:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .menu-items-container {
+            border-top: 1px dashed #eee;
+            padding-top: 20px;
+        }
+
+        .menu-category {
+            display: none; /* Hidden by default */
+        }
+        
+        .menu-category.active {
+            display: block; /* Show when active */
+        }
+
         .menu-item {
             display: flex;
             align-items: center; /* لمحاذاة العناصر عموديا */
@@ -249,6 +290,10 @@
             .section-title {
                 font-size: 1.5em;
             }
+            .menu-category-buttons button {
+                width: 100%;
+                margin-bottom: 5px;
+            }
             .menu-item {
                 flex-direction: column;
                 align-items: flex-start;
@@ -278,827 +323,442 @@
         <header>
             <h1>مطعم طازج</h1>
             <p>أشهى الوجبات الطازجة بين يديك!</p>
+            <img src="https://k.top4top.io/p_3579din080.jpg" alt="صورة ترحيبية لمطعم طازج" style="width: 80%; max-width: 600px; border-radius: 10px; margin-top: 15px; opacity: 0.8;">
         </header>
 
         <section class="menu-items">
             <h2 class="section-title">قائمة الطعام</h2>
             
-            <!-- وجبات -->
-            <h2 class="section-title" style="font-size:1.4em;">الوجبات</h2>
-            <div class="menu-item" data-price="5500" data-name="وجبة طازج" data-image="رابط_صورة_وجبة_طازج.jpg">
-                <img src="رابط_صورة_وجبة_طازج.jpg" alt="وجبة طازج" class="item-image">
-                <div class="item-details">
-                    <h3>وجبة طازج</h3>
-                    <p>يقدم مع بيبسي وفنكر</p>
-                </div>
-                <span class="item-price">5,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="4500" data-name="وجبة زنجر جبن" data-image="رابط_صورة_وجبة_زنجر_جبن.jpg">
-                <img src="رابط_صورة_وجبة_زنجر_جبن.jpg" alt="وجبة زنجر جبن" class="item-image">
-                <div class="item-details">
-                    <h3>وجبة زنجر جبن</h3>
-                    <p>يقدم مع بيبسي وفنكر</p>
-                </div>
-                <span class="item-price">4,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="4500" data-name="وجبة ماكس" data-image="رابط_صورة_وجبة_ماكس.jpg">
-                <img src="رابط_صورة_وجبة_ماكس.jpg" alt="وجبة ماكس" class="item-image">
-                <div class="item-details">
-                    <h3>وجبة ماكس</h3>
-                    <p>يقدم مع بيبسي وفنكر</p>
-                </div>
-                <span class="item-price">4,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="6000" data-name="وجبة ريزو كلاسك" data-image="رابط_صورة_وجبة_ريزو_كلاسك.jpg">
-                <img src="رابط_صورة_وجبة_ريزو_كلاسك.jpg" alt="وجبة ريزو كلاسك" class="item-image">
-                <div class="item-details">
-                    <h3>وجبة ريزو كلاسك</h3>
-                    <p>يقدم مع بيبسي وفنكر</p>
-                </div>
-                <span class="item-price">6,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="4000" data-name="وجبه شاورما دجاج" data-image="رابط_صورة_وجبة_شاورما_دجاج.jpg">
-                <img src="رابط_صورة_وجبة_شاورما_دجاج.jpg" alt="وجبه شاورما دجاج" class="item-image">
-                <div class="item-details">
-                    <h3>وجبه شاورما دجاج</h3>
-                    <p>يقدم مع بيبسي وفنكر</p>
-                </div>
-                <span class="item-price">4,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="5000" data-name="وجبه شاورما لحم" data-image="رابط_صورة_وجبة_شاورما_لحم.jpg">
-                <img src="رابط_صورة_وجبة_شاورما_لحم.jpg" alt="وجبه شاورما لحم" class="item-image">
-                <div class="item-details">
-                    <h3>وجبه شاورما لحم</h3>
-                    <p>يقدم مع بيبسي وفنكر</p>
-                </div>
-                <span class="item-price">5,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="4000" data-name="وجبه كرسي" data-image="رابط_صورة_وجبة_كرسي.jpg">
-                <img src="رابط_صورة_وجبة_كرسي.jpg" alt="وجبه كرسي" class="item-image">
-                <div class="item-details">
-                    <h3>وجبه كرسي</h3>
-                    <p>يقدم مع بيبسي وفنكر</p>
-                </div>
-                <span class="item-price">4,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
+            <div class="menu-category-buttons">
+                <button class="active" onclick="showCategory('meals', this)">الوجبات</button>
+                <button onclick="showCategory('kilo-half-kilo', this)">كيلو / نصف كيلو</button>
+                <button onclick="showCategory('chicken-burger', this)">برغر دجاج</button>
             </div>
 
-            <!-- وجبات كيلو ونصف كيلو -->
-            <h2 class="section-title" style="font-size:1.4em;">كيلو / نصف كيلو</h2>
-            <div class="menu-item" data-price="8000" data-name="نصف كيلو كرسي" data-image="رابط_صورة_نصف_كيلو_كرسي.jpg">
-                <img src="رابط_صورة_نصف_كيلو_كرسي.jpg" alt="نصف كيلو كرسي" class="item-image">
-                <div class="item-details">
-                    <h3>نصف كيلو كرسي</h3>
-                    <p></p>
+            <div class="menu-items-container">
+                <!-- وجبات -->
+                <div id="meals" class="menu-category active">
+                    <div class="menu-item" data-price="5500" data-name="وجبة طازج" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=وجبة">
+                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=وجبة" alt="وجبة طازج" class="item-image">
+                        <div class="item-details">
+                            <h3>وجبة طازج</h3>
+                            <p>يقدم مع بيبسي وفنكر</p>
+                        </div>
+                        <span class="item-price">5,500 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="4500" data-name="وجبة زنجر جبن" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=زنجر">
+                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=زنجر" alt="وجبة زنجر جبن" class="item-image">
+                        <div class="item-details">
+                            <h3>وجبة زنجر جبن</h3>
+                            <p>يقدم مع بيبسي وفنكر</p>
+                        </div>
+                        <span class="item-price">4,500 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="4500" data-name="وجبة ماكس" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=ماكس">
+                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=ماكس" alt="وجبة ماكس" class="item-image">
+                        <div class="item-details">
+                            <h3>وجبة ماكس</h3>
+                            <p>يقدم مع بيبسي وفنكر</p>
+                        </div>
+                        <span class="item-price">4,500 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="6000" data-name="وجبة ريزو كلاسك" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=ريزو">
+                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=ريزو" alt="وجبة ريزو كلاسك" class="item-image">
+                        <div class="item-details">
+                            <h3>وجبة ريزو كلاسك</h3>
+                            <p>يقدم مع بيبسي وفنكر</p>
+                        </div>
+                        <span class="item-price">6,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="4000" data-name="وجبه شاورما دجاج" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=شاورما">
+                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=شاورما" alt="وجبه شاورما دجاج" class="item-image">
+                        <div class="item-details">
+                            <h3>وجبه شاورما دجاج</h3>
+                            <p>يقدم مع بيبسي وفنكر</p>
+                        </div>
+                        <span class="item-price">4,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="5000" data-name="وجبه شاورما لحم" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=لحم">
+                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=لحم" alt="وجبه شاورما لحم" class="item-image">
+                        <div class="item-details">
+                            <h3>وجبه شاورما لحم</h3>
+                            <p>يقدم مع بيبسي وفنكر</p>
+                        </div>
+                        <span class="item-price">5,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="4000" data-name="وجبه كرسي" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=كرسي">
+                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=كرسي" alt="وجبه كرسي" class="item-image">
+                        <div class="item-details">
+                            <h3>وجبه كرسي</h3>
+                            <p>يقدم مع بيبسي وفنكر</p>
+                        </div>
+                        <span class="item-price">4,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
                 </div>
-                <span class="item-price">8,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="16000" data-name="كيلو كرسي" data-image="رابط_صورة_كيلو_كرسي.jpg">
-                <img src="رابط_صورة_كيلو_كرسي.jpg" alt="كيلو كرسي" class="item-image">
-                <div class="item-details">
-                    <h3>كيلو كرسي</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">16,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="14000" data-name="كيلو شاورما دجاج" data-image="رابط_صورة_كيلو_شاورما_دجاج.jpg">
-                <img src="رابط_صورة_كيلو_شاورما_دجاج.jpg" alt="كيلو شاورما دجاج" class="item-image">
-                <div class="item-details">
-                    <h3>كيلو شاورما دجاج</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">14,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="7000" data-name="نصف كيلو شاورما دجاج" data-image="رابط_صورة_نصف_كيلو_شاورما_دجاج.jpg">
-                <img src="رابط_صورة_نصف_كيلو_شاورما_دجاج.jpg" alt="نصف كيلو شاورما دجاج" class="item-image">
-                <div class="item-details">
-                    <h3>نصف كيلو شاورما دجاج</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">7,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="26000" data-name="كيلو شاورما لحم" data-image="رابط_صورة_كيلو_شاورما_لحم.jpg">
-                <img src="رابط_صورة_كيلو_شاورما_لحم.jpg" alt="كيلو شاورما لحم" class="item-image">
-                <div class="item-details">
-                    <h3>كيلو شاورما لحم</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">26,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="13000" data-name="نصف كيلو شاورما لحم" data-image="رابط_صورة_نصف_كيلو_شاورما_لحم.jpg">
-                <img src="رابط_صورة_نصف_كيلو_شاورما_لحم.jpg" alt="نصف كيلو شاورما لحم" class="item-image">
-                <div class="item-details">
-                    <h3>نصف كيلو شاورما لحم</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">13,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
 
-            <!-- برغر دجاج -->
-            <h2 class="section-title" style="font-size:1.4em;">برغر دجاج</h2>
-            <div class="menu-item" data-price="2000" data-name="برغر دجاج" data-image="رابط_صورة_برغر_دجاج.jpg">
-                <img src="رابط_صورة_برغر_دجاج.jpg" alt="برغر دجاج" class="item-image">
-                <div class="item-details">
-                    <h3>برغر دجاج</h3>
-                    <p></p>
+                <!-- وجبات كيلو ونصف كيلو -->
+                <div id="kilo-half-kilo" class="menu-category">
+                    <div class="menu-item" data-price="8000" data-name="نصف كيلو كرسي" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=كرسي">
+                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=كرسي" alt="نصف كيلو كرسي" class="item-image">
+                        <div class="item-details">
+                            <h3>نصف كيلو كرسي</h3>
+                            <p></p>
+                        </div>
+                        <span class="item-price">8,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="16000" data-name="كيلو كرسي" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=كيلو">
+                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=كيلو" alt="كيلو كرسي" class="item-image">
+                        <div class="item-details">
+                            <h3>كيلو كرسي</h3>
+                            <p></p>
+                        </div>
+                        <span class="item-price">16,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="14000" data-name="كيلو شاورما دجاج" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=شاورما">
+                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=شاورما" alt="كيلو شاورما دجاج" class="item-image">
+                        <div class="item-details">
+                            <h3>كيلو شاورما دجاج</h3>
+                            <p></p>
+                        </div>
+                        <span class="item-price">14,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="7000" data-name="نصف كيلو شاورما دجاج" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=شاورما">
+                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=شاورما" alt="نصف كيلو شاورما دجاج" class="item-image">
+                        <div class="item-details">
+                            <h3>نصف كيلو شاورما دجاج</h3>
+                            <p></p>
+                        </div>
+                        <span class="item-price">7,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="26000" data-name="كيلو شاورما لحم" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=لحم">
+                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=لحم" alt="كيلو شاورما لحم" class="item-image">
+                        <div class="item-details">
+                            <h3>كيلو شاورما لحم</h3>
+                            <p></p>
+                        </div>
+                        <span class="item-price">26,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="13000" data-name="نصف كيلو شاورما لحم" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=لحم">
+                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=لحم" alt="نصف كيلو شاورما لحم" class="item-image">
+                        <div class="item-details">
+                            <h3>نصف كيلو شاورما لحم</h3>
+                            <p></p>
+                        </div>
+                        <span class="item-price">13,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
                 </div>
-                <span class="item-price">2,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="2500" data-name="برغر دجاج بالجبن" data-image="رابط_صورة_برغر_دجاج_بالجبن.jpg">
-                <img src="رابط_صورة_برغر_دجاج_بالجبن.jpg" alt="برغر دجاج بالجبن" class="item-image">
-                <div class="item-details">
-                    <h3>برغر دجاج بالجبن</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">2,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="2500" data-name="زنجر كلاسك" data-image="رابط_صورة_زنجر_كلاسك.jpg">
-                <img src="رابط_صورة_زنجر_كلاسك.jpg" alt="زنجر كلاسك" class="item-image">
-                <div class="item-details">
-                    <h3>زنجر كلاسك</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">2,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3000" data-name="زنجر بالجبن" data-image="رابط_صورة_زنجر_بالجبن.jpg">
-                <img src="رابط_صورة_زنجر_بالجبن.jpg" alt="زنجر بالجبن" class="item-image">
-                <div class="item-details">
-                    <h3>زنجر بالجبن</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3000" data-name="زنجر فرنسي" data-image="رابط_صورة_زنجر_فرنسي.jpg">
-                <img src="رابط_صورة_زنجر_فرنسي.jpg" alt="زنجر فرنسي" class="item-image">
-                <div class="item-details">
-                    <h3>زنجر فرنسي</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3000" data-name="زنجر مدخن" data-image="رابط_صورة_زنجر_مدخن.jpg">
-                <img src="رابط_صورة_زنجر_مدخن.jpg" alt="زنجر مدخن" class="item-image">
-                <div class="item-details">
-                    <h3>زنجر مدخن</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3000" data-name="زنجر ماكس" data-image="رابط_صورة_زنجر_ماكس.jpg">
-                <img src="رابط_صورة_زنجر_ماكس.jpg" alt="زنجر ماكس" class="item-image">
-                <div class="item-details">
-                    <h3>زنجر ماكس</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="2500" data-name="صاج زنجر" data-image="رابط_صورة_صاج_زنجر.jpg">
-                <img src="رابط_صورة_صاج_زنجر.jpg" alt="صاج زنجر" class="item-image">
-                <div class="item-details">
-                    <h3>صاج زنجر</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">2,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3000" data-name="سكالوب دجاج" data-image="رابط_صورة_سكالوب_دجاج.jpg">
-                <img src="رابط_صورة_سكالوب_دجاج.jpg" alt="سكالوب دجاج" class="item-image">
-                <div class="item-details">
-                    <h3>سكالوب دجاج</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="2000" data-name="سكالوب بالجبن" data-image="رابط_صورة_سكالوب_بالجبن.jpg">
-                <img src="رابط_صورة_سكالوب_بالجبن.jpg" alt="سكالوب بالجبن" class="item-image">
-                <div class="item-details">
-                    <h3>سكالوب بالجبن</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">2,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="2500" data-name="سندويش شاورما دجاج" data-image="رابط_صورة_سندويش_شاورما_دجاج.jpg">
-                <img src="رابط_صورة_سندويش_شاورما_دجاج.jpg" alt="سندويش شاورما دجاج" class="item-image">
-                <div class="item-details">
-                    <h3>سندويش شاورما دجاج</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">2,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="2500" data-name="سندويش شاورما لحم" data-image="رابط_صورة_سندويش_شاورما_لحم.jpg">
-                <img src="رابط_صورة_سندويش_شاورما_لحم.jpg" alt="سندويش شاورما لحم" class="item-image">
-                <div class="item-details">
-                    <h3>سندويش شاورما لحم</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">2,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3000" data-name="صاج شاورما دجاج" data-image="رابط_صورة_صاج_شاورما_دجاج.jpg">
-                <img src="رابط_صورة_صاج_شاورما_دجاج.jpg" alt="صاج شاورما دجاج" class="item-image">
-                <div class="item-details">
-                    <h3>صاج شاورما دجاج</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="5000" data-name="صاج شاورما لحم" data-image="رابط_صورة_صاج_شاورما_لحم.jpg">
-                <img src="رابط_صورة_صاج_شاورما_لحم.jpg" alt="صاج شاورما لحم" class="item-image">
-                <div class="item-details">
-                    <h3>صاج شاورما لحم</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">5,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
 
-            <!-- ريزو -->
-            <h2 class="section-title" style="font-size:1.4em;">ريزو</h2>
-            <div class="menu-item" data-price="5000" data-name="ريزو كلاسك" data-image="رابط_صورة_ريزو_كلاسك.jpg">
-                <img src="رابط_صورة_ريزو_كلاسك.jpg" alt="ريزو كلاسك" class="item-image">
-                <div class="item-details">
-                    <h3>ريزو كلاسك</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">5,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="5000" data-name="ريزو مدخن" data-image="رابط_صورة_ريزو_مدخن.jpg">
-                <img src="رابط_صورة_ريزو_مدخن.jpg" alt="ريزو مدخن" class="item-image">
-                <div class="item-details">
-                    <h3>ريزو مدخن</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">5,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="5500" data-name="ريزو برغر لحم" data-image="رابط_صورة_ريزو_برغر_لحم.jpg">
-                <img src="رابط_صورة_ريزو_برغر_لحم.jpg" alt="ريزو برغر لحم" class="item-image">
-                <div class="item-details">
-                    <h3>ريزو برغر لحم</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">5,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="4500" data-name="ريزو شاورما دجاج" data-image="رابط_صورة_ريزو_شاورما_دجاج.jpg">
-                <img src="رابط_صورة_ريزو_شاورما_دجاج.jpg" alt="ريزو شاورما دجاج" class="item-image">
-                <div class="item-details">
-                    <h3>ريزو شاورما دجاج</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">4,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="5500" data-name="ريزو شاورما لحم" data-image="رابط_صورة_ريزو_شاورما_لحم.jpg">
-                <img src="رابط_صورة_ريزو_شاورما_لحم.jpg" alt="ريزو شاورما لحم" class="item-image">
-                <div class="item-details">
-                    <h3>ريزو شاورما لحم</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">5,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
+                <!-- برغر دجاج -->
+                <div id="chicken-burger" class="menu-category">
+                    <div class="menu-item" data-price="2000" data-name="برغر دجاج" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=برغر">
+                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=برغر" alt="برغر دجاج" class="item-image">
+                        <div class="item-details">
+                            <h3>برغر دجاج</h3>
+                            <p></p>
+                        </div>
+                        <span class="item-price">2,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="2500" data-name="برغر دجاج بالجبن" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=برغر">
+                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=برغر" alt="برغر دجاج بالجبن" class="item-image">
+                        <div class="item-details">
+                            <h3>برغر دجاج بالجبن</h3>
+                            <p></p>
+                        </div>
+                        <span class="item-price">2,500 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="2500" data-name="زنجر كلاسك" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=زنجر">
+                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=زنجر" alt="زنجر كلاسك" class="item-image">
+                        <div class="item-details">
+                            <h3>زنجر كلاسك</h3>
+                            <p></p>
+                        </div>
+                        <span class="item-price">2,500 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item" data-price="3000" data-name="زنجر بالجبن" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=زنجر">
+                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=زنجر" alt="زنجر بالجبن" class="item-image">
+                        <div class="item-details">
+                            <h3>زنجر بالجبن</h3>
+                            <p></p>
+                        </div>
+                        <span class="item-price">3,000 د.ع</span>
+                        <div class="item-quantity">
+                            <button onclick="updateQuantity(this, -1)">-</button>
+                            <span class="quantity">0</span>
+                            <button onclick="updateQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="menu-item" data-price="6000" data-name="ريزو كرسي بالجبن" data-image="رابط_صورة_ريزو_كرسي_بالجبن.jpg">
-                <img src="رابط_صورة_ريزو_كرسي_بالجبن.jpg" alt="ريزو كرسي بالجبن" class="item-image">
-                <div class="item-details">
-                    <h3>ريزو كرسي بالجبن</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">6,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-
-            <!-- برغر لحم -->
-            <h2 class="section-title" style="font-size:1.4em;">برغر لحم</h2>
-            <div class="menu-item" data-price="2000" data-name="برغر كلاسك" data-image="رابط_صورة_برغر_كلاسك.jpg">
-                <img src="رابط_صورة_برغر_كلاسك.jpg" alt="برغر كلاسك" class="item-image">
-                <div class="item-details">
-                    <h3>برغر كلاسك</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">2,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="2500" data-name="برغر سبايسي" data-image="رابط_صورة_برغر_سبايسي.jpg">
-                <img src="رابط_صورة_برغر_سبايسي.jpg" alt="برغر سبايسي" class="item-image">
-                <div class="item-details">
-                    <h3>برغر سبايسي</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">2,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="2500" data-name="برغر جبن" data-image="رابط_صورة_برغر_جبن.jpg">
-                <img src="رابط_صورة_برغر_جبن.jpg" alt="برغر جبن" class="item-image">
-                <div class="item-details">
-                    <h3>برغر جبن</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">2,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="2500" data-name="صاج برغر" data-image="رابط_صورة_صاج_برغر.jpg">
-                <img src="رابط_صورة_صاج_برغر.jpg" alt="صاج برغر" class="item-image">
-                <div class="item-details">
-                    <h3>صاج برغر</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">2,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3000" data-name="برغر جبن سائج" data-image="رابط_صورة_برغر_جبن_سائح.jpg">
-                <img src="رابط_صورة_برغر_جبن_سائح.jpg" alt="برغر جبن سائج" class="item-image">
-                <div class="item-details">
-                    <h3>برغر جبن سائج</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3000" data-name="برغر ماكس" data-image="رابط_صورة_برغر_ماكس.jpg">
-                <img src="رابط_صورة_برغر_ماكس.jpg" alt="برغر ماكس" class="item-image">
-                <div class="item-details">
-                    <h3>برغر ماكس</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3000" data-name="برغر مشروم" data-image="رابط_صورة_برغر_مشروم.jpg">
-                <img src="رابط_صورة_برغر_مشروم.jpg" alt="برغر مشروم" class="item-image">
-                <div class="item-details">
-                    <h3>برغر مشروم</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3000" data-name="برغر فرنسي" data-image="رابط_صورة_برغر_فرنسي.jpg">
-                <img src="رابط_صورة_برغر_فرنسي.jpg" alt="برغر فرنسي" class="item-image">
-                <div class="item-details">
-                    <h3>برغر فرنسي</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3000" data-name="برغر مدخن" data-image="رابط_صورة_برغر_مدخن.jpg">
-                <img src="رابط_صورة_برغر_مدخن.jpg" alt="برغر مدخن" class="item-image">
-                <div class="item-details">
-                    <h3>برغر مدخن</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3500" data-name="فرانشيسكو برغر" data-image="رابط_صورة_فرانشيسكو_برغر.jpg">
-                <img src="رابط_صورة_فرانشيسكو_برغر.jpg" alt="فرانشيسكو برغر" class="item-image">
-                <div class="item-details">
-                    <h3>فرانشيسكو برغر</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="3500" data-name="برغر دبل" data-image="رابط_صورة_برغر_دبل.jpg">
-                <img src="رابط_صورة_برغر_دبل.jpg" alt="برغر دبل" class="item-image">
-                <div class="item-details">
-                    <h3>برغر دبل</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">3,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="4000" data-name="برغر طازج" data-image="رابط_صورة_برغر_طازج.jpg">
-                <img src="رابط_صورة_برغر_طازج.jpg" alt="برغر طازج" class="item-image">
-                <div class="item-details">
-                    <h3>برغر طازج</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">4,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="4000" data-name="برغر على الفحم" data-image="رابط_صورة_برغر_على_الفحم.jpg">
-                <img src="رابط_صورة_برغر_على_الفحم.jpg" alt="برغر على الفحم" class="item-image">
-                <div class="item-details">
-                    <h3>برغر على الفحم</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">4,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="4000" data-name="مشروم خس" data-image="رابط_صورة_مشروم_خس.jpg">
-                <img src="رابط_صورة_مشروم_خس.jpg" alt="مشروم خس" class="item-image">
-                <div class="item-details">
-                    <h3>مشروم خس</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">4,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="4500" data-name="برغر محشي" data-image="رابط_صورة_برغر_محشي.jpg">
-                <img src="رابط_صورة_برغر_محشي.jpg" alt="برغر محشي" class="item-image">
-                <div class="item-details">
-                    <h3>برغر محشي</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">4,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="5500" data-name="هوم برغر" data-image="رابط_صورة_هوم_برغر.jpg">
-                <img src="رابط_صورة_هوم_برغر.jpg" alt="هوم برغر" class="item-image">
-                <div class="item-details">
-                    <h3>هوم برغر</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">5,500 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="6000" data-name="برغر دبل على الفحم" data-image="رابط_صورة_برغر_دبل_على_الفحم.jpg">
-                <img src="رابط_صورة_برغر_دبل_على_الفحم.jpg" alt="برغر دبل على الفحم" class="item-image">
-                <div class="item-details">
-                    <h3>برغر دبل على الفحم</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">6,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <div class="menu-item" data-price="7000" data-name="بوكس ميني برغر" data-image="رابط_صورة_بوكس_ميني_برغر.jpg">
-                <img src="رابط_صورة_بوكس_ميني_برغر.jpg" alt="بوكس ميني برغر" class="item-image">
-                <div class="item-details">
-                    <h3>بوكس ميني برغر</h3>
-                    <p></p>
-                </div>
-                <span class="item-price">7,000 د.ع</span>
-                <div class="item-quantity">
-                    <button onclick="updateQuantity(this, -1)">-</button>
-                    <span class="quantity">0</span>
-                    <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            
         </section>
 
         <section class="order-summary">
-            <h2 class="section-title">معلومات الطلب</h2>
-
+            <h2>معلومات الطلب</h2>
             <div class="customer-info">
                 <label for="customerName">الاسم:</label>
-                <input type="text" id="customerName" placeholder="الاسم الكامل">
+                <input type="text" id="customerName" placeholder="أدخل اسمك الكريم" required>
 
                 <label for="customerPhone">رقم الهاتف:</label>
-                <input type="tel" id="customerPhone" placeholder="964xxxxxxxxx">
+                <input type="tel" id="customerPhone" placeholder="أدخل رقم هاتفك" required>
 
-                <label for="customerAddress">العنوان:</label>
-                <input type="text" id="customerAddress" placeholder="الشارع، الحي، المدينة">
+                <label for="customerAddress">عنوان التوصيل:</label>
+                <input type="text" id="customerAddress" placeholder="أدخل عنوان التوصيل بالتفصيل" required>
+                
+                <label for="orderNotes">ملاحظات إضافية (اختياري):</label>
+                <textarea id="orderNotes" placeholder="اكتب أي ملاحظات خاصة بالطلب هنا"></textarea>
 
-                <label for="customerLandmark">أقرب نقطة دالة:</label>
-                <input type="text" id="customerLandmark" placeholder="مثل: قرب جامع كذا، مقابل سوبر ماركت كذا">
-
-                <label>موقعك التلقائي (GPS):</label>
-                <div id="location-display">جاري تحديد الموقع...</div>
-                <div class="loading-spinner" id="location-spinner"></div>
-
-                <label for="customerNotes">ملاحظات إضافية:</label>
-                <textarea id="customerNotes" placeholder="ملاحظات حول الطلب أو التوصيل (اختياري)"></textarea>
+                <div id="location-display" style="display: none;">
+                    <strong>موقعك الحالي:</strong> <span id="current-location"></span>
+                </div>
+                <button onclick="getLocation()" class="send-order-btn" style="width: auto; margin: 10px auto;">تحديد الموقع الحالي</button>
             </div>
 
             <div class="total-price">
-                السعر الإجمالي: <span id="totalPrice">0 د.ع</span>
+                الإجمالي: <span id="total-price-display">0 د.ع</span>
             </div>
 
-            <button class="send-order-btn" onclick="sendOrder()">إرسال الطلب عبر واتساب</button>
+            <button class="send-order-btn" onclick="sendOrder()">إرسال الطلب</button>
+            <div class="loading-spinner" id="loading-spinner"></div>
         </section>
     </div>
 
     <script>
-        const whatsappNumber = "9647858644168"; // رقم الواتساب الخاص بك
-        let currentLatitude = null;
-        let currentLongitude = null;
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTotalPrice(); // Calculate total price on load
+            // Show the default category (meals) on load
+            showCategory('meals', document.querySelector('.menu-category-buttons button.active'));
+        });
 
-        // وظيفة لتحديث الكمية والسعر
         function updateQuantity(button, change) {
             const quantitySpan = button.parentNode.querySelector('.quantity');
             let quantity = parseInt(quantitySpan.textContent);
-            quantity = Math.max(0, quantity + change); // لا يمكن أن تكون الكمية أقل من صفر
+            quantity += change;
+
+            if (quantity < 0) {
+                quantity = 0;
+            }
             quantitySpan.textContent = quantity;
-            calculateTotal();
+            updateTotalPrice();
         }
 
-        // وظيفة لحساب السعر الإجمالي
-        function calculateTotal() {
+        function updateTotalPrice() {
             let total = 0;
             document.querySelectorAll('.menu-item').forEach(item => {
                 const price = parseFloat(item.dataset.price);
                 const quantity = parseInt(item.querySelector('.quantity').textContent);
                 total += price * quantity;
             });
-            document.getElementById('totalPrice').textContent = total.toLocaleString('ar-IQ') + ' د.ع';
-            return total;
+            document.getElementById('total-price-display').textContent = total.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 });
         }
 
-        // وظيفة لتحديد الموقع التلقائي
-        function getLocation() {
-            const locationDisplay = document.getElementById('location-display');
-            const locationSpinner = document.getElementById('location-spinner');
-            locationDisplay.textContent = 'جاري تحديد الموقع...';
-            locationSpinner.style.display = 'block';
+        function showCategory(categoryId, clickedButton) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.menu-category-buttons button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Add active class to the clicked button
+            clickedButton.classList.add('active');
 
+            // Hide all categories
+            document.querySelectorAll('.menu-category').forEach(category => {
+                category.classList.remove('active');
+            });
+
+            // Show the selected category
+            document.getElementById(categoryId).classList.add('active');
+        }
+
+        function getLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        currentLatitude = position.coords.latitude;
-                        currentLongitude = position.coords.longitude;
-                        locationDisplay.innerHTML = `الموقع: <a href="https://www.google.com/maps?q=${currentLatitude},${currentLongitude}" target="_blank">عرض على الخريطة</a><br>خط العرض: ${currentLatitude.toFixed(6)}, خط الطول: ${currentLongitude.toFixed(6)}`;
-                        locationSpinner.style.display = 'none';
-                    },
-                    (error) => {
-                        locationDisplay.textContent = 'تعذر تحديد الموقع. يرجى تفعيل GPS أو إدخال العنوان يدوياً.';
-                        locationSpinner.style.display = 'none';
-                        console.error('Error getting location:', error);
-                    },
-                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-                );
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
             } else {
-                locationDisplay.textContent = 'متصفحك لا يدعم تحديد الموقع الجغرافي.';
-                locationSpinner.style.display = 'none';
+                alert("المتصفح الخاص بك لا يدعم تحديد الموقع الجغرافي.");
             }
         }
 
-        // وظيفة لإرسال الطلب عبر الواتساب
+        function showPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const locationDisplay = document.getElementById('location-display');
+            const currentLocationSpan = document.getElementById('current-location');
+            
+            currentLocationSpan.textContent = `خط العرض: ${latitude.toFixed(5)}, خط الطول: ${longitude.toFixed(5)}`;
+            locationDisplay.style.display = 'block';
+
+            // Optional: You can try to reverse geocode these coordinates to a readable address
+            // This would require a third-party API (e.g., Google Maps Geocoding API)
+            // For simplicity, we are just displaying coordinates here.
+        }
+
+        function showError(error) {
+            let errorMessage = "";
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = "تم رفض طلب تحديد الموقع من قبل المستخدم.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = "معلومات الموقع غير متوفرة.";
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = "انتهت مهلة طلب تحديد الموقع.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    errorMessage = "حدث خطأ غير معروف.";
+                    break;
+            }
+            alert("خطأ في تحديد الموقع: " + errorMessage);
+        }
+
         function sendOrder() {
             const customerName = document.getElementById('customerName').value;
             const customerPhone = document.getElementById('customerPhone').value;
             const customerAddress = document.getElementById('customerAddress').value;
-            const customerLandmark = document.getElementById('customerLandmark').value;
-            const customerNotes = document.getElementById('customerNotes').value;
-            const totalPrice = calculateTotal();
+            const orderNotes = document.getElementById('orderNotes').value;
+            const currentLocation = document.getElementById('current-location').textContent;
 
-            let orderDetails = `*طلب جديد من مطعم طازج*\n\n`;
-            orderDetails += `*الاسم:* ${customerName || 'غير محدد'}\n`;
-            orderDetails += `*رقم الهاتف:* ${customerPhone || 'غير محدد'}\n`;
-            orderDetails += `*العنوان:* ${customerAddress || 'غير محدد'}\n`;
-            orderDetails += `*أقرب نقطة دالة:* ${customerLandmark || 'غير محدد'}\n`;
-
-            if (currentLatitude && currentLongitude) {
-                orderDetails += `*موقع GPS:* https://www.google.com/maps?q=${currentLatitude},${currentLongitude}\n`;
-            } else {
-                orderDetails += `*موقع GPS:* غير متوفر (يرجى التأكد من العنوان يدوياً)\n`;
-            }
-            orderDetails += `*ملاحظات:* ${customerNotes || 'لا توجد'}\n\n`;
-
-            orderDetails += `*تفاصيل الطلب:*\n`;
-            let itemsCount = 0;
-            document.querySelectorAll('.menu-item').forEach(item => {
-                const name = item.dataset.name;
-                const quantity = parseInt(item.querySelector('.quantity').textContent);
-                const pricePerItem = parseFloat(item.dataset.price);
-
-                if (quantity > 0) {
-                    orderDetails += `- ${name} (الكمية: ${quantity}) - السعر: ${(pricePerItem * quantity).toLocaleString('ar-IQ')} د.ع\n`;
-                    itemsCount++;
-                }
-            });
-
-            if (itemsCount === 0) {
-                alert('الرجاء اختيار بعض المنتجات قبل إرسال الطلب.');
+            if (!customerName || !customerPhone || !customerAddress) {
+                alert("الرجاء تعبئة جميع معلومات العميل المطلوبة (الاسم، رقم الهاتف، عنوان التوصيل).");
                 return;
             }
 
-            orderDetails += `\n*السعر الإجمالي:* ${totalPrice.toLocaleString('ar-IQ')} د.ع\n`;
+            const orderedItems = [];
+            document.querySelectorAll('.menu-item').forEach(item => {
+                const quantity = parseInt(item.querySelector('.quantity').textContent);
+                if (quantity > 0) {
+                    orderedItems.push({
+                        name: item.dataset.name,
+                        price: parseFloat(item.dataset.price),
+                        quantity: quantity
+                    });
+                }
+            });
 
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(orderDetails)}`;
-            window.open(whatsappUrl, '_blank');
+            if (orderedItems.length === 0) {
+                alert("الرجاء اختيار بعض المنتجات قبل إرسال الطلب.");
+                return;
+            }
+
+            const total = document.getElementById('total-price-display').textContent;
+
+            let orderDetails = `طلب جديد من مطعم طازج:\n\n`;
+            orderDetails += `الاسم: ${customerName}\n`;
+            orderDetails += `رقم الهاتف: ${customerPhone}\n`;
+            orderDetails += `عنوان التوصيل: ${customerAddress}\n`;
+            if (currentLocation) {
+                orderDetails += `الموقع الحالي: ${currentLocation}\n`;
+            }
+            if (orderNotes) {
+                orderDetails += `ملاحظات: ${orderNotes}\n\n`;
+            }
+            
+            orderDetails += `المنتجات المطلوبة:\n`;
+            orderedItems.forEach(item => {
+                orderDetails += `- ${item.name} (الكمية: ${item.quantity}) - السعر: ${(item.price * item.quantity).toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}\n`;
+            });
+            orderDetails += `\nالإجمالي الكلي: ${total}\n\n`;
+            orderDetails += `شكرا لاختياركم مطعم طازج!`;
+
+            // Display loading spinner
+            document.getElementById('loading-spinner').style.display = 'block';
+            document.querySelector('.send-order-btn').disabled = true;
+
+            // Simulate sending order (e.g., to a backend or a WhatsApp API)
+            // For this example, we'll just log it and show an alert.
+            console.log(orderDetails);
+            
+            setTimeout(() => {
+                document.getElementById('loading-spinner').style.display = 'none';
+                document.querySelector('.send-order-btn').disabled = false;
+                alert("تم إرسال طلبك بنجاح! سيتم التواصل معك قريبا.");
+                // Optionally, you can redirect the user or clear the form
+                // window.location.reload(); 
+            }, 2000); // Simulate 2 seconds loading time
         }
 
-        // عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', () => {
-            getLocation(); // تحديد الموقع عند تحميل الصفحة
-            calculateTotal(); // حساب الإجمالي الأولي
+        // Generate placeholder images if specific image links are not provided
+        document.querySelectorAll('.item-image[src^="رابط_صورة_"]').forEach(img => {
+            const altText = img.alt;
+            const placeholderUrl = `https://via.placeholder.com/80/cccccc/333333?text=${encodeURIComponent(altText.replace(/ /g, '_'))}`;
+            img.src = placeholderUrl;
         });
     </script>
 </body>
