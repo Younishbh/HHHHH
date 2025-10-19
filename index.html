@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قائمة مطعم طازج</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>قائمة مطعم طازج الفاخرة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary-color: #4CAF50; /* أخضر */
-            --secondary-color: #FFC107; /* أصفر */
+            --primary-color: #A0522D; /* بني ترابي/قهوي فاخر */
+            --secondary-color: #D4AF37; /* ذهبي فاخر */
+            --accent-color: #6B8E23; /* أخضر زيتوني داكن */
             --text-color: #333;
-            --bg-color: #f9f9f9;
-            --card-bg: #fff;
-            --border-radius: 10px;
-            --box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            --light-text-color: #555;
+            --bg-color: #F8F4E3; /* خلفية كريمي فاتح */
+            --card-bg: #FFFFFF;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            --header-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
         body {
@@ -24,51 +28,105 @@
             color: var(--text-color);
             direction: rtl;
             text-align: right;
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 30px;
             background-color: var(--card-bg);
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden; /* لإخفاء أي جزء زائد من العناصر الداخلية */
+        }
+        
+        /* Decoration element for a touch of luxury */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            border-bottom-left-radius: 50%;
+        }
+        .container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(315deg, var(--secondary-color) 0%, transparent 70%);
+            opacity: 0.1;
+            border-top-right-radius: 50%;
         }
 
         header {
             text-align: center;
-            padding-bottom: 20px;
+            padding-bottom: 30px;
+            margin-bottom: 30px;
             border-bottom: 1px solid #eee;
-            margin-bottom: 20px;
         }
 
         header h1 {
+            font-family: 'Playfair Display', serif;
             color: var(--primary-color);
-            font-size: 2.5em;
+            font-size: 3.2em;
             margin-bottom: 10px;
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+        header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--secondary-color);
         }
 
+
         header p {
-            color: #777;
-            font-size: 1.1em;
+            color: var(--light-text-color);
+            font-size: 1.2em;
+            font-style: italic;
+            margin-top: 15px;
+        }
+
+        .header-image {
+            width: 90%;
+            max-width: 700px;
+            border-radius: var(--border-radius);
+            margin-top: 25px;
+            opacity: 0.9;
+            box-shadow: var(--box-shadow);
         }
 
         .section-title {
             color: var(--primary-color);
             text-align: center;
-            margin-bottom: 25px;
-            font-size: 1.8em;
+            margin-bottom: 40px;
+            font-size: 2.2em;
+            font-family: 'Playfair Display', serif;
             position: relative;
+            padding-top: 20px;
         }
 
         .section-title::after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: -15px;
             right: 50%;
             transform: translateX(50%);
-            width: 60px;
-            height: 3px;
+            width: 80px;
+            height: 4px;
             background-color: var(--secondary-color);
             border-radius: 5px;
         }
@@ -77,61 +135,76 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
+            gap: 12px;
+            margin-bottom: 40px;
         }
 
         .menu-category-buttons button {
-            background-color: #e0e0e0;
-            color: var(--text-color);
-            border: none;
-            padding: 10px 20px;
-            border-radius: var(--border-radius);
+            background-color: #EFEBE0; /* لون فاتح للخلفية */
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 12px 25px;
+            border-radius: 30px; /* شكل دائري أكثر */
             font-size: 1.1em;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .menu-category-buttons button.active,
         .menu-category-buttons button:hover {
             background-color: var(--primary-color);
             color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .menu-category-buttons button.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
         }
 
         .menu-items-container {
-            border-top: 1px dashed #eee;
             padding-top: 20px;
         }
 
         .menu-category {
-            display: none; /* Hidden by default */
+            display: none;
         }
         
         .menu-category.active {
-            display: block; /* Show when active */
+            display: block;
         }
 
         .menu-item {
             display: flex;
-            align-items: center; /* لمحاذاة العناصر عموديا */
-            padding: 15px 0;
-            border-bottom: 1px dashed #eee;
-            gap: 15px; /* مسافة بين الصورة والتفاصيل */
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px dashed #e0e0e0;
+            gap: 20px;
+            transition: background-color 0.2s ease;
         }
 
         .menu-item:last-child {
             border-bottom: none;
         }
 
+        .menu-item:hover {
+            background-color: #fcfcfc;
+            border-radius: var(--border-radius);
+        }
+
         .item-image {
-            width: 80px; /* حجم صورة المنتج */
-            height: 80px;
-            object-fit: cover; /* لضمان تغطية الصورة للمساحة دون تشوه */
-            border-radius: 8px; /* حواف دائرية للصور */
-            border: 1px solid #eee;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+            border: 2px solid var(--secondary-color);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
         }
 
         .item-details {
@@ -139,139 +212,196 @@
         }
 
         .item-details h3 {
-            margin: 0 0 5px 0;
-            color: var(--text-color);
+            margin: 0 0 8px 0;
+            color: var(--primary-color);
+            font-size: 1.4em;
+            font-weight: 700;
         }
 
         .item-details p {
             margin: 0;
-            color: #777;
-            font-size: 0.9em;
+            color: var(--light-text-color);
+            font-size: 1em;
+            line-height: 1.4;
         }
 
         .item-price {
             font-weight: bold;
-            color: var(--primary-color);
-            font-size: 1.1em;
-            margin-left: 20px; /* مسافة بين السعر وأزرار الكمية */
-            white-space: nowrap; /* لمنع كسر السعر إلى سطرين */
+            color: var(--accent-color);
+            font-size: 1.3em;
+            white-space: nowrap;
+            margin-left: 25px;
         }
 
         .item-quantity {
             display: flex;
             align-items: center;
-            min-width: 90px; /* لضمان بقاء الأزرار والكمية معًا */
+            min-width: 110px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
         }
 
         .item-quantity button {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
+            padding: 8px 12px;
             cursor: pointer;
-            font-size: 1em;
-            margin: 0 5px;
+            font-size: 1.1em;
             transition: background-color 0.3s ease;
+            flex-shrink: 0;
         }
 
         .item-quantity button:hover {
-            background-color: #388E3C;
+            background-color: var(--accent-color);
         }
 
         .item-quantity span {
             font-weight: bold;
-            font-size: 1.1em;
-            min-width: 20px; /* لتوسيط الرقم */
+            font-size: 1.2em;
+            min-width: 30px;
             text-align: center;
+            padding: 0 5px;
+            color: var(--text-color);
+            flex-grow: 1;
         }
 
+        /* Order Summary Section */
         .order-summary {
-            margin-top: 30px;
-            padding-top: 20px;
+            margin-top: 50px;
+            padding-top: 30px;
             border-top: 1px solid #eee;
         }
 
         .order-summary h2 {
             text-align: center;
             color: var(--primary-color);
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            font-family: 'Playfair Display', serif;
         }
 
         .customer-info label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1em;
         }
 
         .customer-info input[type="text"],
         .customer-info input[type="tel"],
         .customer-info textarea {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            width: calc(100% - 22px); /* Adjust for padding and border */
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
             font-family: 'Cairo', sans-serif;
             font-size: 1em;
-            box-sizing: border-box; /* لضمان عدم تجاوز العرض المحدد */
+            box-sizing: border-box;
+            background-color: #fefefe;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .customer-info input[type="text"]:focus,
+        .customer-info input[type="tel"]:focus,
+        .customer-info textarea:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(var(--secondary-color), 0.2);
+            outline: none;
         }
         .customer-info textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 100px;
         }
 
         #location-display {
-            background-color: #e0ffe0;
-            border: 1px solid var(--primary-color);
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            font-size: 0.95em;
-            color: #2e7d32;
+            background-color: #E6F3E6;
+            border: 1px solid var(--accent-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #location-display i {
+            font-size: 1.2em;
         }
 
         .total-price {
-            font-size: 1.5em;
+            font-size: 1.8em;
             font-weight: bold;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 30px;
             color: var(--primary-color);
+            background-color: #FFF8E1; /* خلفية خفيفة للسعر الإجمالي */
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         .send-order-btn {
             display: block;
-            width: 80%;
-            margin: 30px auto 0 auto;
-            padding: 15px 20px;
+            width: 90%;
+            max-width: 400px;
+            margin: 40px auto 0 auto;
+            padding: 18px 25px;
             background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: var(--border-radius);
-            font-size: 1.3em;
+            border-radius: 30px;
+            font-size: 1.4em;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .send-order-btn:hover {
-            background-color: #388E3C;
-            transform: translateY(-2px);
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
 
         .send-order-btn:active {
             transform: translateY(0);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .send-order-btn.location-btn {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            width: auto;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            margin: 15px auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .send-order-btn.location-btn:hover {
+            background-color: #C19A00; /* Darker gold */
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
 
         .loading-spinner {
-            display: none; /* Hidden by default */
-            border: 4px solid #f3f3f3; /* Light grey */
-            border-top: 4px solid var(--primary-color); /* Blue */
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
             border-radius: 50%;
             width: 30px;
             height: 30px;
             animation: spin 1s linear infinite;
-            margin: 10px auto;
+            margin: 20px auto 0;
         }
 
         @keyframes spin {
@@ -279,41 +409,75 @@
             100% { transform: rotate(360deg); }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .container {
-                margin: 10px;
-                padding: 15px;
+                margin: 20px auto;
+                padding: 20px;
+            }
+            header h1 {
+                font-size: 2.5em;
+            }
+            .section-title {
+                font-size: 1.8em;
+            }
+            .menu-category-buttons {
+                gap: 8px;
+            }
+            .menu-category-buttons button {
+                font-size: 1em;
+                padding: 10px 18px;
+            }
+            .menu-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                text-align: right;
+            }
+            .item-image {
+                width: 100%;
+                height: 160px;
+                border-radius: var(--border-radius);
+            }
+            .item-details {
+                width: 100%;
+            }
+            .item-price {
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+                text-align: right; /* Keep price to the right for RTL */
+            }
+            .item-quantity {
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .item-quantity span {
+                min-width: 40px;
+            }
+            .send-order-btn {
+                width: 100%;
+                font-size: 1.2em;
+                padding: 15px 20px;
+            }
+            .customer-info input, .customer-info textarea {
+                width: calc(100% - 20px);
+            }
+        }
+        @media (max-width: 480px) {
+            .menu-category-buttons button {
+                width: 100%;
+                margin-bottom: 5px;
             }
             header h1 {
                 font-size: 2em;
             }
             .section-title {
-                font-size: 1.5em;
+                font-size: 1.6em;
             }
-            .menu-category-buttons button {
-                width: 100%;
-                margin-bottom: 5px;
-            }
-            .menu-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-            .item-image {
-                width: 100%; /* جعل الصورة تأخذ عرض كامل على الجوال */
-                height: 150px; /* ارتفاع أكبر */
-            }
-            .item-price {
-                margin-left: 0;
-                margin-top: 10px;
-            }
-            .item-quantity {
-                width: 100%;
-                justify-content: center; /* توسيط أزرار الكمية */
-                margin-top: 10px;
-            }
-            .send-order-btn {
-                width: 100%;
+            .send-order-btn, .send-order-btn.location-btn {
+                padding: 12px 15px;
+                font-size: 1.1em;
             }
         }
     </style>
@@ -322,27 +486,27 @@
     <div class="container">
         <header>
             <h1>مطعم طازج</h1>
-            <p>أشهى الوجبات الطازجة بين يديك!</p>
-            <img src="https://k.top4top.io/p_3579din080.jpg" alt="صورة ترحيبية لمطعم طازج" style="width: 80%; max-width: 600px; border-radius: 10px; margin-top: 15px; opacity: 0.8;">
+            <p>تجربة طعام فاخرة لا تُنسى في كل وجبة</p>
+            <img src="https://k.top4top.io/p_3579din080.jpg" alt="صورة ترحيبية لمطعم طازج الفاخر" class="header-image">
         </header>
 
         <section class="menu-items">
-            <h2 class="section-title">قائمة الطعام</h2>
+            <h2 class="section-title">قائمة الطعام الفاخرة</h2>
             
             <div class="menu-category-buttons">
-                <button class="active" onclick="showCategory('meals', this)">الوجبات</button>
-                <button onclick="showCategory('kilo-half-kilo', this)">كيلو / نصف كيلو</button>
-                <button onclick="showCategory('chicken-burger', this)">برغر دجاج</button>
+                <button class="active" onclick="showCategory('meals', this)"><i class="fas fa-utensils"></i> الوجبات</button>
+                <button onclick="showCategory('kilo-half-kilo', this)"><i class="fas fa-weight-hanging"></i> كيلو / نصف كيلو</button>
+                <button onclick="showCategory('chicken-burger', this)"><i class="fas fa-hamburger"></i> برغر دجاج</button>
             </div>
 
             <div class="menu-items-container">
                 <!-- وجبات -->
                 <div id="meals" class="menu-category active">
-                    <div class="menu-item" data-price="5500" data-name="وجبة طازج" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=وجبة">
-                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=وجبة" alt="وجبة طازج" class="item-image">
+                    <div class="menu-item" data-price="5500" data-name="وجبة طازج" data-image="https://i.ibb.co/L5hY5Mh/burger-meal.jpg">
+                        <img src="https://i.ibb.co/L5hY5Mh/burger-meal.jpg" alt="وجبة طازج" class="item-image">
                         <div class="item-details">
                             <h3>وجبة طازج</h3>
-                            <p>يقدم مع بيبسي وفنكر</p>
+                            <p>وجبة برجر طازجة مع بطاطا مقلية ومشروب غازي.</p>
                         </div>
                         <span class="item-price">5,500 د.ع</span>
                         <div class="item-quantity">
@@ -351,11 +515,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="4500" data-name="وجبة زنجر جبن" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=زنجر">
-                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=زنجر" alt="وجبة زنجر جبن" class="item-image">
+                    <div class="menu-item" data-price="4500" data-name="وجبة زنجر جبن" data-image="https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg">
+                        <img src="https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg" alt="وجبة زنجر جبن" class="item-image">
                         <div class="item-details">
                             <h3>وجبة زنجر جبن</h3>
-                            <p>يقدم مع بيبسي وفنكر</p>
+                            <p>ساندويتش زنجر الدجاج مع الجبن السويسري وبطاطا ومشروب.</p>
                         </div>
                         <span class="item-price">4,500 د.ع</span>
                         <div class="item-quantity">
@@ -364,11 +528,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="4500" data-name="وجبة ماكس" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=ماكس">
-                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=ماكس" alt="وجبة ماكس" class="item-image">
+                    <div class="menu-item" data-price="4500" data-name="وجبة ماكس" data-image="https://i.ibb.co/jrbq2wz/max-meal.jpg">
+                        <img src="https://i.ibb.co/jrbq2wz/max-meal.jpg" alt="وجبة ماكس" class="item-image">
                         <div class="item-details">
                             <h3>وجبة ماكس</h3>
-                            <p>يقدم مع بيبسي وفنكر</p>
+                            <p>أقصى نكهة مع برجر الدجاج المزدوج، بطاطا ومشروب.</p>
                         </div>
                         <span class="item-price">4,500 د.ع</span>
                         <div class="item-quantity">
@@ -377,11 +541,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="6000" data-name="وجبة ريزو كلاسك" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=ريزو">
-                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=ريزو" alt="وجبة ريزو كلاسك" class="item-image">
+                    <div class="menu-item" data-price="6000" data-name="وجبة ريزو كلاسك" data-image="https://i.ibb.co/K2Jk53B/rezo-classic-meal.jpg">
+                        <img src="https://i.ibb.co/K2Jk53B/rezo-classic-meal.jpg" alt="وجبة ريزو كلاسك" class="item-image">
                         <div class="item-details">
                             <h3>وجبة ريزو كلاسك</h3>
-                            <p>يقدم مع بيبسي وفنكر</p>
+                            <p>أرز الريزو الشهي مع قطع الدجاج المقرمشة وصلصة خاصة.</p>
                         </div>
                         <span class="item-price">6,000 د.ع</span>
                         <div class="item-quantity">
@@ -390,11 +554,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="4000" data-name="وجبه شاورما دجاج" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=شاورما">
-                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=شاورما" alt="وجبه شاورما دجاج" class="item-image">
+                    <div class="menu-item" data-price="4000" data-name="وجبه شاورما دجاج" data-image="https://i.ibb.co/gMwV9Gj/chicken-shawarma-meal.jpg">
+                        <img src="https://i.ibb.co/gMwV9Gj/chicken-shawarma-meal.jpg" alt="وجبه شاورما دجاج" class="item-image">
                         <div class="item-details">
                             <h3>وجبه شاورما دجاج</h3>
-                            <p>يقدم مع بيبسي وفنكر</p>
+                            <p>شاورما الدجاج التقليدية ملفوفة بالخبز العربي مع المخلل والثومية.</p>
                         </div>
                         <span class="item-price">4,000 د.ع</span>
                         <div class="item-quantity">
@@ -403,11 +567,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="5000" data-name="وجبه شاورما لحم" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=لحم">
-                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=لحم" alt="وجبه شاورما لحم" class="item-image">
+                    <div class="menu-item" data-price="5000" data-name="وجبه شاورما لحم" data-image="https://i.ibb.co/3sLdM7h/beef-shawarma-meal.jpg">
+                        <img src="https://i.ibb.co/3sLdM7h/beef-shawarma-meal.jpg" alt="وجبه شاورما لحم" class="item-image">
                         <div class="item-details">
                             <h3>وجبه شاورما لحم</h3>
-                            <p>يقدم مع بيبسي وفنكر</p>
+                            <p>شاورما اللحم الغنية بالتوابل ملفوفة بالخبز العربي والطحينة.</p>
                         </div>
                         <span class="item-price">5,000 د.ع</span>
                         <div class="item-quantity">
@@ -416,11 +580,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="4000" data-name="وجبه كرسي" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=كرسي">
-                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=كرسي" alt="وجبه كرسي" class="item-image">
+                    <div class="menu-item" data-price="4000" data-name="وجبه كرسي" data-image="https://i.ibb.co/Q8Q41y4/korsy-meal.jpg">
+                        <img src="https://i.ibb.co/Q8Q41y4/korsy-meal.jpg" alt="وجبه كرسي" class="item-image">
                         <div class="item-details">
                             <h3>وجبه كرسي</h3>
-                            <p>يقدم مع بيبسي وفنكر</p>
+                            <p>وجبة الدجاج المقرمش مع الأرز المبهر ومرقة الخضار.</p>
                         </div>
                         <span class="item-price">4,000 د.ع</span>
                         <div class="item-quantity">
@@ -433,11 +597,11 @@
 
                 <!-- وجبات كيلو ونصف كيلو -->
                 <div id="kilo-half-kilo" class="menu-category">
-                    <div class="menu-item" data-price="8000" data-name="نصف كيلو كرسي" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=كرسي">
-                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=كرسي" alt="نصف كيلو كرسي" class="item-image">
+                    <div class="menu-item" data-price="8000" data-name="نصف كيلو كرسي" data-image="https://i.ibb.co/Q8Q41y4/korsy-meal.jpg">
+                        <img src="https://i.ibb.co/Q8Q41y4/korsy-meal.jpg" alt="نصف كيلو كرسي" class="item-image">
                         <div class="item-details">
                             <h3>نصف كيلو كرسي</h3>
-                            <p></p>
+                            <p>نصف كيلو من قطع الدجاج المقرمش والشهي.</p>
                         </div>
                         <span class="item-price">8,000 د.ع</span>
                         <div class="item-quantity">
@@ -446,11 +610,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="16000" data-name="كيلو كرسي" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=كيلو">
-                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=كيلو" alt="كيلو كرسي" class="item-image">
+                    <div class="menu-item" data-price="16000" data-name="كيلو كرسي" data-image="https://i.ibb.co/Q8Q41y4/korsy-meal.jpg">
+                        <img src="https://i.ibb.co/Q8Q41y4/korsy-meal.jpg" alt="كيلو كرسي" class="item-image">
                         <div class="item-details">
                             <h3>كيلو كرسي</h3>
-                            <p></p>
+                            <p>كيلو كامل من الدجاج المقرمش الغني بالنكهة.</p>
                         </div>
                         <span class="item-price">16,000 د.ع</span>
                         <div class="item-quantity">
@@ -459,11 +623,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="14000" data-name="كيلو شاورما دجاج" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=شاورما">
-                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=شاورما" alt="كيلو شاورما دجاج" class="item-image">
+                    <div class="menu-item" data-price="14000" data-name="كيلو شاورما دجاج" data-image="https://i.ibb.co/gMwV9Gj/chicken-shawarma-meal.jpg">
+                        <img src="https://i.ibb.co/gMwV9Gj/chicken-shawarma-meal.jpg" alt="كيلو شاورما دجاج" class="item-image">
                         <div class="item-details">
                             <h3>كيلو شاورما دجاج</h3>
-                            <p></p>
+                            <p>كيلو شاورما دجاج متبلة ومقطعة جاهزة للتقديم.</p>
                         </div>
                         <span class="item-price">14,000 د.ع</span>
                         <div class="item-quantity">
@@ -472,11 +636,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="7000" data-name="نصف كيلو شاورما دجاج" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=شاورما">
-                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=شاورما" alt="نصف كيلو شاورما دجاج" class="item-image">
+                    <div class="menu-item" data-price="7000" data-name="نصف كيلو شاورما دجاج" data-image="https://i.ibb.co/gMwV9Gj/chicken-shawarma-meal.jpg">
+                        <img src="https://i.ibb.co/gMwV9Gj/chicken-shawarma-meal.jpg" alt="نصف كيلو شاورما دجاج" class="item-image">
                         <div class="item-details">
                             <h3>نصف كيلو شاورما دجاج</h3>
-                            <p></p>
+                            <p>نصف كيلو شاورما دجاج شهية.</p>
                         </div>
                         <span class="item-price">7,000 د.ع</span>
                         <div class="item-quantity">
@@ -485,11 +649,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="26000" data-name="كيلو شاورما لحم" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=لحم">
-                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=لحم" alt="كيلو شاورما لحم" class="item-image">
+                    <div class="menu-item" data-price="26000" data-name="كيلو شاورما لحم" data-image="https://i.ibb.co/3sLdM7h/beef-shawarma-meal.jpg">
+                        <img src="https://i.ibb.co/3sLdM7h/beef-shawarma-meal.jpg" alt="كيلو شاورما لحم" class="item-image">
                         <div class="item-details">
                             <h3>كيلو شاورما لحم</h3>
-                            <p></p>
+                            <p>كيلو شاورما لحم فاخرة ومتبلة بعناية.</p>
                         </div>
                         <span class="item-price">26,000 د.ع</span>
                         <div class="item-quantity">
@@ -498,11 +662,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="13000" data-name="نصف كيلو شاورما لحم" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=لحم">
-                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=لحم" alt="نصف كيلو شاورما لحم" class="item-image">
+                    <div class="menu-item" data-price="13000" data-name="نصف كيلو شاورما لحم" data-image="https://i.ibb.co/3sLdM7h/beef-shawarma-meal.jpg">
+                        <img src="https://i.ibb.co/3sLdM7h/beef-shawarma-meal.jpg" alt="نصف كيلو شاورما لحم" class="item-image">
                         <div class="item-details">
                             <h3>نصف كيلو شاورما لحم</h3>
-                            <p></p>
+                            <p>نصف كيلو شاورما لحم غنية بالنكهة.</p>
                         </div>
                         <span class="item-price">13,000 د.ع</span>
                         <div class="item-quantity">
@@ -515,11 +679,11 @@
 
                 <!-- برغر دجاج -->
                 <div id="chicken-burger" class="menu-category">
-                    <div class="menu-item" data-price="2000" data-name="برغر دجاج" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=برغر">
-                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=برغر" alt="برغر دجاج" class="item-image">
+                    <div class="menu-item" data-price="2000" data-name="برغر دجاج" data-image="https://i.ibb.co/y4L26F2/chicken-burger.jpg">
+                        <img src="https://i.ibb.co/y4L26F2/chicken-burger.jpg" alt="برغر دجاج" class="item-image">
                         <div class="item-details">
                             <h3>برغر دجاج</h3>
-                            <p></p>
+                            <p>ساندويتش برجر الدجاج الكلاسيكي مع الخضار الطازجة.</p>
                         </div>
                         <span class="item-price">2,000 د.ع</span>
                         <div class="item-quantity">
@@ -528,11 +692,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="2500" data-name="برغر دجاج بالجبن" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=برغر">
-                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=برغر" alt="برغر دجاج بالجبن" class="item-image">
+                    <div class="menu-item" data-price="2500" data-name="برغر دجاج بالجبن" data-image="https://i.ibb.co/X2Y53Dq/chicken-cheese-burger.jpg">
+                        <img src="https://i.ibb.co/X2Y53Dq/chicken-cheese-burger.jpg" alt="برغر دجاج بالجبن" class="item-image">
                         <div class="item-details">
                             <h3>برغر دجاج بالجبن</h3>
-                            <p></p>
+                            <p>برجر دجاج مع طبقة غنية من الجبن الذائب.</p>
                         </div>
                         <span class="item-price">2,500 د.ع</span>
                         <div class="item-quantity">
@@ -541,11 +705,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="2500" data-name="زنجر كلاسك" data-image="https://via.placeholder.com/80/FFC107/FFFFFF?text=زنجر">
-                        <img src="https://via.placeholder.com/80/FFC107/FFFFFF?text=زنجر" alt="زنجر كلاسك" class="item-image">
+                    <div class="menu-item" data-price="2500" data-name="زنجر كلاسك" data-image="https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg">
+                        <img src="https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg" alt="زنجر كلاسك" class="item-image">
                         <div class="item-details">
                             <h3>زنجر كلاسك</h3>
-                            <p></p>
+                            <p>ساندويتش زنجر الدجاج المقرمش الشهير.</p>
                         </div>
                         <span class="item-price">2,500 د.ع</span>
                         <div class="item-quantity">
@@ -554,11 +718,11 @@
                             <button onclick="updateQuantity(this, 1)">+</button>
                         </div>
                     </div>
-                    <div class="menu-item" data-price="3000" data-name="زنجر بالجبن" data-image="https://via.placeholder.com/80/4CAF50/FFFFFF?text=زنجر">
-                        <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=زنجر" alt="زنجر بالجبن" class="item-image">
+                    <div class="menu-item" data-price="3000" data-name="زنجر بالجبن" data-image="https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg">
+                        <img src="https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg" alt="زنجر بالجبن" class="item-image">
                         <div class="item-details">
                             <h3>زنجر بالجبن</h3>
-                            <p></p>
+                            <p>زنجر الدجاج مع إضافة الجبن الفاخر.</p>
                         </div>
                         <span class="item-price">3,000 د.ع</span>
                         <div class="item-quantity">
@@ -572,39 +736,43 @@
         </section>
 
         <section class="order-summary">
-            <h2>معلومات الطلب</h2>
+            <h2 class="section-title">إتمام الطلب</h2>
             <div class="customer-info">
-                <label for="customerName">الاسم:</label>
-                <input type="text" id="customerName" placeholder="أدخل اسمك الكريم" required>
+                <label for="customerName"><i class="fas fa-user"></i> الاسم الكامل:</label>
+                <input type="text" id="customerName" placeholder="الرجاء إدخال اسمك الكريم" required>
 
-                <label for="customerPhone">رقم الهاتف:</label>
-                <input type="tel" id="customerPhone" placeholder="أدخل رقم هاتفك" required>
+                <label for="customerPhone"><i class="fas fa-phone"></i> رقم الهاتف:</label>
+                <input type="tel" id="customerPhone" placeholder="مثال: 07xxxxxxxx (مطلوب)" required>
 
-                <label for="customerAddress">عنوان التوصيل:</label>
-                <input type="text" id="customerAddress" placeholder="أدخل عنوان التوصيل بالتفصيل" required>
+                <label for="customerAddress"><i class="fas fa-map-marker-alt"></i> عنوان التوصيل:</label>
+                <input type="text" id="customerAddress" placeholder="الشارع، الحي، رقم المنزل، المدينة (مطلوب)" required>
                 
-                <label for="orderNotes">ملاحظات إضافية (اختياري):</label>
-                <textarea id="orderNotes" placeholder="اكتب أي ملاحظات خاصة بالطلب هنا"></textarea>
+                <label for="orderNotes"><i class="fas fa-comment-alt"></i> ملاحظات إضافية (اختياري):</label>
+                <textarea id="orderNotes" placeholder="أضف أي ملاحظات خاصة بالطلب هنا، مثل عدم إضافة بهارات، أو وقت التوصيل المفضل..."></textarea>
 
                 <div id="location-display" style="display: none;">
-                    <strong>موقعك الحالي:</strong> <span id="current-location"></span>
+                    <i class="fas fa-location-arrow"></i> <strong>موقعك الحالي:</strong> <span id="current-location"></span>
                 </div>
-                <button onclick="getLocation()" class="send-order-btn" style="width: auto; margin: 10px auto;">تحديد الموقع الحالي</button>
+                <button onclick="getLocation()" class="send-order-btn location-btn"><i class="fas fa-crosshairs"></i> تحديد الموقع الحالي تلقائياً</button>
             </div>
 
             <div class="total-price">
-                الإجمالي: <span id="total-price-display">0 د.ع</span>
+                <i class="fas fa-money-bill-wave"></i> الإجمالي الكلي: <span id="total-price-display">0 د.ع</span>
             </div>
 
-            <button class="send-order-btn" onclick="sendOrder()">إرسال الطلب</button>
+            <button class="send-order-btn" onclick="sendOrderViaWhatsApp()">
+                <i class="fab fa-whatsapp"></i> إرسال الطلب عبر الواتساب
+            </button>
             <div class="loading-spinner" id="loading-spinner"></div>
         </section>
     </div>
 
     <script>
+        // Set the WhatsApp number here
+        const WHATSAPP_NUMBER = "9647800000000"; // مثال: 07800000000 (تأكد من استخدام رمز الدولة بدون علامة +)
+
         document.addEventListener('DOMContentLoaded', () => {
-            updateTotalPrice(); // Calculate total price on load
-            // Show the default category (meals) on load
+            updateTotalPrice();
             showCategory('meals', document.querySelector('.menu-category-buttons button.active'));
         });
 
@@ -631,27 +799,27 @@
         }
 
         function showCategory(categoryId, clickedButton) {
-            // Remove active class from all buttons
             document.querySelectorAll('.menu-category-buttons button').forEach(btn => {
                 btn.classList.remove('active');
             });
-            // Add active class to the clicked button
             clickedButton.classList.add('active');
 
-            // Hide all categories
             document.querySelectorAll('.menu-category').forEach(category => {
                 category.classList.remove('active');
             });
 
-            // Show the selected category
             document.getElementById(categoryId).classList.add('active');
         }
 
         function getLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition, showError);
+                document.querySelector('.location-btn').disabled = true;
+                document.querySelector('.location-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تحديد الموقع...';
+                navigator.geolocation.getCurrentPosition(showPosition, showError, {timeout: 10000, enableHighAccuracy: true});
             } else {
-                alert("المتصفح الخاص بك لا يدعم تحديد الموقع الجغرافي.");
+                alert("عذرًا، المتصفح الخاص بك لا يدعم تحديد الموقع الجغرافي.");
+                document.querySelector('.location-btn').disabled = false;
+                document.querySelector('.location-btn').innerHTML = '<i class="fas fa-crosshairs"></i> تحديد الموقع الحالي تلقائياً';
             }
         }
 
@@ -662,41 +830,59 @@
             const currentLocationSpan = document.getElementById('current-location');
             
             currentLocationSpan.textContent = `خط العرض: ${latitude.toFixed(5)}, خط الطول: ${longitude.toFixed(5)}`;
-            locationDisplay.style.display = 'block';
+            locationDisplay.style.display = 'flex'; // Use flex for icon alignment
+            document.querySelector('.location-btn').disabled = false;
+            document.querySelector('.location-btn').innerHTML = '<i class="fas fa-check-circle"></i> تم تحديد الموقع';
+            document.querySelector('.location-btn').style.backgroundColor = var('--accent-color');
+            document.querySelector('.location-btn').style.color = 'white';
 
-            // Optional: You can try to reverse geocode these coordinates to a readable address
-            // This would require a third-party API (e.g., Google Maps Geocoding API)
-            // For simplicity, we are just displaying coordinates here.
+            // Optional: You could integrate a reverse geocoding API here to get a human-readable address.
+            // For example, using OpenStreetMap Nominatim API:
+            /*
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.display_name) {
+                        currentLocationSpan.textContent = data.display_name;
+                    }
+                })
+                .catch(error => console.error('Error during reverse geocoding:', error));
+            */
         }
 
         function showError(error) {
             let errorMessage = "";
             switch(error.code) {
                 case error.PERMISSION_DENIED:
-                    errorMessage = "تم رفض طلب تحديد الموقع من قبل المستخدم.";
+                    errorMessage = "تم رفض طلب تحديد الموقع. يرجى السماح للمتصفح بالوصول إلى موقعك.";
                     break;
                 case error.POSITION_UNAVAILABLE:
-                    errorMessage = "معلومات الموقع غير متوفرة.";
+                    errorMessage = "معلومات الموقع غير متوفرة حالياً.";
                     break;
                 case error.TIMEOUT:
-                    errorMessage = "انتهت مهلة طلب تحديد الموقع.";
+                    errorMessage = "انتهت مهلة تحديد الموقع. يرجى المحاولة مرة أخرى.";
                     break;
                 case error.UNKNOWN_ERROR:
-                    errorMessage = "حدث خطأ غير معروف.";
+                    errorMessage = "حدث خطأ غير معروف أثناء تحديد الموقع.";
                     break;
             }
             alert("خطأ في تحديد الموقع: " + errorMessage);
+            document.querySelector('.location-btn').disabled = false;
+            document.querySelector('.location-btn').innerHTML = '<i class="fas fa-crosshairs"></i> تحديد الموقع الحالي تلقائياً';
+            document.querySelector('.location-btn').style.backgroundColor = ''; // Reset color
+            document.querySelector('.location-btn').style.color = ''; // Reset color
+            document.getElementById('location-display').style.display = 'none'; // Hide location display on error
         }
 
-        function sendOrder() {
-            const customerName = document.getElementById('customerName').value;
-            const customerPhone = document.getElementById('customerPhone').value;
-            const customerAddress = document.getElementById('customerAddress').value;
-            const orderNotes = document.getElementById('orderNotes').value;
-            const currentLocation = document.getElementById('current-location').textContent;
+        function sendOrderViaWhatsApp() {
+            const customerName = document.getElementById('customerName').value.trim();
+            const customerPhone = document.getElementById('customerPhone').value.trim();
+            const customerAddress = document.getElementById('customerAddress').value.trim();
+            const orderNotes = document.getElementById('orderNotes').value.trim();
+            const currentLocation = document.getElementById('current-location').textContent.trim();
 
             if (!customerName || !customerPhone || !customerAddress) {
-                alert("الرجاء تعبئة جميع معلومات العميل المطلوبة (الاسم، رقم الهاتف، عنوان التوصيل).");
+                alert("الرجاء تعبئة جميع معلومات العميل المطلوبة (الاسم الكامل، رقم الهاتف، عنوان التوصيل) قبل إرسال الطلب.");
                 return;
             }
 
@@ -719,47 +905,60 @@
 
             const total = document.getElementById('total-price-display').textContent;
 
-            let orderDetails = `طلب جديد من مطعم طازج:\n\n`;
-            orderDetails += `الاسم: ${customerName}\n`;
-            orderDetails += `رقم الهاتف: ${customerPhone}\n`;
-            orderDetails += `عنوان التوصيل: ${customerAddress}\n`;
-            if (currentLocation) {
-                orderDetails += `الموقع الحالي: ${currentLocation}\n`;
+            let orderMessage = `🚀 *طلب جديد من مطعم طازج الفاخر*\n\n`;
+            orderMessage += `*معلومات العميل:*\n`;
+            orderMessage += `الاسم: *${customerName}*\n`;
+            orderMessage += `رقم الهاتف: *${customerPhone}*\n`;
+            orderMessage += `عنوان التوصيل: *${customerAddress}*\n`;
+            if (currentLocation && currentLocation !== 'غير محدد') {
+                orderMessage += `الموقع الحالي (تقريبي): ${currentLocation}\n`;
             }
             if (orderNotes) {
-                orderDetails += `ملاحظات: ${orderNotes}\n\n`;
+                orderMessage += `ملاحظات إضافية: ${orderNotes}\n\n`;
             }
             
-            orderDetails += `المنتجات المطلوبة:\n`;
+            orderMessage += `*المنتجات المطلوبة:*\n`;
             orderedItems.forEach(item => {
-                orderDetails += `- ${item.name} (الكمية: ${item.quantity}) - السعر: ${(item.price * item.quantity).toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}\n`;
+                orderMessage += `• ${item.name} (الكمية: ${item.quantity}) - السعر: ${(item.price * item.quantity).toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}\n`;
             });
-            orderDetails += `\nالإجمالي الكلي: ${total}\n\n`;
-            orderDetails += `شكرا لاختياركم مطعم طازج!`;
+            orderMessage += `\n*الإجمالي الكلي: ${total}*\n\n`;
+            orderMessage += `نتطلع لخدمتك! 🌟`;
 
-            // Display loading spinner
-            document.getElementById('loading-spinner').style.display = 'block';
-            document.querySelector('.send-order-btn').disabled = true;
+            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(orderMessage)}`;
+            window.open(whatsappUrl, '_blank');
 
-            // Simulate sending order (e.g., to a backend or a WhatsApp API)
-            // For this example, we'll just log it and show an alert.
-            console.log(orderDetails);
-            
-            setTimeout(() => {
-                document.getElementById('loading-spinner').style.display = 'none';
-                document.querySelector('.send-order-btn').disabled = false;
-                alert("تم إرسال طلبك بنجاح! سيتم التواصل معك قريبا.");
-                // Optionally, you can redirect the user or clear the form
-                // window.location.reload(); 
-            }, 2000); // Simulate 2 seconds loading time
+            // Optionally, clear the form after sending
+            // document.getElementById('customerName').value = '';
+            // document.getElementById('customerPhone').value = '';
+            // document.getElementById('customerAddress').value = '';
+            // document.getElementById('orderNotes').value = '';
+            // document.getElementById('current-location').textContent = '';
+            // document.getElementById('location-display').style.display = 'none';
+            // document.querySelectorAll('.quantity').forEach(span => span.textContent = '0');
+            // updateTotalPrice();
         }
 
-        // Generate placeholder images if specific image links are not provided
+        // Placeholder images
         document.querySelectorAll('.item-image[src^="رابط_صورة_"]').forEach(img => {
             const altText = img.alt;
-            const placeholderUrl = `https://via.placeholder.com/80/cccccc/333333?text=${encodeURIComponent(altText.replace(/ /g, '_'))}`;
+            const placeholderUrl = `https://via.placeholder.com/100/A0522D/FFFFFF?text=${encodeURIComponent(altText.replace(/ /g, '_'))}`;
             img.src = placeholderUrl;
         });
+
+        // Some sample professional images from ImgBB for better appearance (replace with your actual images)
+        // I've directly used these in the HTML for simplicity, but you could have a JS array.
+        // Example:
+        // const mealImages = {
+        //     "وجبة طازج": "https://i.ibb.co/L5hY5Mh/burger-meal.jpg",
+        //     "وجبة زنجر جبن": "https://i.ibb.co/j3Fw37R/zinger-cheese-meal.jpg",
+        //     // ... and so on
+        // };
+        // document.querySelectorAll('.menu-item').forEach(item => {
+        //     const itemName = item.dataset.name;
+        //     if (mealImages[itemName]) {
+        //         item.querySelector('.item-image').src = mealImages[itemName];
+        //     }
+        // });
     </script>
 </body>
 </html>
