@@ -14,6 +14,7 @@
             background-color: #fce4ec; /* لون وردي فاتح */
             margin: 0;
             color: #333;
+            overflow-x: hidden; /* لمنع ظهور شريط التمرير الأفقي إذا الدبدوب خرج قليلاً */
         }
         .container {
             background-color: #fff;
@@ -24,6 +25,7 @@
             max-width: 500px;
             width: 90%;
             animation: fadeIn 1s ease-out;
+            position: relative; /* لتحديد موضع الدبدوب بالنسبة للحاوية */
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
@@ -37,6 +39,8 @@
         .section {
             display: none; /* إخفاء الأقسام في البداية */
             margin-top: 20px;
+            position: relative; /* للسماح بوضع الدبدوب بجانبه بشكل صحيح */
+            padding-right: 80px; /* مسافة لكي لا يتداخل الدبدوب مع النص */
         }
         .section.active {
             display: block; /* إظهار القسم النشط */
@@ -67,6 +71,29 @@
             margin-top: 30px;
             font-weight: bold;
         }
+        .teddy-bear {
+            position: absolute;
+            left: -80px; /* تحريك الدبدوب إلى اليسار خارج القسم */
+            top: 50%;
+            transform: translateY(-50%); /* لتوسيط الدبدوب عمودياً */
+            width: 70px; /* حجم الدبدوب */
+            height: auto;
+            display: none; /* إخفاء الدبدوب في البداية */
+            animation: bounce 0.8s infinite alternate ease-in-out; /* حركة نط بسيطة */
+        }
+        .section.active .teddy-bear {
+            display: block; /* إظهار الدبدوب في القسم النشط فقط */
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(-50%) translateX(0); }
+            to { transform: translateY(-60%) translateX(5px); }
+        }
+
+        /* تعديل لموضع الدبدوب في القسم الأخير إذا كان هناك نص طويل */
+        #finalMessage .teddy-bear {
+            top: 30%; /* تعديل الموضع العلوي للقسم الأخير */
+        }
     </style>
 </head>
 <body>
@@ -74,6 +101,7 @@
         <h1>حنينه المطيه 🎀🩷🩷🩷🩷</h1>
 
         <div id="section1" class="section active">
+            <img src="https://i.imgur.com/rN5nO8Y.png" alt="دبدوب كيوت يؤشر" class="teddy-bear">
             <p>شلونچ ؟؟</p>
             <div class="buttons">
                 <button onclick="answerQuestion(1, 'نفستي تعبانة')">نفستي تعبانة</button>
@@ -83,6 +111,7 @@
         </div>
 
         <div id="section2" class="section">
+            <img src="https://i.imgur.com/rN5nO8Y.png" alt="دبدوب كيوت يؤشر" class="teddy-bear">
             <p>تحبيني؟</p>
             <div class="buttons">
                 <button onclick="answerQuestion(2, 'لا')">لا</button>
@@ -91,6 +120,7 @@
         </div>
 
         <div id="section3" class="section">
+            <img src="https://i.imgur.com/rN5nO8Y.png" alt="دبدوب كيوت يؤشر" class="teddy-bear">
             <p>ندمانه ؟</p>
             <div class="buttons">
                 <button onclick="answerQuestion(3, 'اي')">اي</button>
@@ -99,6 +129,7 @@
         </div>
 
         <div id="section4" class="section">
+            <img src="https://i.imgur.com/rN5nO8Y.png" alt="دبدوب كيوت يؤشر" class="teddy-bear">
             <p>تونستي ؟</p>
             <div class="buttons">
                 <button onclick="answerQuestion(4, 'اي كلش')">اي كلش</button>
@@ -107,6 +138,7 @@
         </div>
 
         <div id="section5" class="section">
+            <img src="https://i.imgur.com/rN5nO8Y.png" alt="دبدوب كيوت يؤشر" class="teddy-bear">
             <p>تحبيني ؟</p>
             <div class="buttons">
                 <button onclick="answerQuestion(5, 'اي')">اي</button>
@@ -115,6 +147,7 @@
         </div>
 
         <div id="finalMessage" class="section">
+            <img src="https://i.imgur.com/rN5nO8Y.png" alt="دبدوب كيوت يؤشر" class="teddy-bear">
             <p class="final-message">تعبناچ ياغبيه💜💜💜💜💜💜💜</p>
             <p>
         </div>
@@ -124,7 +157,6 @@
         let currentSection = 1;
 
         function answerQuestion(sectionNumber, answer) {
-            // يمكنك هنا تخزين الإجابات إذا أردت
             console.log(`Question ${sectionNumber} answered: ${answer}`);
 
             document.getElementById(`section${sectionNumber}`).classList.remove('active');
