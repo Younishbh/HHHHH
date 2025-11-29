@@ -5,14 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مكتبة ماري</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- تحميل خط تجوال (للعربي) + خط Great Vibes (للإنكليزي المزج) -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
             theme: {
-                extend: { fontFamily: { sans: ['Tajawal', 'sans-serif'] } }
+                extend: { 
+                    fontFamily: { 
+                        sans: ['Tajawal', 'sans-serif'],
+                        script: ['"Great Vibes"', 'cursive'], /* تعريف الخط الجديد */
+                    },
+                    colors: {
+                        primary: '#db2777',
+                        secondary: '#fce7f3',
+                    }
+                }
             }
         }
     </script>
@@ -21,104 +32,149 @@
         body { font-family: 'Tajawal', sans-serif; }
         .admin-only { display: none !important; }
         .show-admin .admin-only { display: flex !important; }
-        /* إخفاء شريط التمرير للنوافذ المنبثقة */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* حركة الطفو */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        .float-delay {
+            animation-delay: 3s; 
+        }
     </style>
 </head>
-<body class="min-h-screen bg-gray-50 text-gray-800" id="mainBody">
+<body class="min-h-screen bg-pink-50 text-gray-800 relative selection:bg-pink-200" id="mainBody">
 
-    <!-- الرأس -->
-    <header class="bg-indigo-700 text-white shadow-lg sticky top-0 z-40">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="library" class="w-8 h-8"></i>
-                    <h1 class="text-2xl font-bold">مكتبة ماري</h1>
+    <!-- خلفية الفراشة -->
+    <div class="fixed inset-0 z-0 pointer-events-none opacity-10"
+         style="background-image: url('https://images.unsplash.com/photo-1462275646964-a0e338679c1e?q=80&w=2000&auto=format&fit=crop'); 
+                background-size: cover; 
+                background-position: center;">
+    </div>
+
+    <!-- زينة متحركة -->
+    <img src="https://cdn-icons-png.flaticon.com/512/2909/2909241.png" 
+         class="fixed bottom-10 left-10 w-24 h-24 z-0 floating-element opacity-80" 
+         alt="Pink Butterfly">
+
+    <img src="https://cdn-icons-png.flaticon.com/512/864/864685.png" 
+         class="fixed bottom-10 right-10 w-24 h-24 z-0 floating-element float-delay opacity-80" 
+         alt="Pink Bow">
+
+    <!-- المحتوى -->
+    <div class="relative z-10">
+
+        <!-- الرأس -->
+        <header class="bg-gradient-to-r from-pink-600 to-rose-500 text-white shadow-lg sticky top-0 z-40">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    
+                    <!-- الشعار والعنوان -->
+                    <div class="flex items-center gap-3">
+                        <!-- شعار MY بخط مزج -->
+                        <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md border-2 border-pink-200 transform hover:scale-105 transition duration-300">
+                            <span class="font-script text-3xl text-pink-600 pt-1 pr-1 font-bold">My</span>
+                        </div>
+                        
+                        <h1 class="text-2xl font-bold tracking-wide">مكتبة ماري</h1>
+                    </div>
+                    
+                    <div class="flex gap-3 items-center">
+                        <button id="loginBtn" onclick="adminLogin()" class="px-3 py-1 bg-white/20 hover:bg-white/30 rounded text-sm border border-white/20">
+                            👨‍💻 دخول المشرف
+                        </button>
+                        
+                        <button onclick="adminLogout()" class="admin-only px-3 py-1 bg-red-400 hover:bg-red-500 rounded text-sm text-white font-bold">
+                            خروج
+                        </button>
+
+                        <button onclick="openAddModal()" class="admin-only px-4 py-2 bg-white text-pink-600 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:bg-pink-50">
+                            <i data-lucide="plus"></i> إضافة رواية
+                        </button>
+                    </div>
                 </div>
                 
-                <div class="flex gap-3 items-center">
-                    <button id="loginBtn" onclick="adminLogin()" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-sm border border-white/20">
-                        👨‍💻 دخول المشرف
-                    </button>
-                    
-                    <button onclick="adminLogout()" class="admin-only px-3 py-1 bg-red-500 hover:bg-red-600 rounded text-sm">
-                        خروج
-                    </button>
-
-                    <button onclick="openAddModal()" class="admin-only px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg font-bold flex items-center gap-2 shadow-lg">
-                        <i data-lucide="plus"></i> إضافة رواية
-                    </button>
+                <div class="mt-4 relative max-w-xl mx-auto">
+                    <input type="text" placeholder="ابحث عن رواية..." 
+                        class="w-full pr-10 pl-4 py-2 rounded-full text-gray-800 border-2 border-pink-300 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
+                        oninput="handleSearch(this.value)">
+                    <i data-lucide="search" class="absolute right-3 top-2.5 text-pink-400 w-5 h-5"></i>
                 </div>
             </div>
+        </header>
+
+        <!-- المحتوى الرئيسي -->
+        <div class="container mx-auto px-4 py-8">
             
-            <div class="mt-4 relative max-w-xl mx-auto">
-                <input type="text" placeholder="ابحث عن رواية..." 
-                    class="w-full pr-10 pl-4 py-2 rounded-full text-gray-800 border-2 border-indigo-400 focus:outline-none focus:border-indigo-200"
-                    oninput="handleSearch(this.value)">
-                <i data-lucide="search" class="absolute right-3 top-2.5 text-gray-400 w-5 h-5"></i>
+            <!-- تنبيه المشرف -->
+            <div class="admin-only bg-white/80 backdrop-blur border-r-4 border-pink-500 p-4 mb-6 rounded shadow-sm">
+                <div class="flex justify-between items-center w-full">
+                    <p class="font-bold text-pink-800">⚠️ وضع المشرف مفعل.</p>
+                    <button onclick="resetData()" class="text-red-500 text-sm underline hover:text-red-700">حذف جميع البيانات</button>
+                </div>
             </div>
-        </div>
-    </header>
 
-    <!-- المحتوى الرئيسي -->
-    <div class="container mx-auto px-4 py-8">
-        
-        <!-- تنبيه المشرف -->
-        <div class="admin-only bg-yellow-50 border-r-4 border-yellow-400 p-4 mb-6 rounded shadow-sm">
-            <div class="flex justify-between items-center w-full">
-                <p class="font-bold text-yellow-800">⚠️ وضع المشرف مفعل.</p>
-                <button onclick="resetData()" class="text-red-600 text-sm underline hover:text-red-800">حذف جميع البيانات</button>
+            <!-- شبكة الروايات -->
+            <div id="novelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+            <!-- الحالة الفارغة -->
+            <div id="emptyState" class="hidden text-center py-20 text-gray-400">
+                <div class="flex justify-center mb-4">
+                     <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center">
+                        <span class="font-script text-4xl text-pink-300">My</span>
+                     </div>
+                </div>
+                <p class="text-xl text-pink-400">لا توجد روايات حالياً</p>
             </div>
-        </div>
-
-        <!-- شبكة الروايات -->
-        <div id="novelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-        <!-- الحالة الفارغة -->
-        <div id="emptyState" class="hidden text-center py-20 text-gray-400">
-            <i data-lucide="book-x" class="w-16 h-16 mx-auto mb-4 opacity-50"></i>
-            <p class="text-xl">لا توجد روايات حالياً</p>
         </div>
     </div>
 
     <!-- نافذة إضافة رواية -->
-    <div id="addModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50 overflow-y-auto" onclick="closeAddModal()">
-        <div class="bg-white rounded-xl max-w-lg w-full shadow-2xl my-8" onclick="event.stopPropagation()">
-            <div class="bg-indigo-700 text-white p-4 rounded-t-xl flex justify-between items-center">
-                <h2 class="text-xl font-bold">إضافة رواية جديدة</h2>
+    <div id="addModal" class="fixed inset-0 bg-pink-900/40 backdrop-blur-sm hidden items-center justify-center p-4 z-50 overflow-y-auto" onclick="closeAddModal()">
+        <div class="bg-white rounded-xl max-w-lg w-full shadow-2xl my-8 border-2 border-pink-100" onclick="event.stopPropagation()">
+            <div class="bg-gradient-to-r from-pink-600 to-rose-500 text-white p-4 rounded-t-lg flex justify-between items-center">
+                <h2 class="text-xl font-bold flex items-center gap-2">
+                    <span class="font-script text-2xl bg-white text-pink-600 px-2 rounded-lg">My</span>
+                    إضافة رواية جديدة
+                </h2>
                 <button onclick="closeAddModal()" class="hover:bg-white/20 rounded-full p-1"><i data-lucide="x"></i></button>
             </div>
             
             <form onsubmit="handleAddSubmit(event)" class="p-6 space-y-4">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">عنوان الرواية *</label>
-                    <input type="text" name="title" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <input type="text" name="title" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none">
                 </div>
                 
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">المؤلف *</label>
-                    <input type="text" name="author" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <input type="text" name="author" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none">
                 </div>
 
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">قصة الرواية (الوصف) *</label>
-                    <textarea name="description" required rows="4" placeholder="اكتب ملخصاً مشوقاً للرواية..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
+                    <textarea name="description" required rows="4" placeholder="اكتب ملخصاً مشوقاً..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none"></textarea>
                 </div>
 
-                <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                    <label class="block text-sm font-bold text-blue-800 mb-1">رابط ملف PDF *</label>
-                    <input type="url" name="pdfLink" required placeholder="https://..." class="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <div class="bg-pink-50 p-3 rounded-lg border border-pink-200">
+                    <label class="block text-sm font-bold text-pink-800 mb-1">رابط ملف PDF *</label>
+                    <input type="url" name="pdfLink" required placeholder="https://..." class="w-full px-3 py-2 border border-pink-300 rounded-lg focus:ring-2 focus:ring-pink-500 outline-none bg-white">
                 </div>
 
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">رابط صورة الغلاف</label>
-                    <input type="url" name="cover" placeholder="https://..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <input type="url" name="cover" placeholder="https://..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none">
                 </div>
 
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">التصنيف</label>
-                    <select name="category" class="w-full px-3 py-2 border rounded-lg">
+                    <select name="category" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500">
                         <option>روايات عالمية</option>
                         <option>رعب وغموض</option>
                         <option>تاريخية</option>
@@ -129,45 +185,41 @@
                 </div>
 
                 <div class="pt-4 flex gap-3">
-                    <button type="submit" class="flex-1 bg-indigo-600 text-white py-2 rounded-lg font-bold hover:bg-indigo-700 transition">حفظ</button>
+                    <button type="submit" class="flex-1 bg-pink-600 text-white py-2 rounded-lg font-bold hover:bg-pink-700 transition">حفظ</button>
                     <button type="button" onclick="closeAddModal()" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 font-semibold">إلغاء</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- نافذة تفاصيل الرواية (القصة + زر القراءة) -->
-    <div id="detailsModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center p-4 z-50" onclick="closeDetailsModal()">
-        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl relative" onclick="event.stopPropagation()">
+    <!-- نافذة التفاصيل -->
+    <div id="detailsModal" class="fixed inset-0 bg-pink-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50" onclick="closeDetailsModal()">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl relative border-2 border-pink-100" onclick="event.stopPropagation()">
             
-            <!-- زر الإغلاق -->
             <button onclick="closeDetailsModal()" class="absolute top-4 left-4 bg-white/80 p-2 rounded-full hover:bg-white z-10 shadow-md">
                 <i data-lucide="x" class="w-6 h-6 text-gray-800"></i>
             </button>
 
-            <!-- صورة الغلاف كبيرة -->
             <div class="h-64 md:h-80 w-full relative">
                 <img id="modalCover" src="" class="w-full h-full object-cover">
-                <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 pt-20">
-                    <span id="modalCategory" class="text-xs font-bold bg-indigo-600 text-white px-3 py-1 rounded-full mb-2 inline-block"></span>
+                <div class="absolute bottom-0 w-full bg-gradient-to-t from-pink-900/90 via-pink-900/50 to-transparent p-6 pt-20">
+                    <span id="modalCategory" class="text-xs font-bold bg-white text-pink-600 px-3 py-1 rounded-full mb-2 inline-block shadow-sm"></span>
                     <h2 id="modalTitle" class="text-3xl font-bold text-white drop-shadow-md"></h2>
-                    <p id="modalAuthor" class="text-gray-200 mt-1 font-medium"></p>
+                    <p id="modalAuthor" class="text-pink-100 mt-1 font-medium"></p>
                 </div>
             </div>
 
-            <!-- المحتوى -->
             <div class="p-6 md:p-8">
                 <div class="mb-8">
-                    <h3 class="text-xl font-bold text-indigo-900 mb-3 flex items-center gap-2">
+                    <h3 class="text-xl font-bold text-pink-700 mb-3 flex items-center gap-2">
                         <i data-lucide="file-text" class="w-5 h-5"></i>
                         قصة الرواية
                     </h3>
                     <p id="modalDescription" class="text-gray-700 leading-relaxed text-lg whitespace-pre-line"></p>
                 </div>
 
-                <!-- زر القراءة -->
-                <div class="border-t border-gray-200 pt-6">
-                    <a id="modalReadBtn" href="#" target="_blank" class="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-4 rounded-xl font-bold text-xl hover:from-indigo-700 hover:to-blue-700 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                <div class="border-t border-pink-100 pt-6">
+                    <a id="modalReadBtn" href="#" target="_blank" class="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-4 rounded-xl font-bold text-xl hover:from-pink-600 hover:to-rose-600 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                         <i data-lucide="book-open" class="w-6 h-6"></i>
                         قراءة الرواية كاملة (PDF)
                     </a>
@@ -184,6 +236,7 @@
         let isAdmin = false;
         let searchTerm = '';
 
+        // بيانات تجريبية
         const initialData = [
             {
                 id: 1, 
@@ -216,7 +269,6 @@
             localStorage.setItem('maryNovelsLibrary', JSON.stringify(novels));
         }
 
-        // --- العرض ---
         function renderNovels() {
             const grid = document.getElementById('novelsGrid');
             const empty = document.getElementById('emptyState');
@@ -231,19 +283,19 @@
             }
 
             grid.innerHTML = filtered.map(novel => `
-                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 border border-gray-100 flex flex-col h-full relative group cursor-pointer" 
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:shadow-pink-100 transition duration-300 border border-pink-100 flex flex-col h-full relative group cursor-pointer" 
                      onclick="openDetails(${novel.id})">
                     
                     ${isAdmin ? `
-                    <button onclick="event.stopPropagation(); deleteNovel(${novel.id})" class="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full shadow-lg z-20 hover:bg-red-700" title="حذف الرواية">
+                    <button onclick="event.stopPropagation(); deleteNovel(${novel.id})" class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full shadow-lg z-20 hover:bg-red-600" title="حذف الرواية">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
                     ` : ''}
 
                     <div class="h-56 overflow-hidden relative bg-gray-200">
                         <img src="${novel.cover || 'https://via.placeholder.com/400x600?text=No+Cover'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4">
-                             <span class="text-white text-xs bg-indigo-600 px-2 py-1 rounded-full mb-1 inline-block">${novel.category}</span>
+                        <div class="absolute bottom-0 w-full bg-gradient-to-t from-pink-900/80 to-transparent p-4">
+                             <span class="text-white text-xs bg-pink-500 px-2 py-1 rounded-full mb-1 inline-block">${novel.category}</span>
                              <h3 class="font-bold text-lg text-white leading-tight">${novel.title}</h3>
                         </div>
                     </div>
@@ -254,7 +306,7 @@
                             <p class="text-gray-600 text-sm line-clamp-3 mb-4">${novel.description || 'لا يوجد وصف متاح...'}</p>
                         </div>
                         
-                        <button class="w-full bg-gray-100 text-indigo-700 py-2 rounded-lg font-bold hover:bg-indigo-50 transition flex items-center justify-center gap-2">
+                        <button class="w-full bg-pink-50 text-pink-700 py-2 rounded-lg font-bold hover:bg-pink-100 transition flex items-center justify-center gap-2">
                             <i data-lucide="eye" class="w-4 h-4"></i>
                             عرض التفاصيل والقراءة
                         </button>
@@ -265,7 +317,7 @@
             lucide.createIcons();
         }
 
-        // --- فتح نافذة التفاصيل ---
+        // --- باقي الدوال ---
         function openDetails(id) {
             const novel = novels.find(n => n.id === id);
             if(!novel) return;
@@ -280,32 +332,27 @@
             document.getElementById('detailsModal').classList.replace('hidden', 'flex');
         }
 
-        function closeDetailsModal() {
-            document.getElementById('detailsModal').classList.replace('flex', 'hidden');
-        }
+        function closeDetailsModal() { document.getElementById('detailsModal').classList.replace('flex', 'hidden'); }
 
-        // --- إضافة وحذف ---
         function handleAddSubmit(e) {
             e.preventDefault();
             const form = e.target;
-            
             const newNovel = {
                 id: Date.now(),
                 title: form.title.value,
                 author: form.author.value,
                 category: form.category.value,
-                description: form.description.value, // إضافة الوصف
+                description: form.description.value,
                 cover: form.cover.value,
                 pdfLink: form.pdfLink.value,
                 reads: 0
             };
-
             novels.unshift(newNovel);
             saveData();
             renderNovels();
             closeAddModal();
             form.reset();
-            alert("✅ تم إضافة الرواية بنجاح!");
+            alert("🌸 تم إضافة الرواية بنجاح!");
         }
 
         function deleteNovel(id) {
@@ -316,7 +363,6 @@
             }
         }
 
-        // --- أدوات المشرف ---
         function adminLogin() {
             if (prompt("🔐 رمز المشرف:") === ADMIN_PASS) {
                 isAdmin = true;
@@ -346,7 +392,6 @@
 
         function openAddModal() { document.getElementById('addModal').classList.replace('hidden', 'flex'); }
         function closeAddModal() { document.getElementById('addModal').classList.replace('flex', 'hidden'); }
-
     </script>
 </body>
 </html>
