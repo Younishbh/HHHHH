@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مكتبة ماري</title>
+    <title>مَكْتَبَةُ مَارِي 🦋🎀</title>
     
-    <!-- تحميل خط تجوال (للعربي) + خط Great Vibes (للإنكليزي المزج) -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- الخطوط: تجوال (للنصوص) + Great Vibes (للإنجليزي) + أميري (للزخرفة العربية) -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Great+Vibes&family=Amiri:wght@700&display=swap" rel="stylesheet">
     
+    <!-- المكاتب -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -17,7 +18,8 @@
                 extend: { 
                     fontFamily: { 
                         sans: ['Tajawal', 'sans-serif'],
-                        script: ['"Great Vibes"', 'cursive'], /* تعريف الخط الجديد */
+                        script: ['"Great Vibes"', 'cursive'],
+                        deco: ['"Amiri"', 'serif'], /* خط الزخرفة */
                     },
                     colors: {
                         primary: '#db2777',
@@ -34,55 +36,35 @@
         .show-admin .admin-only { display: flex !important; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* حركة الطفو */
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        .floating-element {
-            animation: float 6s ease-in-out infinite;
-        }
-        .float-delay {
-            animation-delay: 3s; 
-        }
     </style>
 </head>
+
+<!-- الخلفية: لون وردي فقط بدون صور -->
 <body class="min-h-screen bg-pink-50 text-gray-800 relative selection:bg-pink-200" id="mainBody">
-
-    <!-- خلفية الفراشة -->
-    <div class="fixed inset-0 z-0 pointer-events-none opacity-10"
-         style="background-image: url('https://images.unsplash.com/photo-1462275646964-a0e338679c1e?q=80&w=2000&auto=format&fit=crop'); 
-                background-size: cover; 
-                background-position: center;">
-    </div>
-
-    <!-- زينة متحركة -->
-    <img src="https://cdn-icons-png.flaticon.com/512/2909/2909241.png" 
-         class="fixed bottom-10 left-10 w-24 h-24 z-0 floating-element opacity-80" 
-         alt="Pink Butterfly">
-
-    <img src="https://cdn-icons-png.flaticon.com/512/864/864685.png" 
-         class="fixed bottom-10 right-10 w-24 h-24 z-0 floating-element float-delay opacity-80" 
-         alt="Pink Bow">
 
     <!-- المحتوى -->
     <div class="relative z-10">
 
-        <!-- الرأس -->
+        <!-- الرأس (Header) -->
         <header class="bg-gradient-to-r from-pink-600 to-rose-500 text-white shadow-lg sticky top-0 z-40">
             <div class="container mx-auto px-4 py-4">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                     
-                    <!-- الشعار والعنوان -->
                     <div class="flex items-center gap-3">
-                        <!-- شعار MY بخط مزج -->
-                        <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md border-2 border-pink-200 transform hover:scale-105 transition duration-300">
+                        <!-- الشعار My -->
+                        <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md border-2 border-pink-200">
                             <span class="font-script text-3xl text-pink-600 pt-1 pr-1 font-bold">My</span>
                         </div>
                         
-                        <h1 class="text-2xl font-bold tracking-wide">مكتبة ماري</h1>
+                        <!-- العنوان المزخرف مع الرموز -->
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-3xl font-deco font-bold tracking-wide text-white drop-shadow-md">
+                                مَكْتَبَةُ مَارِي
+                            </h1>
+                            <span class="bg-white/20 px-2 py-1 rounded-full text-xl shadow-sm border border-white/10">
+                                🦋🎀
+                            </span>
+                        </div>
                     </div>
                     
                     <div class="flex gap-3 items-center">
@@ -110,9 +92,9 @@
         </header>
 
         <!-- المحتوى الرئيسي -->
-        <div class="container mx-auto px-4 py-8">
+        <div class="container mx-auto px-4 py-8 pb-10">
             
-            <!-- تنبيه المشرف -->
+            <!-- أدوات المشرف -->
             <div class="admin-only bg-white/80 backdrop-blur border-r-4 border-pink-500 p-4 mb-6 rounded shadow-sm">
                 <div class="flex justify-between items-center w-full">
                     <p class="font-bold text-pink-800">⚠️ وضع المشرف مفعل.</p>
@@ -125,12 +107,7 @@
 
             <!-- الحالة الفارغة -->
             <div id="emptyState" class="hidden text-center py-20 text-gray-400">
-                <div class="flex justify-center mb-4">
-                     <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center">
-                        <span class="font-script text-4xl text-pink-300">My</span>
-                     </div>
-                </div>
-                <p class="text-xl text-pink-400">لا توجد روايات حالياً</p>
+                <p class="text-xl text-pink-400 font-bold font-deco">لا توجد روايات حالياً 🦋</p>
             </div>
         </div>
     </div>
@@ -139,54 +116,25 @@
     <div id="addModal" class="fixed inset-0 bg-pink-900/40 backdrop-blur-sm hidden items-center justify-center p-4 z-50 overflow-y-auto" onclick="closeAddModal()">
         <div class="bg-white rounded-xl max-w-lg w-full shadow-2xl my-8 border-2 border-pink-100" onclick="event.stopPropagation()">
             <div class="bg-gradient-to-r from-pink-600 to-rose-500 text-white p-4 rounded-t-lg flex justify-between items-center">
-                <h2 class="text-xl font-bold flex items-center gap-2">
-                    <span class="font-script text-2xl bg-white text-pink-600 px-2 rounded-lg">My</span>
-                    إضافة رواية جديدة
-                </h2>
+                <h2 class="text-xl font-bold font-deco">إضافة رواية جديدة</h2>
                 <button onclick="closeAddModal()" class="hover:bg-white/20 rounded-full p-1"><i data-lucide="x"></i></button>
             </div>
             
             <form onsubmit="handleAddSubmit(event)" class="p-6 space-y-4">
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">عنوان الرواية *</label>
-                    <input type="text" name="title" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none">
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">المؤلف *</label>
-                    <input type="text" name="author" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">قصة الرواية (الوصف) *</label>
-                    <textarea name="description" required rows="4" placeholder="اكتب ملخصاً مشوقاً..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none"></textarea>
-                </div>
-
+                <input type="text" name="title" required placeholder="عنوان الرواية" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none">
+                <input type="text" name="author" required placeholder="اسم المؤلف" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none">
+                <textarea name="description" required rows="4" placeholder="وصف الرواية..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none"></textarea>
                 <div class="bg-pink-50 p-3 rounded-lg border border-pink-200">
                     <label class="block text-sm font-bold text-pink-800 mb-1">رابط ملف PDF *</label>
                     <input type="url" name="pdfLink" required placeholder="https://..." class="w-full px-3 py-2 border border-pink-300 rounded-lg focus:ring-2 focus:ring-pink-500 outline-none bg-white">
                 </div>
-
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">رابط صورة الغلاف</label>
-                    <input type="url" name="cover" placeholder="https://..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">التصنيف</label>
-                    <select name="category" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500">
-                        <option>روايات عالمية</option>
-                        <option>رعب وغموض</option>
-                        <option>تاريخية</option>
-                        <option>تنمية بشرية</option>
-                        <option>خيال علمي</option>
-                        <option>رومانسي</option>
-                    </select>
-                </div>
-
+                <input type="url" name="cover" placeholder="رابط صورة الغلاف" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none">
+                <select name="category" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500">
+                    <option>روايات عالمية</option><option>رعب وغموض</option><option>تاريخية</option><option>تنمية بشرية</option><option>خيال علمي</option><option>رومانسي</option>
+                </select>
                 <div class="pt-4 flex gap-3">
-                    <button type="submit" class="flex-1 bg-pink-600 text-white py-2 rounded-lg font-bold hover:bg-pink-700 transition">حفظ</button>
-                    <button type="button" onclick="closeAddModal()" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 font-semibold">إلغاء</button>
+                    <button type="submit" class="flex-1 bg-pink-600 text-white py-2 rounded-lg font-bold hover:bg-pink-700">حفظ</button>
+                    <button type="button" onclick="closeAddModal()" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">إلغاء</button>
                 </div>
             </form>
         </div>
@@ -195,20 +143,17 @@
     <!-- نافذة التفاصيل -->
     <div id="detailsModal" class="fixed inset-0 bg-pink-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50" onclick="closeDetailsModal()">
         <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl relative border-2 border-pink-100" onclick="event.stopPropagation()">
-            
             <button onclick="closeDetailsModal()" class="absolute top-4 left-4 bg-white/80 p-2 rounded-full hover:bg-white z-10 shadow-md">
                 <i data-lucide="x" class="w-6 h-6 text-gray-800"></i>
             </button>
-
             <div class="h-64 md:h-80 w-full relative">
                 <img id="modalCover" src="" class="w-full h-full object-cover">
                 <div class="absolute bottom-0 w-full bg-gradient-to-t from-pink-900/90 via-pink-900/50 to-transparent p-6 pt-20">
-                    <span id="modalCategory" class="text-xs font-bold bg-white text-pink-600 px-3 py-1 rounded-full mb-2 inline-block shadow-sm"></span>
-                    <h2 id="modalTitle" class="text-3xl font-bold text-white drop-shadow-md"></h2>
+                    <span id="modalCategory" class="text-xs font-bold bg-white text-pink-600 px-3 py-1 rounded-full mb-2 inline-block"></span>
+                    <h2 id="modalTitle" class="text-3xl font-bold text-white drop-shadow-md font-deco"></h2>
                     <p id="modalAuthor" class="text-pink-100 mt-1 font-medium"></p>
                 </div>
             </div>
-
             <div class="p-6 md:p-8">
                 <div class="mb-8">
                     <h3 class="text-xl font-bold text-pink-700 mb-3 flex items-center gap-2">
@@ -217,9 +162,8 @@
                     </h3>
                     <p id="modalDescription" class="text-gray-700 leading-relaxed text-lg whitespace-pre-line"></p>
                 </div>
-
                 <div class="border-t border-pink-100 pt-6">
-                    <a id="modalReadBtn" href="#" target="_blank" class="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-4 rounded-xl font-bold text-xl hover:from-pink-600 hover:to-rose-600 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    <a id="modalReadBtn" href="#" target="_blank" class="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-4 rounded-xl font-bold text-xl hover:from-pink-600 hover:to-rose-600 transition shadow-lg transform hover:-translate-y-1">
                         <i data-lucide="book-open" class="w-6 h-6"></i>
                         قراءة الرواية كاملة (PDF)
                     </a>
@@ -230,25 +174,11 @@
     </div>
 
     <script>
-        // --- الإعدادات ---
         const ADMIN_PASS = "2004225";
         let novels = [];
         let isAdmin = false;
         let searchTerm = '';
-
-        // بيانات تجريبية
-        const initialData = [
-            {
-                id: 1, 
-                title: "أرض زيكولا", 
-                author: "عمرو عبد الحميد", 
-                category: "خيال", 
-                description: "هل جرّبت أن تتعامل بعملة مختلفة عن العملات الورقية .. ليست معدنية وليست ذهبية ...الثروة هنا من نوع آخر ... لن تدفع مالاً لتأخذ ..بل ستدفع من ذكائك ..ستدفع من وحدات عقلك... ولكن انتبه فـ للثروة حدود ...فهنا المفلس لا يعامل باحتقار أو يُهان كما يحدث في عالمك .. بل يتعرض للموت .. احذر .. فأنت .. في أرض زيكولا.",
-                cover: "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?w=400",
-                pdfLink: "https://www.google.com", 
-                reads: 120
-            }
-        ];
+        const initialData = [{id: 1, title: "أرض زيكولا", author: "عمرو عبد الحميد", category: "خيال", description: "هل جرّبت أن تتعامل بعملة مختلفة عن العملات الورقية..", cover: "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?w=400", pdfLink: "https://www.google.com", reads: 120}];
 
         document.addEventListener('DOMContentLoaded', () => {
             loadData();
@@ -258,16 +188,11 @@
 
         function loadData() {
             const saved = localStorage.getItem('maryNovelsLibrary');
-            if (saved) {
-                novels = JSON.parse(saved);
-            } else {
-                novels = initialData;
-            }
+            if (saved) novels = JSON.parse(saved);
+            else novels = initialData;
         }
 
-        function saveData() {
-            localStorage.setItem('maryNovelsLibrary', JSON.stringify(novels));
-        }
+        function saveData() { localStorage.setItem('maryNovelsLibrary', JSON.stringify(novels)); }
 
         function renderNovels() {
             const grid = document.getElementById('novelsGrid');
@@ -277,61 +202,45 @@
             if (filtered.length === 0) {
                 grid.innerHTML = '';
                 empty.classList.remove('hidden');
-                return;
             } else {
                 empty.classList.add('hidden');
+                grid.innerHTML = filtered.map(novel => `
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:shadow-pink-100 transition duration-300 border border-pink-100 flex flex-col h-full relative group cursor-pointer" onclick="openDetails(${novel.id})">
+                        ${isAdmin ? `<button onclick="event.stopPropagation(); deleteNovel(${novel.id})" class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full shadow-lg z-20 hover:bg-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}
+                        <div class="h-56 overflow-hidden relative bg-gray-200">
+                            <img src="${novel.cover || 'https://via.placeholder.com/400x600?text=No+Cover'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute bottom-0 w-full bg-gradient-to-t from-pink-900/80 to-transparent p-4">
+                                 <span class="text-white text-xs bg-pink-500 px-2 py-1 rounded-full mb-1 inline-block">${novel.category}</span>
+                                 <h3 class="font-bold text-lg text-white leading-tight font-deco">${novel.title}</h3>
+                            </div>
+                        </div>
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm mb-2">✍️ ${novel.author}</p>
+                                <p class="text-gray-600 text-sm line-clamp-3 mb-4">${novel.description || 'لا يوجد وصف...'}</p>
+                            </div>
+                            <button class="w-full bg-pink-50 text-pink-700 py-2 rounded-lg font-bold hover:bg-pink-100 transition flex items-center justify-center gap-2">
+                                <i data-lucide="eye" class="w-4 h-4"></i> عرض التفاصيل
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                lucide.createIcons();
             }
-
-            grid.innerHTML = filtered.map(novel => `
-                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:shadow-pink-100 transition duration-300 border border-pink-100 flex flex-col h-full relative group cursor-pointer" 
-                     onclick="openDetails(${novel.id})">
-                    
-                    ${isAdmin ? `
-                    <button onclick="event.stopPropagation(); deleteNovel(${novel.id})" class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full shadow-lg z-20 hover:bg-red-600" title="حذف الرواية">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                    ` : ''}
-
-                    <div class="h-56 overflow-hidden relative bg-gray-200">
-                        <img src="${novel.cover || 'https://via.placeholder.com/400x600?text=No+Cover'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <div class="absolute bottom-0 w-full bg-gradient-to-t from-pink-900/80 to-transparent p-4">
-                             <span class="text-white text-xs bg-pink-500 px-2 py-1 rounded-full mb-1 inline-block">${novel.category}</span>
-                             <h3 class="font-bold text-lg text-white leading-tight">${novel.title}</h3>
-                        </div>
-                    </div>
-                    
-                    <div class="p-4 flex-1 flex flex-col justify-between">
-                        <div>
-                            <p class="text-gray-500 text-sm mb-2">✍️ ${novel.author}</p>
-                            <p class="text-gray-600 text-sm line-clamp-3 mb-4">${novel.description || 'لا يوجد وصف متاح...'}</p>
-                        </div>
-                        
-                        <button class="w-full bg-pink-50 text-pink-700 py-2 rounded-lg font-bold hover:bg-pink-100 transition flex items-center justify-center gap-2">
-                            <i data-lucide="eye" class="w-4 h-4"></i>
-                            عرض التفاصيل والقراءة
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-
-            lucide.createIcons();
         }
 
-        // --- باقي الدوال ---
         function openDetails(id) {
             const novel = novels.find(n => n.id === id);
             if(!novel) return;
-
             document.getElementById('modalTitle').innerText = novel.title;
             document.getElementById('modalAuthor').innerText = `بقلم: ${novel.author}`;
             document.getElementById('modalCategory').innerText = novel.category;
-            document.getElementById('modalDescription').innerText = novel.description || "لا يوجد وصف لهذه الرواية.";
+            document.getElementById('modalDescription').innerText = novel.description || "لا يوجد وصف.";
             document.getElementById('modalCover').src = novel.cover || 'https://via.placeholder.com/400x600?text=Cover';
             document.getElementById('modalReadBtn').href = novel.pdfLink;
-
             document.getElementById('detailsModal').classList.replace('hidden', 'flex');
         }
-
+        
         function closeDetailsModal() { document.getElementById('detailsModal').classList.replace('flex', 'hidden'); }
 
         function handleAddSubmit(e) {
@@ -352,11 +261,11 @@
             renderNovels();
             closeAddModal();
             form.reset();
-            alert("🌸 تم إضافة الرواية بنجاح!");
+            alert("تم إضافة الرواية بنجاح 🦋");
         }
 
         function deleteNovel(id) {
-            if(confirm("هل أنت متأكد من حذف هذه الرواية؟")) {
+            if(confirm("هل أنت متأكد من الحذف؟")) {
                 novels = novels.filter(n => n.id !== id);
                 saveData();
                 renderNovels();
@@ -369,9 +278,7 @@
                 document.getElementById('mainBody').classList.add('show-admin');
                 document.getElementById('loginBtn').style.display = 'none';
                 renderNovels();
-            } else {
-                alert("رمز خاطئ");
-            }
+            } else { alert("رمز خاطئ"); }
         }
 
         function adminLogout() {
@@ -382,14 +289,7 @@
         }
 
         function handleSearch(val) { searchTerm = val; renderNovels(); }
-        
-        function resetData() {
-            if(confirm("سيتم حذف كل شيء! هل أنت متأكد؟")) {
-                localStorage.removeItem('maryNovelsLibrary');
-                location.reload();
-            }
-        }
-
+        function resetData() { if(confirm("حذف كل شيء؟")) { localStorage.removeItem('maryNovelsLibrary'); location.reload(); } }
         function openAddModal() { document.getElementById('addModal').classList.replace('hidden', 'flex'); }
         function closeAddModal() { document.getElementById('addModal').classList.replace('flex', 'hidden'); }
     </script>
