@@ -1,172 +1,483 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حنينه المطيه 🩷🌷</title>
+    <title>مكتبة الروايات</title>
+    
+    <!-- تحميل خط تجوال للعربية -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- تحميل Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- تحميل أيقونات Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- إعدادات الخط -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #fce4ec; /* لون وردي فاتح */
-            margin: 0;
-            color: #333;
-            overflow-x: hidden; /* لمنع ظهور شريط التمرير الأفقي إذا الدبدوب خرج قليلاً */
-        }
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            animation: fadeIn 1s ease-out;
-            position: relative; /* لتحديد موضع الدبدوب بالنسبة للحاوية */
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        h1 {
-            color: #d81b60; /* لون وردي غامق */
-            margin-bottom: 25px;
-            font-size: 2.2em;
-        }
-        .section {
-            display: none; /* إخفاء الأقسام في البداية */
-            margin-top: 20px;
-            position: relative; /* للسماح بوضع الدبدوب بجانبه بشكل صحيح */
-            padding-right: 80px; /* مسافة لكي لا يتداخل الدبدوب مع النص */
-        }
-        .section.active {
-            display: block; /* إظهار القسم النشط */
-        }
-        p {
-            font-size: 1.3em;
-            margin-bottom: 25px;
-            color: #555;
-        }
-        .buttons button {
-            background-color: #ff4081; /* لون أزرق جذاب */
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            margin: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-        .buttons button:hover {
-            background-color: #d81b60; /* لون أزرق أغمق عند التحويم */
-            transform: translateY(-2px);
-        }
-        .final-message {
-            font-size: 1.5em;
-            color: #ff4081;
-            margin-top: 30px;
-            font-weight: bold;
-        }
-        .teddy-bear {
-            position: absolute;
-            left: -80px; /* تحريك الدبدوب إلى اليسار خارج القسم */
-            top: 50%;
-            transform: translateY(-50%); /* لتوسيط الدبدوب عمودياً */
-            width: 70px; /* حجم الدبدوب */
-            height: auto;
-            display: none; /* إخفاء الدبدوب في البداية */
-            animation: bounce 0.8s infinite alternate ease-in-out; /* حركة نط بسيطة */
-        }
-        .section.active .teddy-bear {
-            display: block; /* إظهار الدبدوب في القسم النشط فقط */
-        }
-
-        @keyframes bounce {
-            from { transform: translateY(-50%) translateX(0); }
-            to { transform: translateY(-60%) translateX(5px); }
-        }
-
-        /* تعديل لموضع الدبدوب في القسم الأخير إذا كان هناك نص طويل */
-        #finalMessage .teddy-bear {
-            top: 30%; /* تعديل الموضع العلوي للقسم الأخير */
-        }
+        body { font-family: 'Tajawal', sans-serif; }
+        /* إخفاء شريط التمرير للمودال */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>حنينه المطيه 🎀🩷🩷🩷🩷</h1>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 text-gray-800">
 
-        <div id="section1" class="section active">
-            <img src="https://i.imgur.com/rN5nO8Y.png" alt="دبدوب كيوت يؤشر" class="teddy-bear">
-            <p>شلونچ ؟؟</p>
-            <div class="buttons">
-                <button onclick="answerQuestion(1, 'نفستي تعبانة')">نفستي تعبانة</button>
-                <button onclick="answerQuestion(1, 'معليك')">معليك</button>
-                <button onclick="answerQuestion(1, 'زين')">زين</button>
+    <!-- الرأس (Header) -->
+    <header class="bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="book-open" class="w-10 h-10"></i>
+                    <h1 class="text-3xl font-bold">مكتبة الروايات</h1>
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="openAddModal()" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-semibold flex items-center gap-2">
+                        <span class="text-xl">+</span>
+                        إضافة رواية
+                    </button>
+                </div>
+            </div>
+            
+            <!-- شريط البحث -->
+            <div class="relative max-w-2xl mx-auto">
+                <i data-lucide="search" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="ابحث عن روايات، مؤلفين، أو تصنيفات..."
+                    class="w-full pr-12 pl-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-300 shadow-sm"
+                    oninput="handleSearch(this.value)"
+                />
+            </div>
+        </div>
+    </header>
+
+    <!-- الإحصائيات -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-md p-6 flex items-center gap-4 hover:shadow-lg transition">
+                <div class="bg-purple-100 p-4 rounded-full">
+                    <i data-lucide="book-open" class="w-8 h-8 text-purple-600"></i>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">مجموع الروايات</p>
+                    <p class="text-2xl font-bold text-gray-800" id="totalNovelsCount">0</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6 flex items-center gap-4 hover:shadow-lg transition">
+                <div class="bg-blue-100 p-4 rounded-full">
+                    <i data-lucide="trending-up" class="w-8 h-8 text-blue-600"></i>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">القراءات الكلية</p>
+                    <p class="text-2xl font-bold text-gray-800">93.6k</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6 flex items-center gap-4 hover:shadow-lg transition">
+                <div class="bg-pink-100 p-4 rounded-full">
+                    <i data-lucide="heart" class="w-8 h-8 text-pink-600"></i>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">المفضلة</p>
+                    <p class="text-2xl font-bold text-gray-800" id="favoritesCount">0</p>
+                </div>
             </div>
         </div>
 
-        <div id="section2" class="section">
-            <img src="https://i.imgur.com/rN5nO8Y.png" alt="دبدوب كيوت يؤشر" class="teddy-bear">
-            <p>تحبيني؟</p>
-            <div class="buttons">
-                <button onclick="answerQuestion(2, 'لا')">لا</button>
-                <button onclick="answerQuestion(2, 'لا')">لا</button>
-            </div>
-        </div>
-
-        <div id="section3" class="section">
-            <img src="https://i.imgur.com/rN5nO8Y.png" alt="دبدوب كيوت يؤشر" class="teddy-bear">
-            <p>ندمانه ؟</p>
-            <div class="buttons">
-                <button onclick="answerQuestion(3, 'اي')">اي</button>
-                <button onclick="answerQuestion(3, 'اي')">اي</button>
-            </div>
-        </div>
-
-        <div id="section4" class="section">
-            <img src="https://i.imgur.com/rN5nO8Y.png" alt="دبدوب كيوت يؤشر" class="teddy-bear">
-            <p>تونستي ؟</p>
-            <div class="buttons">
-                <button onclick="answerQuestion(4, 'اي كلش')">اي كلش</button>
-                <button onclick="answerQuestion(4, 'لا ضايجة منك')">لا ضايجة منك</button>
-            </div>
-        </div>
-
-        <div id="section5" class="section">
-            <img src="https://i.imgur.com/rN5nO8Y.png" alt="دبدوب كيوت يؤشر" class="teddy-bear">
-            <p>تحبيني ؟</p>
-            <div class="buttons">
-                <button onclick="answerQuestion(5, 'اي')">اي</button>
-                <button onclick="answerQuestion(5, 'اي')">اي</button>
-            </div>
-        </div>
-
-        <div id="finalMessage" class="section">
-            <img src="https://i.imgur.com/rN5nO8Y.png" alt="دبدوب كيوت يؤشر" class="teddy-bear">
-            <p class="final-message">تعبناچ ياغبيه💜💜💜💜💜💜💜</p>
-            <p>
+        <!-- شبكة الروايات -->
+        <div id="novelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- سيتم ملء الروايات هنا بواسطة JavaScript -->
         </div>
     </div>
 
+    <!-- نافذة إضافة رواية (Add Modal) -->
+    <div id="addModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50 overflow-y-auto" onclick="closeAddModal()">
+        <div class="bg-white rounded-2xl max-w-2xl w-full my-8" onclick="event.stopPropagation()">
+            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-t-2xl flex justify-between items-center">
+                <h2 class="text-2xl font-bold">إضافة رواية جديدة</h2>
+                <button onclick="closeAddModal()" class="text-white hover:bg-white/20 rounded-full p-2">✕</button>
+            </div>
+            
+            <form id="addForm" onsubmit="handleAddSubmit(event)" class="p-8 space-y-6">
+                <!-- الحقول -->
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">عنوان الرواية *</label>
+                    <input type="text" name="title" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">اسم المؤلف *</label>
+                    <input type="text" name="author" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">التصنيف *</label>
+                    <select name="category" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none">
+                        <option value="خيال علمي">خيال علمي</option>
+                        <option value="غموض">غموض</option>
+                        <option value="رومانسي">رومانسي</option>
+                        <option value="فانتازيا">فانتازيا</option>
+                        <option value="واقعية">واقعية</option>
+                        <option value="إثارة">إثارة</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">وصف الرواية *</label>
+                    <textarea name="description" required rows="3" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">عدد الفصول</label>
+                        <input type="number" name="chapters" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">الحالة</label>
+                        <select name="status" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none">
+                            <option value="جاري الكتابة">جاري الكتابة</option>
+                            <option value="مكتملة">مكتملة</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">رابط الصورة (اختياري)</label>
+                    <input type="url" name="cover" placeholder="https://..." class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none">
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4">
+                    <h3 class="font-bold mb-3">المحتوى والروابط</h3>
+                    <input type="url" name="pdfLink" placeholder="رابط PDF" class="w-full px-4 py-3 mb-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none">
+                    <input type="url" name="externalLink" placeholder="رابط خارجي" class="w-full px-4 py-3 mb-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none">
+                    <textarea name="content" rows="4" placeholder="محتوى الرواية (لإنشاء ملف HTML)" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"></textarea>
+                </div>
+
+                <div class="flex gap-4">
+                    <button type="submit" class="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 font-bold">حفظ الرواية</button>
+                    <button type="button" onclick="closeAddModal()" class="px-6 py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 font-semibold">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل الرواية (Details Modal) -->
+    <div id="detailsModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50" onclick="closeDetailsModal()">
+        <!-- سيتم ملء المحتوى هنا ديناميكياً -->
+        <div id="detailsContent" class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto no-scrollbar" onclick="event.stopPropagation()">
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
     <script>
-        let currentSection = 1;
-
-        function answerQuestion(sectionNumber, answer) {
-            console.log(`Question ${sectionNumber} answered: ${answer}`);
-
-            document.getElementById(`section${sectionNumber}`).classList.remove('active');
-            currentSection++;
-
-            if (currentSection <= 5) {
-                document.getElementById(`section${currentSection}`).classList.add('active');
-            } else {
-                document.getElementById('finalMessage').classList.add('active');
+        // البيانات الأولية
+        let novels = [
+            {
+                id: 1,
+                title: "رحلة عبر الزمن",
+                author: "أحمد محمود",
+                category: "خيال علمي",
+                rating: 4.8,
+                reads: "15.2k",
+                cover: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400&h=600&fit=crop",
+                description: "رواية مشوقة تأخذك في رحلة عبر الأزمنة المختلفة، حيث يكتشف البطل سر آلة الزمن القديمة ويواجه تحديات لم يتخيلها من قبل.",
+                chapters: 45,
+                status: "مكتملة"
+            },
+            {
+                id: 2,
+                title: "أسرار القصر القديم",
+                author: "ليلى السعيد",
+                category: "غموض",
+                rating: 4.6,
+                reads: "12.8k",
+                cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop",
+                description: "قصة غامضة تدور أحداثها في قصر عتيق مليء بالأسرار والألغاز التي تكشف عن تاريخ عائلة عريقة.",
+                chapters: 38,
+                status: "مكتملة"
+            },
+            {
+                id: 3,
+                title: "حب في زمن الحرب",
+                author: "خالد عبدالله",
+                category: "رومانسي",
+                rating: 4.9,
+                reads: "20.5k",
+                cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=600&fit=crop",
+                description: "رواية رومانسية مؤثرة تروي قصة حب استثنائية نشأت في أصعب الظروف، حيث يتحدى الحبيبان كل العقبات.",
+                chapters: 52,
+                status: "جاري الكتابة"
+            },
+            {
+                id: 4,
+                title: "مدينة الأحلام",
+                author: "سارة حسن",
+                category: "فانتازيا",
+                rating: 4.7,
+                reads: "18.3k",
+                cover: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=600&fit=crop",
+                description: "عالم خيالي ساحر حيث تلتقي الأحلام بالواقع، ويكتشف البطل قدرات خارقة تغير مسار حياته للأبد.",
+                chapters: 41,
+                status: "مكتملة"
+            },
+            {
+                id: 5,
+                title: "الطريق إلى القمة",
+                author: "محمد علي",
+                category: "واقعية",
+                rating: 4.5,
+                reads: "10.1k",
+                cover: "https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=400&h=600&fit=crop",
+                description: "قصة ملهمة عن شاب يواجه تحديات الحياة ويسعى لتحقيق أحلامه رغم كل الصعوبات.",
+                chapters: 35,
+                status: "جاري الكتابة"
+            },
+            {
+                id: 6,
+                title: "ظلال الماضي",
+                author: "نورا إبراهيم",
+                category: "إثارة",
+                rating: 4.8,
+                reads: "16.7k",
+                cover: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=600&fit=crop",
+                description: "رواية مثيرة مليئة بالتشويق والإثارة، حيث تعود أحداث الماضي لتطارد البطل وتكشف أسراراً مظلمة.",
+                chapters: 48,
+                status: "مكتملة"
             }
+        ];
+
+        let favorites = [];
+        let searchTerm = '';
+
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNovels();
+            lucide.createIcons();
+        });
+
+        // دالة العرض الرئيسية
+        function renderNovels() {
+            const grid = document.getElementById('novelsGrid');
+            const filtered = novels.filter(n => 
+                n.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                n.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                n.category.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            // تحديث الإحصائيات
+            document.getElementById('totalNovelsCount').innerText = novels.length;
+            document.getElementById('favoritesCount').innerText = favorites.length;
+
+            grid.innerHTML = filtered.map(novel => `
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer group" onclick="openDetails(${novel.id})">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${novel.cover}" alt="${novel.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute top-3 right-3 bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            ${novel.category}
+                        </div>
+                        <button onclick="event.stopPropagation(); toggleFavorite(${novel.id})" 
+                            class="absolute top-3 left-3 bg-white/90 p-2 rounded-full hover:bg-white transition shadow-sm">
+                            <i data-lucide="heart" class="w-5 h-5 ${favorites.includes(novel.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'}"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="p-5">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">${novel.title}</h3>
+                        <p class="text-gray-600 mb-3">بقلم: ${novel.author}</p>
+                        
+                        <div class="flex items-center gap-4 mb-3 text-sm text-gray-600">
+                            <div class="flex items-center gap-1">
+                                <i data-lucide="star" class="w-4 h-4 fill-yellow-400 text-yellow-400"></i>
+                                <span class="font-semibold">${novel.rating}</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i data-lucide="book-open" class="w-4 h-4"></i>
+                                <span>${novel.chapters} فصل</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i data-lucide="clock" class="w-4 h-4"></i>
+                                <span>${novel.reads}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold ${novel.status === 'مكتملة' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}">
+                                ${novel.status}
+                            </span>
+                            <span class="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition text-sm font-semibold">
+                                ابدأ القراءة
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // إعادة تفعيل الأيقونات بعد تحديث DOM
+            lucide.createIcons();
+        }
+
+        // دالة البحث
+        function handleSearch(value) {
+            searchTerm = value;
+            renderNovels();
+        }
+
+        // المفضلة
+        function toggleFavorite(id) {
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(fav => fav !== id);
+            } else {
+                favorites.push(id);
+            }
+            renderNovels();
+            // تحديث نافذة التفاصيل إذا كانت مفتوحة
+            const modalContent = document.getElementById('detailsContent');
+            if(modalContent.innerHTML !== "") {
+                 // إعادة رسم زر المفضلة في المودال (بسيط)
+                 const btn = document.getElementById('favBtnModal');
+                 if(btn) {
+                     btn.innerHTML = favorites.includes(id) ? '💔 إزالة' : '❤️ مفضلة';
+                 }
+            }
+        }
+
+        // --- التعامل مع المودال (إضافة رواية) ---
+        function openAddModal() {
+            document.getElementById('addModal').classList.replace('hidden', 'flex');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.replace('flex', 'hidden');
+        }
+
+        function handleAddSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const newNovel = {
+                id: Date.now(),
+                title: form.title.value,
+                author: form.author.value,
+                category: form.category.value,
+                rating: 5.0,
+                reads: "0",
+                cover: form.cover.value || "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400&h=600&fit=crop",
+                description: form.description.value,
+                chapters: parseInt(form.chapters.value) || 0,
+                status: form.status.value,
+                pdfLink: form.pdfLink.value,
+                externalLink: form.externalLink.value,
+                content: form.content.value
+            };
+
+            novels.unshift(newNovel); // إضافة للأعلى
+            renderNovels();
+            closeAddModal();
+            form.reset();
+        }
+
+        // --- التعامل مع مودال التفاصيل ---
+        function openDetails(id) {
+            const novel = novels.find(n => n.id === id);
+            if (!novel) return;
+
+            const contentDiv = document.getElementById('detailsContent');
+            contentDiv.innerHTML = `
+                <div class="relative h-80">
+                    <img src="${novel.cover}" class="w-full h-full object-cover">
+                    <button onclick="closeDetailsModal()" class="absolute top-4 left-4 bg-white rounded-full p-2 hover:bg-gray-100 transition z-10">✕</button>
+                </div>
+                <div class="p-8">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2">${novel.title}</h2>
+                            <p class="text-gray-600 text-lg">بقلم: ${novel.author}</p>
+                        </div>
+                        <span class="px-4 py-2 bg-purple-100 text-purple-700 rounded-full font-semibold">${novel.category}</span>
+                    </div>
+
+                    <div class="flex items-center gap-6 mb-6 text-gray-600 flex-wrap">
+                        <div class="flex items-center gap-2"><i data-lucide="star" class="w-5 h-5 fill-yellow-400 text-yellow-400"></i> <span>${novel.rating}</span></div>
+                        <div class="flex items-center gap-2"><i data-lucide="book-open" class="w-5 h-5"></i> <span>${novel.chapters} فصل</span></div>
+                        <div class="flex items-center gap-2"><i data-lucide="clock" class="w-5 h-5"></i> <span>${novel.reads} قراءة</span></div>
+                    </div>
+
+                    <p class="text-gray-700 leading-relaxed mb-6">${novel.description}</p>
+
+                    <div class="flex flex-wrap gap-3 mb-6">
+                        <button onclick="window.open('${novel.externalLink || '#'}', '_blank')" class="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 font-bold">
+                            ${novel.externalLink ? '📖 اقرأ الرواية' : 'ابدأ القراءة'}
+                        </button>
+                        
+                        ${novel.pdfLink ? `<a href="${novel.pdfLink}" target="_blank" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold flex items-center gap-2">📄 PDF</a>` : ''}
+                        
+                        ${novel.content ? `<button onclick="generatePDF(${novel.id})" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-bold flex items-center gap-2">💾 HTML</button>` : ''}
+                        
+                        <button id="favBtnModal" onclick="toggleFavorite(${novel.id})" class="px-6 py-3 border-2 border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 font-bold">
+                            ${favorites.includes(novel.id) ? '💔 إزالة' : '❤️ مفضلة'}
+                        </button>
+                    </div>
+
+                    ${novel.content ? `
+                        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                            <h3 class="font-bold text-lg mb-3">معاينة المحتوى:</h3>
+                            <p class="text-gray-700 leading-relaxed whitespace-pre-line max-h-60 overflow-y-auto">${novel.content.substring(0, 500)}...</p>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            document.getElementById('detailsModal').classList.replace('hidden', 'flex');
+            lucide.createIcons();
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('detailsModal').classList.replace('flex', 'hidden');
+        }
+
+        // توليد ملف HTML للقراءة
+        function generatePDF(id) {
+            const novel = novels.find(n => n.id === id);
+            const htmlContent = `
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>${novel.title}</title>
+<style>
+    body { font-family: Arial, sans-serif; direction: rtl; padding: 40px; max-width: 800px; margin: 0 auto; }
+    h1 { color: #6b46c1; text-align: center; font-size: 32px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+    .meta { text-align: center; color: #666; margin-bottom: 40px; }
+    .content { line-height: 1.8; text-align: justify; font-size: 18px; }
+</style>
+</head>
+<body>
+    <h1>${novel.title}</h1>
+    <div class="meta">
+        <p>بقلم: ${novel.author}</p>
+        <p>التصنيف: ${novel.category}</p>
+    </div>
+    <div class="content">
+        ${novel.content ? novel.content.replace(/\n/g, '<br>') : 'لا يوجد محتوى نصي.'}
+    </div>
+</body>
+</html>`;
+            
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${novel.title}.html`;
+            link.click();
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>
