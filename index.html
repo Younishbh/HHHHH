@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مَكْتَبَةُ مَارِي 🦋🎀</title>
     
-    <!-- الخطوط: تجوال (للنصوص) + Great Vibes (للإنجليزي) + أميري (للزخرفة العربية) -->
+    <!-- الخطوط -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Great+Vibes&family=Amiri:wght@700&display=swap" rel="stylesheet">
     
     <!-- المكاتب -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -19,7 +20,7 @@
                     fontFamily: { 
                         sans: ['Tajawal', 'sans-serif'],
                         script: ['"Great Vibes"', 'cursive'],
-                        deco: ['"Amiri"', 'serif'], /* خط الزخرفة */
+                        deco: ['"Amiri"', 'serif'],
                     },
                     colors: {
                         primary: '#db2777',
@@ -29,114 +30,68 @@
             }
         }
     </script>
-
     <style>
         body { font-family: 'Tajawal', sans-serif; }
-        .admin-only { display: none !important; }
-        .show-admin .admin-only { display: flex !important; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* تصميم شريط التصنيفات */
+        .category-btn.active {
+            background-color: #db2777; /* وردي غامق */
+            color: white;
+            border-color: #db2777;
+        }
+        .category-btn {
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 
-<!-- الخلفية: لون وردي فقط بدون صور -->
-<body class="min-h-screen bg-pink-50 text-gray-800 relative selection:bg-pink-200" id="mainBody">
+<body class="min-h-screen bg-pink-50 text-gray-800 relative selection:bg-pink-200">
 
-    <!-- المحتوى -->
-    <div class="relative z-10">
-
-        <!-- الرأس (Header) -->
-        <header class="bg-gradient-to-r from-pink-600 to-rose-500 text-white shadow-lg sticky top-0 z-40">
-            <div class="container mx-auto px-4 py-4">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                    
-                    <div class="flex items-center gap-3">
-                        <!-- الشعار My -->
-                        <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md border-2 border-pink-200">
-                            <span class="font-script text-3xl text-pink-600 pt-1 pr-1 font-bold">My</span>
-                        </div>
-                        
-                        <!-- العنوان المزخرف مع الرموز -->
-                        <div class="flex items-center gap-2">
-                            <h1 class="text-3xl font-deco font-bold tracking-wide text-white drop-shadow-md">
-                                مَكْتَبَةُ مَارِي
-                            </h1>
-                            <span class="bg-white/20 px-2 py-1 rounded-full text-xl shadow-sm border border-white/10">
-                                🦋🎀
-                            </span>
-                        </div>
+    <!-- الرأس -->
+    <header class="bg-gradient-to-r from-pink-600 to-rose-500 text-white shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md border-2 border-pink-200">
+                        <span class="font-script text-3xl text-pink-600 pt-1 pr-1 font-bold">My</span>
                     </div>
-                    
-                    <div class="flex gap-3 items-center">
-                        <button id="loginBtn" onclick="adminLogin()" class="px-3 py-1 bg-white/20 hover:bg-white/30 rounded text-sm border border-white/20">
-                            👨‍💻 دخول المشرف
-                        </button>
-                        
-                        <button onclick="adminLogout()" class="admin-only px-3 py-1 bg-red-400 hover:bg-red-500 rounded text-sm text-white font-bold">
-                            خروج
-                        </button>
-
-                        <button onclick="openAddModal()" class="admin-only px-4 py-2 bg-white text-pink-600 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:bg-pink-50">
-                            <i data-lucide="plus"></i> إضافة رواية
-                        </button>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-3xl font-deco font-bold tracking-wide text-white drop-shadow-md">مَكْتَبَةُ مَارِي</h1>
+                        <span class="bg-white/20 px-2 py-1 rounded-full text-xl shadow-sm border border-white/10">🦋🎀</span>
                     </div>
-                </div>
-                
-                <div class="mt-4 relative max-w-xl mx-auto">
-                    <input type="text" placeholder="ابحث عن رواية..." 
-                        class="w-full pr-10 pl-4 py-2 rounded-full text-gray-800 border-2 border-pink-300 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
-                        oninput="handleSearch(this.value)">
-                    <i data-lucide="search" class="absolute right-3 top-2.5 text-pink-400 w-5 h-5"></i>
                 </div>
             </div>
-        </header>
-
-        <!-- المحتوى الرئيسي -->
-        <div class="container mx-auto px-4 py-8 pb-10">
             
-            <!-- أدوات المشرف -->
-            <div class="admin-only bg-white/80 backdrop-blur border-r-4 border-pink-500 p-4 mb-6 rounded shadow-sm">
-                <div class="flex justify-between items-center w-full">
-                    <p class="font-bold text-pink-800">⚠️ وضع المشرف مفعل.</p>
-                    <button onclick="resetData()" class="text-red-500 text-sm underline hover:text-red-700">حذف جميع البيانات</button>
-                </div>
-            </div>
-
-            <!-- شبكة الروايات -->
-            <div id="novelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-            <!-- الحالة الفارغة -->
-            <div id="emptyState" class="hidden text-center py-20 text-gray-400">
-                <p class="text-xl text-pink-400 font-bold font-deco">لا توجد روايات حالياً 🦋</p>
+            <!-- البحث -->
+            <div class="mt-4 relative max-w-xl mx-auto">
+                <input type="text" placeholder="ابحث عن رواية..." 
+                    class="w-full pr-10 pl-4 py-2 rounded-full text-gray-800 border-2 border-pink-300 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
+                    oninput="handleSearch(this.value)">
+                <i data-lucide="search" class="absolute right-3 top-2.5 text-pink-400 w-5 h-5"></i>
             </div>
         </div>
-    </div>
+    </header>
 
-    <!-- نافذة إضافة رواية -->
-    <div id="addModal" class="fixed inset-0 bg-pink-900/40 backdrop-blur-sm hidden items-center justify-center p-4 z-50 overflow-y-auto" onclick="closeAddModal()">
-        <div class="bg-white rounded-xl max-w-lg w-full shadow-2xl my-8 border-2 border-pink-100" onclick="event.stopPropagation()">
-            <div class="bg-gradient-to-r from-pink-600 to-rose-500 text-white p-4 rounded-t-lg flex justify-between items-center">
-                <h2 class="text-xl font-bold font-deco">إضافة رواية جديدة</h2>
-                <button onclick="closeAddModal()" class="hover:bg-white/20 rounded-full p-1"><i data-lucide="x"></i></button>
-            </div>
-            
-            <form onsubmit="handleAddSubmit(event)" class="p-6 space-y-4">
-                <input type="text" name="title" required placeholder="عنوان الرواية" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none">
-                <input type="text" name="author" required placeholder="اسم المؤلف" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none">
-                <textarea name="description" required rows="4" placeholder="وصف الرواية..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none"></textarea>
-                <div class="bg-pink-50 p-3 rounded-lg border border-pink-200">
-                    <label class="block text-sm font-bold text-pink-800 mb-1">رابط ملف PDF *</label>
-                    <input type="url" name="pdfLink" required placeholder="https://..." class="w-full px-3 py-2 border border-pink-300 rounded-lg focus:ring-2 focus:ring-pink-500 outline-none bg-white">
-                </div>
-                <input type="url" name="cover" placeholder="رابط صورة الغلاف" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none">
-                <select name="category" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500">
-                    <option>روايات عالمية</option><option>رعب وغموض</option><option>تاريخية</option><option>تنمية بشرية</option><option>خيال علمي</option><option>رومانسي</option>
-                </select>
-                <div class="pt-4 flex gap-3">
-                    <button type="submit" class="flex-1 bg-pink-600 text-white py-2 rounded-lg font-bold hover:bg-pink-700">حفظ</button>
-                    <button type="button" onclick="closeAddModal()" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">إلغاء</button>
-                </div>
-            </form>
+    <!-- المحتوى -->
+    <div class="container mx-auto px-4 py-6 pb-10">
+        
+        <!-- شريط الأقسام (جديد) -->
+        <div id="categoriesContainer" class="flex gap-3 overflow-x-auto pb-4 mb-2 no-scrollbar whitespace-nowrap">
+            <!-- سيتم إضافة الأزرار هنا تلقائياً -->
+        </div>
+
+        <!-- حالة التحميل -->
+        <div id="loadingState" class="text-center py-20">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mb-4"></div>
+            <p class="text-pink-600 text-lg">جاري ترتيب المكتبة...</p>
+        </div>
+
+        <!-- شبكة الروايات -->
+        <div id="novelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden"></div>
+
+        <!-- حالة فارغة -->
+        <div id="emptyState" class="hidden text-center py-20 text-gray-400">
+            <p class="text-xl text-pink-400 font-bold font-deco">لا توجد روايات في هذا القسم 🦋</p>
         </div>
     </div>
 
@@ -167,56 +122,106 @@
                         <i data-lucide="book-open" class="w-6 h-6"></i>
                         قراءة الرواية كاملة (PDF)
                     </a>
-                    <p class="text-center text-gray-400 text-sm mt-3">سيفتح ملف الرواية في نافذة جديدة</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const ADMIN_PASS = "2004225";
+        // رابط ملف CSV الخاص بك
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQroSmC0_KFPc19QWPzhaMRp8V16m2oVTBOloGJMofxw15Scq1YzomQj-So8e_E1IopP1VLyyh4v95Z/pub?output=csv"; 
+
         let novels = [];
-        let isAdmin = false;
         let searchTerm = '';
-        const initialData = [{id: 1, title: "أرض زيكولا", author: "عمرو عبد الحميد", category: "خيال", description: "هل جرّبت أن تتعامل بعملة مختلفة عن العملات الورقية..", cover: "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?w=400", pdfLink: "https://www.google.com", reads: 120}];
+        let currentCategory = 'الكل'; // القسم الافتراضي
 
         document.addEventListener('DOMContentLoaded', () => {
-            loadData();
-            renderNovels();
+            loadDataFromSheet();
             lucide.createIcons();
         });
 
-        function loadData() {
-            const saved = localStorage.getItem('maryNovelsLibrary');
-            if (saved) novels = JSON.parse(saved);
-            else novels = initialData;
+        function loadDataFromSheet() {
+            Papa.parse(SHEET_URL, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    novels = results.data.filter(n => n.title && n.title.trim() !== "");
+                    
+                    setupCategories(); // إعداد الأزرار
+                    
+                    document.getElementById('loadingState').classList.add('hidden');
+                    document.getElementById('novelsGrid').classList.remove('hidden');
+                    renderNovels();
+                },
+                error: function(err) {
+                    document.getElementById('loadingState').innerHTML = "<p class='text-red-500'>فشل تحميل البيانات</p>";
+                }
+            });
         }
 
-        function saveData() { localStorage.setItem('maryNovelsLibrary', JSON.stringify(novels)); }
+        // دالة إنشاء أزرار الأقسام تلقائياً
+        function setupCategories() {
+            const container = document.getElementById('categoriesContainer');
+            
+            // استخراج التصنيفات الفريدة من الروايات
+            const categories = ['الكل', ...new Set(novels.map(n => n.category).filter(c => c))];
+            
+            container.innerHTML = categories.map(cat => `
+                <button onclick="filterByCategory('${cat}')" 
+                    class="category-btn ${cat === 'الكل' ? 'active' : ''} px-6 py-2 rounded-full border border-pink-200 text-pink-700 font-bold bg-white hover:bg-pink-50 whitespace-nowrap shadow-sm">
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        // دالة تصفية الروايات حسب القسم
+        function filterByCategory(cat) {
+            currentCategory = cat;
+            
+            // تحديث شكل الأزرار
+            const buttons = document.querySelectorAll('.category-btn');
+            buttons.forEach(btn => {
+                if(btn.innerText === cat) {
+                    btn.classList.add('active');
+                    btn.classList.remove('bg-white', 'text-pink-700');
+                } else {
+                    btn.classList.remove('active');
+                    btn.classList.add('bg-white', 'text-pink-700');
+                }
+            });
+
+            renderNovels();
+        }
 
         function renderNovels() {
             const grid = document.getElementById('novelsGrid');
             const empty = document.getElementById('emptyState');
-            const filtered = novels.filter(n => n.title.toLowerCase().includes(searchTerm.toLowerCase()));
+            
+            // تصفية حسب البحث + القسم المختار
+            const filtered = novels.filter(n => {
+                const matchesSearch = n.title.toLowerCase().includes(searchTerm.toLowerCase());
+                const matchesCategory = currentCategory === 'الكل' || n.category === currentCategory;
+                return matchesSearch && matchesCategory;
+            });
 
             if (filtered.length === 0) {
                 grid.innerHTML = '';
                 empty.classList.remove('hidden');
             } else {
                 empty.classList.add('hidden');
-                grid.innerHTML = filtered.map(novel => `
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:shadow-pink-100 transition duration-300 border border-pink-100 flex flex-col h-full relative group cursor-pointer" onclick="openDetails(${novel.id})">
-                        ${isAdmin ? `<button onclick="event.stopPropagation(); deleteNovel(${novel.id})" class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full shadow-lg z-20 hover:bg-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}
+                grid.innerHTML = filtered.map((novel, index) => `
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:shadow-pink-100 transition duration-300 border border-pink-100 flex flex-col h-full relative group cursor-pointer" onclick="openDetails('${novel.title}')">
                         <div class="h-56 overflow-hidden relative bg-gray-200">
-                            <img src="${novel.cover || 'https://via.placeholder.com/400x600?text=No+Cover'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <img src="${novel.cover || 'https://via.placeholder.com/400x600?text=No+Cover'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/400x600?text=No+Cover'">
                             <div class="absolute bottom-0 w-full bg-gradient-to-t from-pink-900/80 to-transparent p-4">
-                                 <span class="text-white text-xs bg-pink-500 px-2 py-1 rounded-full mb-1 inline-block">${novel.category}</span>
+                                 <span class="text-white text-xs bg-pink-500 px-2 py-1 rounded-full mb-1 inline-block">${novel.category || 'عام'}</span>
                                  <h3 class="font-bold text-lg text-white leading-tight font-deco">${novel.title}</h3>
                             </div>
                         </div>
                         <div class="p-4 flex-1 flex flex-col justify-between">
                             <div>
-                                <p class="text-gray-500 text-sm mb-2">✍️ ${novel.author}</p>
+                                <p class="text-gray-500 text-sm mb-2">✍️ ${novel.author || 'غير معروف'}</p>
                                 <p class="text-gray-600 text-sm line-clamp-3 mb-4">${novel.description || 'لا يوجد وصف...'}</p>
                             </div>
                             <button class="w-full bg-pink-50 text-pink-700 py-2 rounded-lg font-bold hover:bg-pink-100 transition flex items-center justify-center gap-2">
@@ -229,69 +234,29 @@
             }
         }
 
-        function openDetails(id) {
-            const novel = novels.find(n => n.id === id);
+        function openDetails(title) {
+            const novel = novels.find(n => n.title === title);
+            
             if(!novel) return;
             document.getElementById('modalTitle').innerText = novel.title;
             document.getElementById('modalAuthor').innerText = `بقلم: ${novel.author}`;
             document.getElementById('modalCategory').innerText = novel.category;
             document.getElementById('modalDescription').innerText = novel.description || "لا يوجد وصف.";
             document.getElementById('modalCover').src = novel.cover || 'https://via.placeholder.com/400x600?text=Cover';
-            document.getElementById('modalReadBtn').href = novel.pdfLink;
+            
+            const pdfBtn = document.getElementById('modalReadBtn');
+            if (novel.pdfLink) {
+                pdfBtn.href = novel.pdfLink;
+                pdfBtn.style.display = 'flex';
+            } else {
+                pdfBtn.style.display = 'none';
+            }
+
             document.getElementById('detailsModal').classList.replace('hidden', 'flex');
         }
         
         function closeDetailsModal() { document.getElementById('detailsModal').classList.replace('flex', 'hidden'); }
-
-        function handleAddSubmit(e) {
-            e.preventDefault();
-            const form = e.target;
-            const newNovel = {
-                id: Date.now(),
-                title: form.title.value,
-                author: form.author.value,
-                category: form.category.value,
-                description: form.description.value,
-                cover: form.cover.value,
-                pdfLink: form.pdfLink.value,
-                reads: 0
-            };
-            novels.unshift(newNovel);
-            saveData();
-            renderNovels();
-            closeAddModal();
-            form.reset();
-            alert("تم إضافة الرواية بنجاح 🦋");
-        }
-
-        function deleteNovel(id) {
-            if(confirm("هل أنت متأكد من الحذف؟")) {
-                novels = novels.filter(n => n.id !== id);
-                saveData();
-                renderNovels();
-            }
-        }
-
-        function adminLogin() {
-            if (prompt("🔐 رمز المشرف:") === ADMIN_PASS) {
-                isAdmin = true;
-                document.getElementById('mainBody').classList.add('show-admin');
-                document.getElementById('loginBtn').style.display = 'none';
-                renderNovels();
-            } else { alert("رمز خاطئ"); }
-        }
-
-        function adminLogout() {
-            isAdmin = false;
-            document.getElementById('mainBody').classList.remove('show-admin');
-            document.getElementById('loginBtn').style.display = 'block';
-            renderNovels();
-        }
-
         function handleSearch(val) { searchTerm = val; renderNovels(); }
-        function resetData() { if(confirm("حذف كل شيء؟")) { localStorage.removeItem('maryNovelsLibrary'); location.reload(); } }
-        function openAddModal() { document.getElementById('addModal').classList.replace('hidden', 'flex'); }
-        function closeAddModal() { document.getElementById('addModal').classList.replace('flex', 'hidden'); }
     </script>
 </body>
 </html>
