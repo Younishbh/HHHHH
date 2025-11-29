@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مكتبة الروايات - قراءة PDF</title>
+    <title>مكتبة ماري</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,6 +21,9 @@
         body { font-family: 'Tajawal', sans-serif; }
         .admin-only { display: none !important; }
         .show-admin .admin-only { display: flex !important; }
+        /* إخفاء شريط التمرير للنوافذ المنبثقة */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50 text-gray-800" id="mainBody">
@@ -31,11 +34,10 @@
             <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div class="flex items-center gap-2">
                     <i data-lucide="library" class="w-8 h-8"></i>
-                    <h1 class="text-2xl font-bold">مكتبة الروايات المجانية</h1>
+                    <h1 class="text-2xl font-bold">مكتبة ماري</h1>
                 </div>
                 
                 <div class="flex gap-3 items-center">
-                    <!-- أزرار التحكم -->
                     <button id="loginBtn" onclick="adminLogin()" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-sm border border-white/20">
                         👨‍💻 دخول المشرف
                     </button>
@@ -50,9 +52,8 @@
                 </div>
             </div>
             
-            <!-- البحث -->
             <div class="mt-4 relative max-w-xl mx-auto">
-                <input type="text" placeholder="ابحث عن رواية أو مؤلف..." 
+                <input type="text" placeholder="ابحث عن رواية..." 
                     class="w-full pr-10 pl-4 py-2 rounded-full text-gray-800 border-2 border-indigo-400 focus:outline-none focus:border-indigo-200"
                     oninput="handleSearch(this.value)">
                 <i data-lucide="search" class="absolute right-3 top-2.5 text-gray-400 w-5 h-5"></i>
@@ -60,23 +61,21 @@
         </div>
     </header>
 
-    <!-- المحتوى -->
+    <!-- المحتوى الرئيسي -->
     <div class="container mx-auto px-4 py-8">
         
-        <!-- أدوات المشرف (تظهر فقط بعد تسجيل الدخول) -->
+        <!-- تنبيه المشرف -->
         <div class="admin-only bg-yellow-50 border-r-4 border-yellow-400 p-4 mb-6 rounded shadow-sm">
             <div class="flex justify-between items-center w-full">
-                <p class="font-bold text-yellow-800">⚠️ أنت في وضع المشرف: يمكنك إضافة وحذف الروايات.</p>
+                <p class="font-bold text-yellow-800">⚠️ وضع المشرف مفعل.</p>
                 <button onclick="resetData()" class="text-red-600 text-sm underline hover:text-red-800">حذف جميع البيانات</button>
             </div>
         </div>
 
         <!-- شبكة الروايات -->
-        <div id="novelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- يتم التعبئة بالجافاسكريبت -->
-        </div>
+        <div id="novelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-        <!-- رسالة عند عدم وجود روايات -->
+        <!-- الحالة الفارغة -->
         <div id="emptyState" class="hidden text-center py-20 text-gray-400">
             <i data-lucide="book-x" class="w-16 h-16 mx-auto mb-4 opacity-50"></i>
             <p class="text-xl">لا توجد روايات حالياً</p>
@@ -85,30 +84,31 @@
 
     <!-- نافذة إضافة رواية -->
     <div id="addModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50 overflow-y-auto" onclick="closeAddModal()">
-        <div class="bg-white rounded-xl max-w-lg w-full shadow-2xl transform transition-all scale-100" onclick="event.stopPropagation()">
+        <div class="bg-white rounded-xl max-w-lg w-full shadow-2xl my-8" onclick="event.stopPropagation()">
             <div class="bg-indigo-700 text-white p-4 rounded-t-xl flex justify-between items-center">
-                <h2 class="text-xl font-bold">إضافة رواية جديدة (PDF)</h2>
+                <h2 class="text-xl font-bold">إضافة رواية جديدة</h2>
                 <button onclick="closeAddModal()" class="hover:bg-white/20 rounded-full p-1"><i data-lucide="x"></i></button>
             </div>
             
             <form onsubmit="handleAddSubmit(event)" class="p-6 space-y-4">
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">عنوان الرواية</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">عنوان الرواية *</label>
                     <input type="text" name="title" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">المؤلف</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">المؤلف *</label>
                     <input type="text" name="author" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
                 </div>
 
-                <!-- حقل PDF الجديد -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">قصة الرواية (الوصف) *</label>
+                    <textarea name="description" required rows="4" placeholder="اكتب ملخصاً مشوقاً للرواية..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
+                </div>
+
                 <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                    <label class="block text-sm font-bold text-blue-800 mb-1"> رابط ملف PDF (للقراءة) *</label>
-                    <input type="url" name="pdfLink" required placeholder="https://example.com/file.pdf" 
-                           class="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                           title="يجب وضع رابط مباشر لملف PDF">
-                    <p class="text-xs text-blue-600 mt-1">تلميح: يمكنك وضع رابط من Google Drive أو موقع تحميل مباشر.</p>
+                    <label class="block text-sm font-bold text-blue-800 mb-1">رابط ملف PDF *</label>
+                    <input type="url" name="pdfLink" required placeholder="https://..." class="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
 
                 <div>
@@ -124,38 +124,79 @@
                         <option>تاريخية</option>
                         <option>تنمية بشرية</option>
                         <option>خيال علمي</option>
+                        <option>رومانسي</option>
                     </select>
                 </div>
 
                 <div class="pt-4 flex gap-3">
-                    <button type="submit" class="flex-1 bg-indigo-600 text-white py-2 rounded-lg font-bold hover:bg-indigo-700 transition shadow-lg">حفظ ونشر</button>
+                    <button type="submit" class="flex-1 bg-indigo-600 text-white py-2 rounded-lg font-bold hover:bg-indigo-700 transition">حفظ</button>
                     <button type="button" onclick="closeAddModal()" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 font-semibold">إلغاء</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- نافذة تفاصيل الرواية (القصة + زر القراءة) -->
+    <div id="detailsModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center p-4 z-50" onclick="closeDetailsModal()">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl relative" onclick="event.stopPropagation()">
+            
+            <!-- زر الإغلاق -->
+            <button onclick="closeDetailsModal()" class="absolute top-4 left-4 bg-white/80 p-2 rounded-full hover:bg-white z-10 shadow-md">
+                <i data-lucide="x" class="w-6 h-6 text-gray-800"></i>
+            </button>
+
+            <!-- صورة الغلاف كبيرة -->
+            <div class="h-64 md:h-80 w-full relative">
+                <img id="modalCover" src="" class="w-full h-full object-cover">
+                <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 pt-20">
+                    <span id="modalCategory" class="text-xs font-bold bg-indigo-600 text-white px-3 py-1 rounded-full mb-2 inline-block"></span>
+                    <h2 id="modalTitle" class="text-3xl font-bold text-white drop-shadow-md"></h2>
+                    <p id="modalAuthor" class="text-gray-200 mt-1 font-medium"></p>
+                </div>
+            </div>
+
+            <!-- المحتوى -->
+            <div class="p-6 md:p-8">
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-indigo-900 mb-3 flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-5 h-5"></i>
+                        قصة الرواية
+                    </h3>
+                    <p id="modalDescription" class="text-gray-700 leading-relaxed text-lg whitespace-pre-line"></p>
+                </div>
+
+                <!-- زر القراءة -->
+                <div class="border-t border-gray-200 pt-6">
+                    <a id="modalReadBtn" href="#" target="_blank" class="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-4 rounded-xl font-bold text-xl hover:from-indigo-700 hover:to-blue-700 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                        <i data-lucide="book-open" class="w-6 h-6"></i>
+                        قراءة الرواية كاملة (PDF)
+                    </a>
+                    <p class="text-center text-gray-400 text-sm mt-3">سيفتح ملف الرواية في نافذة جديدة</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // --- الإعدادات ---
-        const ADMIN_PASS = "123"; // كلمة المرور
+        const ADMIN_PASS = "2004225";
         let novels = [];
         let isAdmin = false;
         let searchTerm = '';
 
-        // بيانات تجريبية (تظهر فقط أول مرة)
         const initialData = [
             {
                 id: 1, 
                 title: "أرض زيكولا", 
                 author: "عمرو عبد الحميد", 
                 category: "خيال", 
+                description: "هل جرّبت أن تتعامل بعملة مختلفة عن العملات الورقية .. ليست معدنية وليست ذهبية ...الثروة هنا من نوع آخر ... لن تدفع مالاً لتأخذ ..بل ستدفع من ذكائك ..ستدفع من وحدات عقلك... ولكن انتبه فـ للثروة حدود ...فهنا المفلس لا يعامل باحتقار أو يُهان كما يحدث في عالمك .. بل يتعرض للموت .. احذر .. فأنت .. في أرض زيكولا.",
                 cover: "https://images.unsplash.com/photo-1629198688000-71f23e745b6e?w=400",
-                pdfLink: "https://www.google.com", // رابط تجريبي
+                pdfLink: "https://www.google.com", 
                 reads: 120
             }
         ];
 
-        // --- تشغيل النظام ---
         document.addEventListener('DOMContentLoaded', () => {
             loadData();
             renderNovels();
@@ -163,7 +204,7 @@
         });
 
         function loadData() {
-            const saved = localStorage.getItem('pdfNovelsLibrary');
+            const saved = localStorage.getItem('maryNovelsLibrary');
             if (saved) {
                 novels = JSON.parse(saved);
             } else {
@@ -172,14 +213,13 @@
         }
 
         function saveData() {
-            localStorage.setItem('pdfNovelsLibrary', JSON.stringify(novels));
+            localStorage.setItem('maryNovelsLibrary', JSON.stringify(novels));
         }
 
-        // --- وظائف العرض ---
+        // --- العرض ---
         function renderNovels() {
             const grid = document.getElementById('novelsGrid');
             const empty = document.getElementById('emptyState');
-            
             const filtered = novels.filter(n => n.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
             if (filtered.length === 0) {
@@ -191,37 +231,57 @@
             }
 
             grid.innerHTML = filtered.map(novel => `
-                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 border border-gray-100 flex flex-col h-full relative group">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 border border-gray-100 flex flex-col h-full relative group cursor-pointer" 
+                     onclick="openDetails(${novel.id})">
                     
                     ${isAdmin ? `
-                    <button onclick="deleteNovel(${novel.id})" class="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full shadow-lg z-10 hover:bg-red-700" title="حذف الرواية">
+                    <button onclick="event.stopPropagation(); deleteNovel(${novel.id})" class="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full shadow-lg z-20 hover:bg-red-700" title="حذف الرواية">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
                     ` : ''}
 
-                    <div class="h-48 overflow-hidden relative bg-gray-200">
-                        <img src="${novel.cover || 'https://via.placeholder.com/400x600?text=No+Cover'}" alt="${novel.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
-                            <span class="text-white text-xs bg-indigo-600 px-2 py-1 rounded-full">${novel.category}</span>
+                    <div class="h-56 overflow-hidden relative bg-gray-200">
+                        <img src="${novel.cover || 'https://via.placeholder.com/400x600?text=No+Cover'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4">
+                             <span class="text-white text-xs bg-indigo-600 px-2 py-1 rounded-full mb-1 inline-block">${novel.category}</span>
+                             <h3 class="font-bold text-lg text-white leading-tight">${novel.title}</h3>
                         </div>
                     </div>
                     
-                    <div class="p-4 flex-1 flex flex-col">
-                        <h3 class="font-bold text-lg text-gray-800 mb-1">${novel.title}</h3>
-                        <p class="text-gray-500 text-sm mb-4">✍️ ${novel.author}</p>
-                        
-                        <div class="mt-auto pt-4 border-t border-gray-100">
-                            <a href="${novel.pdfLink}" target="_blank" 
-                               class="flex items-center justify-center gap-2 w-full bg-indigo-600 text-white py-2 rounded-lg font-bold hover:bg-indigo-700 transition shadow-md">
-                                <i data-lucide="book-open" class="w-4 h-4"></i>
-                                قراءة الرواية (PDF)
-                            </a>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm mb-2">✍️ ${novel.author}</p>
+                            <p class="text-gray-600 text-sm line-clamp-3 mb-4">${novel.description || 'لا يوجد وصف متاح...'}</p>
                         </div>
+                        
+                        <button class="w-full bg-gray-100 text-indigo-700 py-2 rounded-lg font-bold hover:bg-indigo-50 transition flex items-center justify-center gap-2">
+                            <i data-lucide="eye" class="w-4 h-4"></i>
+                            عرض التفاصيل والقراءة
+                        </button>
                     </div>
                 </div>
             `).join('');
 
             lucide.createIcons();
+        }
+
+        // --- فتح نافذة التفاصيل ---
+        function openDetails(id) {
+            const novel = novels.find(n => n.id === id);
+            if(!novel) return;
+
+            document.getElementById('modalTitle').innerText = novel.title;
+            document.getElementById('modalAuthor').innerText = `بقلم: ${novel.author}`;
+            document.getElementById('modalCategory').innerText = novel.category;
+            document.getElementById('modalDescription').innerText = novel.description || "لا يوجد وصف لهذه الرواية.";
+            document.getElementById('modalCover').src = novel.cover || 'https://via.placeholder.com/400x600?text=Cover';
+            document.getElementById('modalReadBtn').href = novel.pdfLink;
+
+            document.getElementById('detailsModal').classList.replace('hidden', 'flex');
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('detailsModal').classList.replace('flex', 'hidden');
         }
 
         // --- إضافة وحذف ---
@@ -234,8 +294,9 @@
                 title: form.title.value,
                 author: form.author.value,
                 category: form.category.value,
+                description: form.description.value, // إضافة الوصف
                 cover: form.cover.value,
-                pdfLink: form.pdfLink.value, // حفظ رابط الـ PDF
+                pdfLink: form.pdfLink.value,
                 reads: 0
             };
 
@@ -244,28 +305,26 @@
             renderNovels();
             closeAddModal();
             form.reset();
-            alert("✅ تم إضافة الرواية ورابط القراءة بنجاح!");
+            alert("✅ تم إضافة الرواية بنجاح!");
         }
 
         function deleteNovel(id) {
-            if(confirm("هل أنت متأكد من حذف هذه الرواية؟ لا يمكن التراجع.")) {
+            if(confirm("هل أنت متأكد من حذف هذه الرواية؟")) {
                 novels = novels.filter(n => n.id !== id);
                 saveData();
                 renderNovels();
             }
         }
 
-        // --- تسجيل الدخول والبحث ---
+        // --- أدوات المشرف ---
         function adminLogin() {
-            const input = prompt("🔐 أدخل كلمة مرور المشرف:");
-            if (input === ADMIN_PASS) {
+            if (prompt("🔐 رمز المشرف:") === ADMIN_PASS) {
                 isAdmin = true;
                 document.getElementById('mainBody').classList.add('show-admin');
                 document.getElementById('loginBtn').style.display = 'none';
                 renderNovels();
-                alert("أهلاً بك أيها المشرف");
-            } else if (input !== null) {
-                alert("كلمة المرور خاطئة");
+            } else {
+                alert("رمز خاطئ");
             }
         }
 
@@ -276,19 +335,15 @@
             renderNovels();
         }
 
-        function handleSearch(val) {
-            searchTerm = val;
-            renderNovels();
-        }
-
+        function handleSearch(val) { searchTerm = val; renderNovels(); }
+        
         function resetData() {
-            if(confirm("تحذير: سيتم مسح كل شيء! هل أنت متأكد؟")) {
-                localStorage.removeItem('pdfNovelsLibrary');
+            if(confirm("سيتم حذف كل شيء! هل أنت متأكد؟")) {
+                localStorage.removeItem('maryNovelsLibrary');
                 location.reload();
             }
         }
 
-        // --- نوافذ ---
         function openAddModal() { document.getElementById('addModal').classList.replace('hidden', 'flex'); }
         function closeAddModal() { document.getElementById('addModal').classList.replace('flex', 'hidden'); }
 
