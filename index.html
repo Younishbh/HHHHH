@@ -50,12 +50,8 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         .hide-scroll::-webkit-scrollbar { display: none; }
-        
-        /* أزرار التصنيف النشطة */
         .cat-btn.active {
-            background-color: white;
-            color: black;
-            font-weight: bold;
+            background-color: white; color: black; font-weight: bold;
         }
         
         /* Plyr Customization */
@@ -79,6 +75,9 @@
         .video-cover video { object-fit: cover !important; }
 
         @media (min-width: 768px) { .mobile-only-btn { display: none !important; } }
+        
+        /* Iframe Fallback Style */
+        .iframe-container { width: 100%; height: 100%; border: none; background: #000; }
     </style>
 </head>
 
@@ -127,9 +126,7 @@
     <main class="container mx-auto px-4 pb-20 pt-24 md:pt-4">
         
         <!-- Dynamic Categories -->
-        <div id="categoriesContainer" class="flex gap-2 overflow-x-auto hide-scroll mb-6 pb-2">
-            <!-- سيتم توليد الأزرار هنا تلقائياً -->
-        </div>
+        <div id="categoriesContainer" class="flex gap-2 overflow-x-auto hide-scroll mb-6 pb-2"></div>
 
         <h3 id="listTitle" class="text-xl font-bold text-white mb-4 flex items-center gap-2 border-r-4 border-brand-red pr-3">المكتبة</h3>
 
@@ -182,24 +179,16 @@
             const freshUrl = SHEET_URL + "&t=" + Date.now();
             
             Papa.parse(freshUrl, {
-                download: true,
-                header: true,
-                skipEmptyLines: true,
+                download: true, header: true, skipEmptyLines: true,
                 complete: function(results) {
                     allMovies = results.data;
                     document.getElementById('loading').style.display = 'none';
                     if(allMovies.length > 0) {
-                        // 1. عكس القائمة لجعل الأحدث في الأعلى
-                        allMovies.reverse();
+                        allMovies.reverse(); // الأحدث أولاً
+                        allMovies.forEach((movie, index) => { if (index < 10) movie.isNew = true; });
 
-                        // 2. تمييز أول 10 أفلام كـ "جديدة"
-                        allMovies.forEach((movie, index) => {
-                            if (index < 10) movie.isNew = true;
-                        });
-
-                        // 3. إعداد الواجهة
                         setupHero(allMovies[0]);
-                        setupCategories(); // توليد الأزرار تلقائياً
+                        setupCategories();
                         renderMovies(allMovies);
                     } else {
                         document.getElementById('emptyState').classList.remove('hidden');
@@ -212,10 +201,8 @@
             });
         }
 
-        // دالة توليد الأزرار تلقائياً بناءً على ما هو موجود في الإكسل
         function setupCategories() {
             const container = document.getElementById('categoriesContainer');
-            // استخراج التصنيفات الفريدة من الأفلام
             const categories = ['الكل', ...new Set(allMovies.map(m => m.Category).filter(c => c))];
             
             container.innerHTML = categories.map(cat => `
@@ -228,10 +215,8 @@
 
         function setupHero(movie) {
             if(!movie) return;
-            const heroSection = document.getElementById('heroSection');
-            heroSection.classList.remove('hidden');
+            document.getElementById('heroSection').classList.remove('hidden');
             document.querySelector('main').classList.remove('pt-24');
-            
             document.getElementById('heroImage').src = movie.Cover;
             document.getElementById('heroTitle').innerText = movie.Title;
             document.getElementById('heroDesc').innerText = movie.Description || "شاهد هذا الفيلم الآن.";
@@ -257,17 +242,14 @@
                 card.className = 'group relative aspect-[2/3] bg-[#1a1a1a] rounded-lg overflow-hidden cursor-pointer shadow-lg hover:shadow-brand-red/20 transition-all duration-300';
                 card.onclick = () => openPlayer(movie.Link, movie.Title);
                 
-                // شارة "جديد" تظهر فقط للأفلام العشرة الأولى
                 const newBadge = movie.isNew ? 
                     `<div class="absolute top-2 left-2 bg-green-600 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-lg animate-pulse">جديد 🔥</div>` : '';
 
                 card.innerHTML = `
                     <img src="${movie.Cover}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500" loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-100"></div>
-                    
                     <div class="absolute top-2 right-2 bg-brand-red text-white text-[9px] font-bold px-1.5 py-0.5 rounded">HD</div>
                     ${newBadge}
-
                     <div class="absolute bottom-0 p-3 w-full">
                         <h4 class="font-bold text-sm text-white truncate mb-1">${movie.Title}</h4>
                         <div class="flex justify-between items-center text-[10px] text-gray-400">
@@ -283,13 +265,10 @@
         function filterMovies(cat) {
             currentCategory = cat;
             document.getElementById('listTitle').innerText = cat === 'الكل' ? 'المكتبة' : cat;
-            
-            // تحديث شكل الأزرار
             document.querySelectorAll('.cat-btn').forEach(btn => {
                 if(btn.innerText === cat) btn.classList.add('active');
                 else btn.classList.remove('active');
             });
-
             const filtered = cat === 'الكل' ? allMovies : allMovies.filter(m => m.Category && m.Category.includes(cat));
             renderMovies(filtered);
         }
@@ -300,33 +279,51 @@
         }
 
         // ===========================================
-        //  إعداد المشغل الاحترافي + أدوات التحكم
+        //  SMART PLAYER (الجوكر - يشغل أي شيء)
         // ===========================================
         function openPlayer(link, title) {
             const modal = document.getElementById('playerModal');
             const wrapper = document.getElementById('playerWrapper');
             document.getElementById('playerTitle').innerText = title;
 
-            if (plyrInstance) {
-                plyrInstance.destroy();
-                plyrInstance = null;
-            }
+            // تنظيف
+            if (plyrInstance) { plyrInstance.destroy(); plyrInstance = null; }
             wrapper.innerHTML = '';
             isVideoFit = true;
 
-            let elementHtml = '';
-            let isYoutube = link.includes('youtube.com') || link.includes('youtu.be');
-            
-            if (isYoutube) {
-                const videoId = link.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/))([^&?]*)/)?.[1];
-                elementHtml = `<div id="newPlayer" data-plyr-provider="youtube" data-plyr-embed-id="${videoId}"></div>`;
-            } else {
-                elementHtml = `<video id="newPlayer" playsinline controls class="w-full h-full" src="${link}"></video>`;
-            }
-            wrapper.innerHTML = elementHtml;
             modal.classList.remove('hidden');
 
+            // 1. فحص نوع الرابط
+            const isYoutube = link.includes('youtube.com') || link.includes('youtu.be');
+            const isDirectFile = link.includes('.mp4') || link.includes('.mkv') || link.includes('.webm') || link.includes('.m3u8');
+            
+            // تحويل روابط Google Drive إلى صيغة المعاينة
+            if (link.includes('drive.google.com') && link.includes('/view')) {
+                link = link.replace('/view', '/preview');
+            }
+
+            if (isYoutube) {
+                // --- مشغل يوتيوب ---
+                const videoId = link.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/))([^&?]*)/)?.[1];
+                wrapper.innerHTML = `<div id="newPlayer" data-plyr-provider="youtube" data-plyr-embed-id="${videoId}"></div>`;
+                initPlyr();
+
+            } else if (isDirectFile) {
+                // --- مشغل ملف مباشر (MP4) ---
+                wrapper.innerHTML = `<video id="newPlayer" playsinline controls class="w-full h-full" src="${link}"></video>`;
+                initPlyr();
+
+            } else {
+                // --- وضع الطوارئ (Iframe) ---
+                // هذا الجزء يعمل مع الروابط الغريبة والسيرفرات الخارجية
+                wrapper.innerHTML = `<iframe src="${link}" class="iframe-container" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+            }
+        }
+
+        function initPlyr() {
             const playerElement = document.getElementById('newPlayer');
+            if(!playerElement) return;
+
             plyrInstance = new Plyr(playerElement, {
                 controls: ['play-large', 'rewind', 'play', 'fast-forward', 'progress', 'current-time', 'mute', 'settings', 'fullscreen'],
                 seekTime: 5,
@@ -342,15 +339,13 @@
 
         function addCustomButtons(player) {
             if(window.innerWidth > 768) return; 
-
             const controls = document.querySelector('.plyr__controls');
             if(!controls || document.querySelector('.mobile-only-btn')) return;
 
-            // زر التكبير/الاحتواء
+            // زر التكبير
             const scaleBtn = document.createElement('button');
             scaleBtn.className = 'plyr__controls__item plyr__control mobile-only-btn';
-            scaleBtn.type = 'button';
-            scaleBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`;
+            scaleBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`;
             scaleBtn.onclick = () => {
                 const plyrContainer = document.querySelector('.plyr');
                 if(isVideoFit) {
@@ -366,8 +361,7 @@
             // زر التدوير
             const rotateBtn = document.createElement('button');
             rotateBtn.className = 'plyr__controls__item plyr__control mobile-only-btn';
-            rotateBtn.type = 'button';
-            rotateBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`;
+            rotateBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`;
             rotateBtn.onclick = () => {
                 if(player.fullscreen.active) {
                     player.fullscreen.exit();
