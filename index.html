@@ -13,8 +13,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
-    <!-- HLS.js (لدعم روابط m3u8) -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <!-- HLS.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
 
     <!-- Plyr Player -->
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
@@ -61,6 +61,8 @@
         :root {
             --plyr-color-main: #E50914;
             --plyr-video-background: #000;
+            --plyr-menu-background: rgba(20, 20, 20, 0.95);
+            --plyr-menu-color: #fff;
         }
         .plyr {
             font-family: 'Outfit', sans-serif !important;
@@ -79,7 +81,6 @@
 
         @media (min-width: 768px) { .mobile-only-btn { display: none !important; } }
         
-        /* Iframe Fallback Style */
         .iframe-container { width: 100%; height: 100%; border: none; background: #000; }
     </style>
 </head>
@@ -170,7 +171,7 @@
         const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn9dyAUgn8HOEIsOE8O9y_UJ1CJ9IuSdGIFpSawVta28mee1fFTKqoKZ2vo2t8nCPh0vUCduSZ8KxP/pub?output=csv";
         let allMovies = [];
         let plyrInstance = null;
-        let hlsInstance = null; // متغير لحفظ جلسة HLS
+        let hlsInstance = null;
         let isVideoFit = true;
         let currentCategory = 'الكل';
 
@@ -208,7 +209,6 @@
         function setupCategories() {
             const container = document.getElementById('categoriesContainer');
             const categories = ['الكل', ...new Set(allMovies.map(m => m.Category).filter(c => c))];
-            
             container.innerHTML = categories.map(cat => `
                 <button onclick="filterMovies('${cat}')" 
                     class="cat-btn ${cat === 'الكل' ? 'active' : ''} bg-white/10 border border-white/10 text-white px-4 py-1.5 rounded-full text-xs whitespace-nowrap transition">
@@ -226,13 +226,12 @@
             document.getElementById('heroDesc').innerText = movie.Description || "شاهد هذا الفيلم الآن.";
             document.getElementById('heroYear').innerText = movie.Year || "2024";
             document.getElementById('heroCategory').innerText = movie.Category;
-            document.getElementById('heroPlayBtn').onclick = () => openPlayer(movie.Link, movie.Title);
+            document.getElementById('heroPlayBtn').onclick = () => openPlayer(movie);
         }
 
         function renderMovies(movies) {
             const grid = document.getElementById('moviesGrid');
             grid.innerHTML = '';
-            
             if(movies.length === 0) {
                 document.getElementById('emptyState').classList.remove('hidden');
                 document.getElementById('emptyState').classList.add('flex');
@@ -241,10 +240,12 @@
             document.getElementById('emptyState').classList.add('hidden');
             document.getElementById('emptyState').classList.remove('flex');
 
-            movies.forEach(movie => {
+            movies.forEach((movie, index) => {
                 const card = document.createElement('div');
                 card.className = 'group relative aspect-[2/3] bg-[#1a1a1a] rounded-lg overflow-hidden cursor-pointer shadow-lg hover:shadow-brand-red/20 transition-all duration-300';
-                card.onclick = () => openPlayer(movie.Link, movie.Title);
+                
+                // نمرر كائن الفيلم بالكامل للدالة
+                card.addEventListener('click', () => openPlayer(movie));
                 
                 const newBadge = movie.isNew ? 
                     `<div class="absolute top-2 left-2 bg-green-600 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-lg animate-pulse">جديد 🔥</div>` : '';
@@ -283,14 +284,17 @@
         }
 
         // ===========================================
-        //  ADVANCED PLAYER (HLS + MP4 + Youtube)
+        //  SMART PLAYER (Multi-Quality + HLS + Youtube)
         // ===========================================
-        function openPlayer(link, title) {
+        function openPlayer(movie) {
+            const link = movie.Link;
+            const title = movie.Title;
+            
             const modal = document.getElementById('playerModal');
             const wrapper = document.getElementById('playerWrapper');
             document.getElementById('playerTitle').innerText = title;
 
-            // تنظيف تام
+            // تنظيف
             if (plyrInstance) { plyrInstance.destroy(); plyrInstance = null; }
             if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
             wrapper.innerHTML = '';
@@ -299,8 +303,10 @@
             modal.classList.remove('hidden');
 
             const isYoutube = link.includes('youtube.com') || link.includes('youtu.be');
-            const isHLS = link.includes('.m3u8');
-            const isDirectFile = link.includes('.mp4') || link.includes('.mkv');
+            const isM3U8 = link.includes('.m3u8');
+            
+            // التحقق من وجود جودات متعددة في الإكسل
+            const hasMultipleQualities = movie.Link_1080 || movie.Link_720 || movie.Link_480 || movie.Link_360;
 
             if (isYoutube) {
                 // --- Youtube ---
@@ -308,48 +314,91 @@
                 wrapper.innerHTML = `<div id="newPlayer" data-plyr-provider="youtube" data-plyr-embed-id="${videoId}"></div>`;
                 initPlyr('#newPlayer');
 
-            } else if (isHLS) {
+            } else if (isM3U8) {
                 // --- HLS (m3u8) ---
-                wrapper.innerHTML = `<video id="newPlayer" playsinline controls class="w-full h-full"></video>`;
+                wrapper.innerHTML = `<video id="newPlayer" playsinline controls class="w-full h-full" crossorigin></video>`;
                 const video = document.getElementById('newPlayer');
                 
                 if (Hls.isSupported()) {
-                    hlsInstance = new Hls();
+                    hlsInstance = new Hls({
+                        xhrSetup: function(xhr, url) { xhr.withCredentials = false; }
+                    });
                     hlsInstance.loadSource(link);
                     hlsInstance.attachMedia(video);
                     hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
+                        // إضافة الجودات من HLS إلى Plyr تلقائياً
                         initPlyr(video);
                     });
+                    hlsInstance.on(Hls.Events.ERROR, function (event, data) {
+                        if (data.fatal) {
+                            console.log("HLS Error, trying iframe fallback");
+                            loadIframeFallback(wrapper, link);
+                        }
+                    });
                 } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                    // For Safari
                     video.src = link;
                     initPlyr(video);
                 } else {
-                    alert("المتصفح لا يدعم هذا الفيديو");
+                    loadIframeFallback(wrapper, link);
                 }
 
-            } else if (isDirectFile) {
-                // --- Direct MP4 ---
+            } else if (hasMultipleQualities) {
+                // --- نظام الجودات المتعددة (MP4) ---
+                // بناء مصفوفة المصادر
+                let sources = [];
+                // الجودة الافتراضية
+                sources.push({ src: link, type: 'video/mp4', size: 1080 }); // نعتبر الأساسي 1080 أو أعلى
+                
+                if(movie.Link_1080) sources.push({ src: movie.Link_1080, type: 'video/mp4', size: 1080 });
+                if(movie.Link_720) sources.push({ src: movie.Link_720, type: 'video/mp4', size: 720 });
+                if(movie.Link_480) sources.push({ src: movie.Link_480, type: 'video/mp4', size: 480 });
+                if(movie.Link_360) sources.push({ src: movie.Link_360, type: 'video/mp4', size: 360 });
+
+                wrapper.innerHTML = `<video id="newPlayer" playsinline controls class="w-full h-full"></video>`;
+                const video = document.getElementById('newPlayer');
+                
+                initPlyr(video, sources);
+
+            } else if (link.includes('.mp4') || link.includes('.mkv')) {
+                // --- Direct MP4 (جودة واحدة) ---
                 wrapper.innerHTML = `<video id="newPlayer" playsinline controls class="w-full h-full" src="${link}"></video>`;
                 initPlyr('#newPlayer');
 
             } else {
                 // --- Fallback Iframe ---
-                wrapper.innerHTML = `<iframe src="${link}" class="iframe-container" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+                loadIframeFallback(wrapper, link);
             }
         }
 
-        function initPlyr(element) {
-            plyrInstance = new Plyr(element, {
-                controls: ['play-large', 'rewind', 'play', 'fast-forward', 'progress', 'current-time', 'mute', 'settings', 'fullscreen'],
+        function loadIframeFallback(wrapper, link) {
+            const proxyPlayer = `https://ipcim.com/en/m3u8-player/index.html?source=${link}`;
+            wrapper.innerHTML = `<iframe src="${proxyPlayer}" class="iframe-container" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+        }
+
+        function initPlyr(element, sources = null) {
+            const options = {
+                controls: ['play-large', 'rewind', 'play', 'fast-forward', 'progress', 'current-time', 'mute', 'volume', 'settings', 'pip', 'fullscreen'],
+                settings: ['quality', 'speed'],
                 seekTime: 5,
                 autoplay: true,
                 resetOnEnd: true,
-            });
+            };
+
+            plyrInstance = new Plyr(element, options);
+
+            if (sources) {
+                plyrInstance.source = {
+                    type: 'video',
+                    sources: sources
+                };
+            }
 
             plyrInstance.on('ready', () => {
                 addCustomButtons(plyrInstance);
-                plyrInstance.play().catch(e => console.log("Autoplay blocked"));
+                var playPromise = plyrInstance.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => console.log("Autoplay blocked by browser"));
+                }
             });
         }
 
@@ -358,7 +407,7 @@
             const controls = document.querySelector('.plyr__controls');
             if(!controls || document.querySelector('.mobile-only-btn')) return;
 
-            // زر التكبير
+            // Scale Button
             const scaleBtn = document.createElement('button');
             scaleBtn.className = 'plyr__controls__item plyr__control mobile-only-btn';
             scaleBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`;
@@ -374,7 +423,7 @@
                 isVideoFit = !isVideoFit;
             };
 
-            // زر التدوير
+            // Rotate Button
             const rotateBtn = document.createElement('button');
             rotateBtn.className = 'plyr__controls__item plyr__control mobile-only-btn';
             rotateBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`;
@@ -407,10 +456,7 @@
                 plyrInstance.destroy();
                 plyrInstance = null;
             }
-            if (hlsInstance) {
-                hlsInstance.destroy();
-                hlsInstance = null;
-            }
+            if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
             wrapper.innerHTML = '';
         }
     </script>
