@@ -67,27 +67,24 @@
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* =========================================
-           تخصيص المشغل ليكون مثل شبكتي (الصورة)
+           تخصيص المشغل (شبكتي ستايل)
            ========================================= */
         :root {
-            --plyr-color-main: #E50914; /* لون الشريط الرئيسي */
+            --plyr-color-main: #E50914; 
             --plyr-video-background: #000;
             --plyr-menu-background: rgba(20, 20, 20, 0.9);
             --plyr-menu-color: #fff;
             --plyr-range-track-height: 4px;
             --plyr-range-thumb-height: 12px;
             --plyr-range-thumb-background: #fff;
-            --plyr-control-icon-size: 18px;
         }
 
-        /* تحسين شكل شريط التحكم */
         .plyr__controls {
             background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.8)) !important;
             padding-bottom: 20px !important;
             padding-top: 40px !important;
         }
         
-        /* جعل الأيقونات بيضاء وواضحة */
         .plyr__control {
             color: #fff !important;
         }
@@ -96,7 +93,6 @@
             color: #E50914 !important;
         }
 
-        /* تكبير زر التشغيل في المنتصف */
         .plyr__control--overlaid {
             background: rgba(229, 9, 20, 0.9) !important;
             color: white !important;
@@ -105,11 +101,18 @@
             background: #E50914 !important;
         }
         
-        /* الخط داخل المشغل */
         .plyr {
             font-family: 'Outfit', sans-serif !important;
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* تنسيق زر التدوير المخصص */
+        .rotate-icon-btn {
+            margin-right: 5px;
+        }
+        @media (min-width: 768px) {
+            .rotate-icon-btn { display: none !important; } /* إخفاء في الكمبيوتر */
         }
     </style>
 </head>
@@ -172,7 +175,6 @@
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 md:px-16 -mt-10 relative z-20 pb-20">
-        <!-- فلاتر الموبايل -->
         <div class="md:hidden flex gap-3 overflow-x-auto hide-scroll mb-8 pb-2">
             <button onclick="filterMovies('الكل')" class="bg-white text-black px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-lg">الكل</button>
             <button onclick="filterMovies('أكشن')" class="bg-white/5 border border-white/10 text-white px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap backdrop-blur">أكشن</button>
@@ -200,9 +202,8 @@
         </div>
     </main>
 
-    <!-- مشغل الفيديو الاحترافي (Plyr Modal) -->
+    <!-- Plyr Modal -->
     <div id="playerModal" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-xl flex flex-col animate-[fadeIn_0.3s_ease-out]">
-        <!-- شريط علوي للمشغل -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0f0f0f]">
             <div>
                 <h3 id="playerTitle" class="font-bold text-lg text-white"></h3>
@@ -213,13 +214,9 @@
             </button>
         </div>
         
-        <!-- حاوية الفيديو -->
         <div class="flex-1 flex items-center justify-center relative p-0 md:p-4 bg-black">
             <div class="w-full h-full max-w-6xl max-h-[85vh] rounded-none md:rounded-xl overflow-hidden shadow-2xl relative flex items-center justify-center">
-                <!-- عنصر الفيديو الذي سيتم تحويله إلى Plyr -->
                 <video id="player" playsinline controls class="w-full h-full"></video>
-                
-                <!-- حاوية بديلة لليوتيوب -->
                 <div id="youtubeContainer" class="w-full h-full hidden"></div>
             </div>
         </div>
@@ -234,11 +231,10 @@
     </footer>
 
     <script>
-        // رابط ملف البيانات الخاص بك
         const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn9dyAUgn8HOEIsOE8O9y_UJ1CJ9IuSdGIFpSawVta28mee1fFTKqoKZ2vo2t8nCPh0vUCduSZ8KxP/pub?output=csv";
 
         let allMovies = [];
-        let plyrInstance = null; // متغير لحفظ نسخة المشغل
+        let plyrInstance = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
@@ -329,8 +325,57 @@
         }
 
         // ==========================================
-        //  إعداد المشغل الاحترافي (Plyr Setup)
+        //  وظيفة زر التدوير (Screen Rotate)
         // ==========================================
+        function addRotateButton(player) {
+            // التحقق من أن الجهاز موبايل
+            if(window.innerWidth > 768) return;
+
+            // إنشاء أيقونة التدوير
+            const controls = document.querySelector('.plyr__controls');
+            if(!controls) return;
+
+            const rotateBtn = document.createElement('button');
+            rotateBtn.type = 'button';
+            rotateBtn.className = 'plyr__controls__item plyr__control rotate-icon-btn';
+            rotateBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+            `;
+            rotateBtn.setAttribute('aria-label', 'Rotate Screen');
+            
+            // إضافة الزر قبل زر ملء الشاشة
+            const fullscreenBtn = controls.querySelector('[data-plyr="fullscreen"]');
+            if (fullscreenBtn) {
+                controls.insertBefore(rotateBtn, fullscreenBtn);
+            } else {
+                controls.appendChild(rotateBtn);
+            }
+
+            // تفعيل التدوير عند الضغط
+            rotateBtn.addEventListener('click', async () => {
+                try {
+                    if (player.fullscreen.active) {
+                        player.fullscreen.exit();
+                        if (screen.orientation && screen.orientation.unlock) {
+                            screen.orientation.unlock();
+                        }
+                    } else {
+                        player.fullscreen.enter();
+                        if (screen.orientation && screen.orientation.lock) {
+                            await screen.orientation.lock('landscape');
+                        }
+                    }
+                } catch (err) {
+                    console.log("Rotation locked by browser policy:", err);
+                    // Fallback: Just toggle fullscreen if lock fails
+                    player.fullscreen.toggle();
+                }
+            });
+        }
+
         function openPlayer(link, title) {
             const modal = document.getElementById('playerModal');
             const videoElement = document.getElementById('player');
@@ -338,7 +383,6 @@
             
             document.getElementById('playerTitle').innerText = title;
 
-            // إعادة تعيين المشغل القديم إذا وجد
             if (plyrInstance) {
                 plyrInstance.destroy();
                 plyrInstance = null;
@@ -346,30 +390,28 @@
 
             modal.classList.remove('hidden');
 
-            // التحقق من نوع الرابط
+            const commonControls = ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'pip', 'fullscreen'];
+
             if (link.includes('youtube.com') || link.includes('youtu.be')) {
-                // إعداد يوتيوب
                 videoElement.style.display = 'none';
                 youtubeContainer.style.display = 'block';
                 youtubeContainer.innerHTML = `<div id="youtubePlayer" data-plyr-provider="youtube" data-plyr-embed-id="${getYoutubeId(link)}"></div>`;
                 
                 plyrInstance = new Plyr('#youtubePlayer', {
-                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
+                    controls: commonControls,
                     settings: ['quality', 'speed']
                 });
 
             } else {
-                // إعداد MP4 (روابط شبكتي أو ملفات مباشرة)
                 youtubeContainer.style.display = 'none';
                 videoElement.style.display = 'block';
                 videoElement.src = link;
                 
                 plyrInstance = new Plyr(videoElement, {
-                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'pip', 'fullscreen'],
+                    controls: commonControls,
                     settings: ['speed']
                 });
                 
-                // تشغيل تلقائي
                 setTimeout(() => {
                     const playPromise = plyrInstance.play();
                     if (playPromise !== undefined) {
@@ -377,12 +419,16 @@
                     }
                 }, 500);
             }
+
+            // إضافة زر التدوير بعد تحميل المشغل
+            plyrInstance.on('ready', () => {
+                addRotateButton(plyrInstance);
+            });
         }
 
         function closePlayer() {
             const modal = document.getElementById('playerModal');
             modal.classList.add('hidden');
-            
             if (plyrInstance) {
                 plyrInstance.stop();
             }
@@ -390,7 +436,6 @@
             document.getElementById('youtubeContainer').innerHTML = '';
         }
 
-        // استخراج معرف اليوتيوب
         function getYoutubeId(url) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
             const match = url.match(regExp);
