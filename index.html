@@ -3,260 +3,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مَكْتَبَةُ مَارِي 🦋🎀</title>
+    <title>YOUNIS MOVIES 🍿 | السينما في منزلك</title>
     
     <!-- الخطوط -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Great+Vibes&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
     
-    <!-- المكاتب -->
+    <!-- المكتبات -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
+    <!-- إعدادات Tailwind -->
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
-                extend: { 
+                extend: {
                     fontFamily: { 
-                        sans: ['Tajawal', 'sans-serif'],
-                        script: ['"Great Vibes"', 'cursive'],
-                        deco: ['"Amiri"', 'serif'],
+                        sans: ['Cairo', 'sans-serif'],
+                        en: ['Outfit', 'sans-serif']
                     },
                     colors: {
-                        primary: '#db2777',
-                        secondary: '#fce7f3',
+                        brand: {
+                            red: '#E50914',
+                            dark: '#0f0f0f',
+                            accent: '#B81D24'
+                        }
+                    },
+                    backgroundImage: {
+                        'hero-gradient': 'linear-gradient(to top, #0f0f0f 0%, transparent 60%, rgba(0,0,0,0.8) 100%)',
+                        'card-gradient': 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%)'
                     }
                 }
             }
         }
     </script>
     <style>
-        body { font-family: 'Tajawal', sans-serif; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        /* تصميم شريط التصنيفات */
-        .category-btn.active {
-            background-color: #db2777; /* وردي غامق */
-            color: white;
-            border-color: #db2777;
+        /* خلفية احترافية مع تدرج إضاءة */
+        body {
+            background-color: #0f0f0f;
+            background-image: radial-gradient(circle at 50% 0%, #2a1010 0%, #0f0f0f 70%);
+            color: #e5e5e5;
+            overflow-x: hidden;
         }
-        .category-btn {
-            transition: all 0.3s ease;
+        
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        
+        /* تأثير الزجاج */
+        .glass {
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
+
+        /* تأثير تحميل */
+        .loader {
+            width: 48px; height: 48px;
+            border: 3px solid #FFF;
+            border-bottom-color: #E50914;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 
-<body class="min-h-screen bg-pink-50 text-gray-800 relative selection:bg-pink-200">
+<body class="min-h-screen flex flex-col font-sans">
 
-    <!-- الرأس -->
-    <header class="bg-gradient-to-r from-pink-600 to-rose-500 text-white shadow-lg sticky top-0 z-40">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md border-2 border-pink-200">
-                        <span class="font-script text-3xl text-pink-600 pt-1 pr-1 font-bold">My</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <h1 class="text-3xl font-deco font-bold tracking-wide text-white drop-shadow-md">مَكْتَبَةُ مَارِي</h1>
-                        <span class="bg-white/20 px-2 py-1 rounded-full text-xl shadow-sm border border-white/10">🦋🎀</span>
+    <!-- Navbar -->
+    <header class="fixed top-0 w-full z-50 transition-all duration-500" id="navbar">
+        <div class="glass">
+            <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+                <!-- الشعار -->
+                <div class="flex items-center gap-1 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <h1 class="font-en text-2xl md:text-3xl font-black tracking-tighter text-white">
+                        YOUNIS <span class="text-brand-red">MOVIES</span>
+                    </h1>
+                </div>
+                
+                <!-- القائمة (سطح المكتب) -->
+                <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors" onclick="filterMovies('الكل')">الرئيسية</a>
+                    <a href="#" class="hover:text-white transition-colors" onclick="filterMovies('أكشن')">أفلام أكشن</a>
+                    <a href="#" class="hover:text-white transition-colors" onclick="filterMovies('دراما')">دراما</a>
+                    <a href="#" class="hover:text-white transition-colors" onclick="filterMovies('رعب')">رعب</a>
+                </nav>
+
+                <!-- البحث -->
+                <div class="flex items-center gap-4">
+                    <div class="relative group">
+                        <input type="text" placeholder="بحث..." 
+                            class="bg-transparent border border-white/20 text-white text-sm px-4 py-2 rounded-full w-32 focus:w-64 focus:border-brand-red transition-all duration-300 outline-none pl-10"
+                            oninput="handleSearch(this.value)">
+                        <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-2.5 pointer-events-none"></i>
                     </div>
                 </div>
-            </div>
-            
-            <!-- البحث -->
-            <div class="mt-4 relative max-w-xl mx-auto">
-                <input type="text" placeholder="ابحث عن رواية..." 
-                    class="w-full pr-10 pl-4 py-2 rounded-full text-gray-800 border-2 border-pink-300 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
-                    oninput="handleSearch(this.value)">
-                <i data-lucide="search" class="absolute right-3 top-2.5 text-pink-400 w-5 h-5"></i>
             </div>
         </div>
     </header>
 
-    <!-- المحتوى -->
-    <div class="container mx-auto px-4 py-6 pb-10">
+    <!-- Hero Section (الواجهة الرئيسية) -->
+    <div id="heroSection" class="relative h-[90vh] w-full hidden">
+        <!-- صورة الخلفية -->
+        <div class="absolute inset-0 select-none">
+            <img id="heroImage" src="" class="w-full h-full object-cover">
+            <!-- طبقة تدرج لوني احترافي -->
+            <div class="absolute inset-0 bg-hero-gradient"></div>
+        </div>
         
-        <!-- شريط الأقسام (جديد) -->
-        <div id="categoriesContainer" class="flex gap-3 overflow-x-auto pb-4 mb-2 no-scrollbar whitespace-nowrap">
-            <!-- سيتم إضافة الأزرار هنا تلقائياً -->
-        </div>
+        <!-- المحتوى النصي -->
+        <div class="absolute bottom-0 left-0 w-full px-6 md:px-16 pb-24 z-10 max-w-3xl flex flex-col items-start animate-[fadeIn_1s_ease-out]">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded tracking-widest uppercase">New Release</span>
+                <span class="text-gray-300 text-sm font-bold flex items-center gap-1"><i data-lucide="star" class="w-3 h-3 text-yellow-500 fill-current"></i> Top Rated</span>
+            </div>
+            
+            <h2 id="heroTitle" class="font-en text-5xl md:text-7xl font-black leading-tight mb-4 text-white drop-shadow-2xl"></h2>
+            
+            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-300 mb-6 font-en">
+                <span id="heroYear" class="text-white font-bold"></span>
+                <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
+                <span id="heroCategory"></span>
+                <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
+                <span class="border border-gray-600 px-2 rounded text-xs">HD</span>
+            </div>
 
-        <!-- حالة التحميل -->
-        <div id="loadingState" class="text-center py-20">
-            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mb-4"></div>
-            <p class="text-pink-600 text-lg">جاري ترتيب المكتبة...</p>
-        </div>
-
-        <!-- شبكة الروايات -->
-        <div id="novelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden"></div>
-
-        <!-- حالة فارغة -->
-        <div id="emptyState" class="hidden text-center py-20 text-gray-400">
-            <p class="text-xl text-pink-400 font-bold font-deco">لا توجد روايات في هذا القسم 🦋</p>
+            <p id="heroDesc" class="text-gray-300 text-lg line-clamp-3 mb-8 max-w-2xl leading-relaxed"></p>
+            
+            <div class="flex items-center gap-4">
+                <button id="heroPlayBtn" class="bg-brand-red hover:bg-red-700 text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-3 text-lg transition-transform hover:scale-105 shadow-lg shadow-red-900/50">
+                    <i data-lucide="play" class="w-5 h-5 fill-current"></i> مشاهدة الفيلم
+                </button>
+                <button class="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-3 text-lg transition">
+                    <i data-lucide="info" class="w-5 h-5"></i> التفاصيل
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- نافذة التفاصيل -->
-    <div id="detailsModal" class="fixed inset-0 bg-pink-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50" onclick="closeDetailsModal()">
-        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl relative border-2 border-pink-100" onclick="event.stopPropagation()">
-            <button onclick="closeDetailsModal()" class="absolute top-4 left-4 bg-white/80 p-2 rounded-full hover:bg-white z-10 shadow-md">
-                <i data-lucide="x" class="w-6 h-6 text-gray-800"></i>
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 md:px-16 -mt-10 relative z-20 pb-20">
+        
+        <!-- فلاتر الموبايل -->
+        <div class="md:hidden flex gap-3 overflow-x-auto hide-scroll mb-8 pb-2">
+            <button onclick="filterMovies('الكل')" class="bg-white text-black px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-lg">الكل</button>
+            <button onclick="filterMovies('أكشن')" class="bg-white/5 border border-white/10 text-white px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap backdrop-blur">أكشن</button>
+            <button onclick="filterMovies('دراما')" class="bg-white/5 border border-white/10 text-white px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap backdrop-blur">دراما</button>
+        </div>
+
+        <div class="flex items-center justify-between mb-6">
+            <h3 id="listTitle" class="text-2xl font-bold text-white flex items-center gap-2 border-r-4 border-brand-red pr-3">أحدث الإضافات</h3>
+            <div class="hidden md:flex gap-2">
+                <button class="p-2 bg-white/5 rounded hover:bg-white/10"><i data-lucide="grid" class="w-4 h-4"></i></button>
+                <button class="p-2 bg-white/5 rounded hover:bg-white/10"><i data-lucide="list" class="w-4 h-4"></i></button>
+            </div>
+        </div>
+
+        <!-- Loader -->
+        <div id="loading" class="flex flex-col items-center justify-center py-32">
+            <span class="loader mb-4"></span>
+            <p class="text-gray-500 animate-pulse">جاري تحميل مكتبة يونس...</p>
+        </div>
+
+        <!-- Grid -->
+        <div id="moviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-8">
+            <!-- Movies injected here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-32 text-center opacity-60">
+            <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="film" class="w-8 h-8 text-gray-400"></i>
+            </div>
+            <p class="text-xl font-bold text-white">لا توجد أفلام في القائمة</p>
+            <p class="text-sm text-gray-500 mt-2">تأكد من إضافة البيانات في ملف Google Sheet</p>
+        </div>
+    </main>
+
+    <!-- Player Modal -->
+    <div id="playerModal" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-xl flex flex-col animate-[fadeIn_0.3s_ease-out]">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+            <div>
+                <h3 id="playerTitle" class="font-bold text-lg text-white"></h3>
+                <p class="text-xs text-brand-red font-en font-bold tracking-widest">YOUNIS MOVIES PLAYER</p>
+            </div>
+            <button onclick="closePlayer()" class="text-gray-400 hover:text-white hover:bg-white/10 transition p-2 rounded-full">
+                <i data-lucide="x" class="w-6 h-6"></i>
             </button>
-            <div class="h-64 md:h-80 w-full relative">
-                <img id="modalCover" src="" class="w-full h-full object-cover">
-                <div class="absolute bottom-0 w-full bg-gradient-to-t from-pink-900/90 via-pink-900/50 to-transparent p-6 pt-20">
-                    <span id="modalCategory" class="text-xs font-bold bg-white text-pink-600 px-3 py-1 rounded-full mb-2 inline-block"></span>
-                    <h2 id="modalTitle" class="text-3xl font-bold text-white drop-shadow-md font-deco"></h2>
-                    <p id="modalAuthor" class="text-pink-100 mt-1 font-medium"></p>
-                </div>
-            </div>
-            <div class="p-6 md:p-8">
-                <div class="mb-8">
-                    <h3 class="text-xl font-bold text-pink-700 mb-3 flex items-center gap-2">
-                        <i data-lucide="file-text" class="w-5 h-5"></i>
-                        قصة الرواية
-                    </h3>
-                    <p id="modalDescription" class="text-gray-700 leading-relaxed text-lg whitespace-pre-line"></p>
-                </div>
-                <div class="border-t border-pink-100 pt-6">
-                    <a id="modalReadBtn" href="#" target="_blank" class="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-4 rounded-xl font-bold text-xl hover:from-pink-600 hover:to-rose-600 transition shadow-lg transform hover:-translate-y-1">
-                        <i data-lucide="book-open" class="w-6 h-6"></i>
-                        قراءة الرواية كاملة (PDF)
-                    </a>
-                </div>
+        </div>
+        <div class="flex-1 flex items-center justify-center relative p-4">
+            <div class="w-full h-full max-w-6xl max-h-[80vh] bg-black rounded-xl overflow-hidden shadow-2xl border border-white/10">
+                <iframe id="videoFrame" src="" class="w-full h-full" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto py-12 bg-[#0a0a0a] border-t border-white/5">
+        <div class="container mx-auto text-center">
+            <h2 class="font-en text-2xl font-black text-white mb-6 tracking-tight">YOUNIS <span class="text-brand-red">MOVIES</span></h2>
+            <div class="flex justify-center gap-6 mb-8 text-gray-400">
+                <a href="#" class="hover:text-brand-red transition"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-brand-red transition"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-brand-red transition"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+            </div>
+            <p class="text-gray-600 text-sm">© 2024 Younis Movies. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script>
-        // رابط ملف CSV الخاص بك
-        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQroSmC0_KFPc19QWPzhaMRp8V16m2oVTBOloGJMofxw15Scq1YzomQj-So8e_E1IopP1VLyyh4v95Z/pub?output=csv"; 
+        // ✅ تم دمج الرابط الخاص بك هنا بعد تحويله إلى صيغة CSV
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn9dyAUgn8HOEIsOE8O9y_UJ1CJ9IuSdGIFpSawVta28mee1fFTKqoKZ2vo2t8nCPh0vUCduSZ8KxP/pub?output=csv";
 
-        let novels = [];
-        let searchTerm = '';
-        let currentCategory = 'الكل'; // القسم الافتراضي
+        let allMovies = [];
 
         document.addEventListener('DOMContentLoaded', () => {
-            loadDataFromSheet();
             lucide.createIcons();
+            fetchMovies();
         });
 
-        function loadDataFromSheet() {
+        function fetchMovies() {
             Papa.parse(SHEET_URL, {
                 download: true,
                 header: true,
                 skipEmptyLines: true,
                 complete: function(results) {
-                    novels = results.data.filter(n => n.title && n.title.trim() !== "");
+                    allMovies = results.data;
+                    document.getElementById('loading').style.display = 'none';
                     
-                    setupCategories(); // إعداد الأزرار
-                    
-                    document.getElementById('loadingState').classList.add('hidden');
-                    document.getElementById('novelsGrid').classList.remove('hidden');
-                    renderNovels();
+                    if(allMovies.length > 0) {
+                        // استخدام أول فيلم في القائمة كفيلم مميز (Hero)
+                        setupHero(allMovies[0]); 
+                        renderMovies(allMovies);
+                    } else {
+                        document.getElementById('emptyState').classList.remove('hidden');
+                        document.getElementById('emptyState').classList.add('flex');
+                    }
                 },
-                error: function(err) {
-                    document.getElementById('loadingState').innerHTML = "<p class='text-red-500'>فشل تحميل البيانات</p>";
+                error: function() {
+                    document.getElementById('loading').innerHTML = '<p class="text-red-500">حدث خطأ في جلب البيانات</p>';
                 }
             });
         }
 
-        // دالة إنشاء أزرار الأقسام تلقائياً
-        function setupCategories() {
-            const container = document.getElementById('categoriesContainer');
-            
-            // استخراج التصنيفات الفريدة من الروايات
-            const categories = ['الكل', ...new Set(novels.map(n => n.category).filter(c => c))];
-            
-            container.innerHTML = categories.map(cat => `
-                <button onclick="filterByCategory('${cat}')" 
-                    class="category-btn ${cat === 'الكل' ? 'active' : ''} px-6 py-2 rounded-full border border-pink-200 text-pink-700 font-bold bg-white hover:bg-pink-50 whitespace-nowrap shadow-sm">
-                    ${cat}
-                </button>
-            `).join('');
+        function setupHero(movie) {
+            if(!movie) return;
+            document.getElementById('heroSection').classList.remove('hidden');
+            document.getElementById('heroImage').src = movie.Cover;
+            document.getElementById('heroTitle').innerText = movie.Title;
+            document.getElementById('heroDesc').innerText = movie.Description || "شاهد هذا العمل السينمائي المميز حصرياً على منصة يونس.";
+            document.getElementById('heroYear').innerText = movie.Year || "2024";
+            document.getElementById('heroCategory').innerText = movie.Category;
+            document.getElementById('heroPlayBtn').onclick = () => openPlayer(movie.Link, movie.Title);
         }
 
-        // دالة تصفية الروايات حسب القسم
-        function filterByCategory(cat) {
-            currentCategory = cat;
+        function renderMovies(movies) {
+            const grid = document.getElementById('moviesGrid');
+            grid.innerHTML = '';
             
-            // تحديث شكل الأزرار
-            const buttons = document.querySelectorAll('.category-btn');
-            buttons.forEach(btn => {
-                if(btn.innerText === cat) {
-                    btn.classList.add('active');
-                    btn.classList.remove('bg-white', 'text-pink-700');
-                } else {
-                    btn.classList.remove('active');
-                    btn.classList.add('bg-white', 'text-pink-700');
-                }
-            });
-
-            renderNovels();
-        }
-
-        function renderNovels() {
-            const grid = document.getElementById('novelsGrid');
-            const empty = document.getElementById('emptyState');
+            if(movies.length === 0) {
+                document.getElementById('emptyState').classList.remove('hidden');
+                document.getElementById('emptyState').classList.add('flex');
+                return;
+            }
             
-            // تصفية حسب البحث + القسم المختار
-            const filtered = novels.filter(n => {
-                const matchesSearch = n.title.toLowerCase().includes(searchTerm.toLowerCase());
-                const matchesCategory = currentCategory === 'الكل' || n.category === currentCategory;
-                return matchesSearch && matchesCategory;
-            });
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('emptyState').classList.remove('flex');
 
-            if (filtered.length === 0) {
-                grid.innerHTML = '';
-                empty.classList.remove('hidden');
-            } else {
-                empty.classList.add('hidden');
-                grid.innerHTML = filtered.map((novel, index) => `
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:shadow-pink-100 transition duration-300 border border-pink-100 flex flex-col h-full relative group cursor-pointer" onclick="openDetails('${novel.title}')">
-                        <div class="h-56 overflow-hidden relative bg-gray-200">
-                            <img src="${novel.cover || 'https://via.placeholder.com/400x600?text=No+Cover'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/400x600?text=No+Cover'">
-                            <div class="absolute bottom-0 w-full bg-gradient-to-t from-pink-900/80 to-transparent p-4">
-                                 <span class="text-white text-xs bg-pink-500 px-2 py-1 rounded-full mb-1 inline-block">${novel.category || 'عام'}</span>
-                                 <h3 class="font-bold text-lg text-white leading-tight font-deco">${novel.title}</h3>
-                            </div>
-                        </div>
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <p class="text-gray-500 text-sm mb-2">✍️ ${novel.author || 'غير معروف'}</p>
-                                <p class="text-gray-600 text-sm line-clamp-3 mb-4">${novel.description || 'لا يوجد وصف...'}</p>
-                            </div>
-                            <button class="w-full bg-pink-50 text-pink-700 py-2 rounded-lg font-bold hover:bg-pink-100 transition flex items-center justify-center gap-2">
-                                <i data-lucide="eye" class="w-4 h-4"></i> عرض التفاصيل
-                            </button>
+            movies.forEach((movie) => {
+                const card = document.createElement('div');
+                card.className = 'group relative aspect-[2/3] bg-[#1a1a1a] rounded-lg overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-brand-red/10 transition-all duration-500 hover:-translate-y-2';
+                card.onclick = () => openPlayer(movie.Link, movie.Title);
+                
+                card.innerHTML = `
+                    <img src="${movie.Cover}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500 transform group-hover:scale-110" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=No+Cover'">
+                    
+                    <div class="absolute inset-0 bg-card-gradient opacity-90"></div>
+                    
+                    <div class="absolute top-2 right-2 bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition duration-300">HD</div>
+
+                    <div class="absolute bottom-0 p-4 w-full translate-y-2 group-hover:translate-y-0 transition duration-300">
+                        <h4 class="font-bold text-base text-white truncate mb-1">${movie.Title}</h4>
+                        <div class="flex justify-between items-center text-xs text-gray-400 group-hover:text-gray-200">
+                            <span>${movie.Category}</span>
+                            <span>${movie.Year || ''}</span>
                         </div>
                     </div>
-                `).join('');
-                lucide.createIcons();
-            }
+
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                        <div class="w-14 h-14 bg-brand-red rounded-full flex items-center justify-center shadow-lg transform scale-50 group-hover:scale-100 transition duration-300">
+                            <i data-lucide="play" class="w-6 h-6 fill-white text-white ml-1"></i>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
         }
 
-        function openDetails(title) {
-            const novel = novels.find(n => n.title === title);
-            
-            if(!novel) return;
-            document.getElementById('modalTitle').innerText = novel.title;
-            document.getElementById('modalAuthor').innerText = `بقلم: ${novel.author}`;
-            document.getElementById('modalCategory').innerText = novel.category;
-            document.getElementById('modalDescription').innerText = novel.description || "لا يوجد وصف.";
-            document.getElementById('modalCover').src = novel.cover || 'https://via.placeholder.com/400x600?text=Cover';
-            
-            const pdfBtn = document.getElementById('modalReadBtn');
-            if (novel.pdfLink) {
-                pdfBtn.href = novel.pdfLink;
-                pdfBtn.style.display = 'flex';
+        function filterMovies(category) {
+            document.getElementById('listTitle').innerText = category === 'الكل' ? 'أحدث الإضافات' : category;
+            if(category === 'الكل') {
+                renderMovies(allMovies);
             } else {
-                pdfBtn.style.display = 'none';
+                const filtered = allMovies.filter(m => m.Category && m.Category.includes(category));
+                renderMovies(filtered);
+            }
+        }
+
+        function handleSearch(query) {
+            const lowerQuery = query.toLowerCase();
+            const filtered = allMovies.filter(m => m.Title.toLowerCase().includes(lowerQuery));
+            renderMovies(filtered);
+        }
+
+        function openPlayer(link, title) {
+            const modal = document.getElementById('playerModal');
+            const frame = document.getElementById('videoFrame');
+            
+            // تحويل الروابط الذكي (Youtube Embed)
+            let embedLink = link;
+            if (link.includes('youtube.com/watch?v=')) {
+                const videoId = link.split('v=')[1].split('&')[0];
+                embedLink = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            } else if (link.includes('youtu.be/')) {
+                const videoId = link.split('youtu.be/')[1];
+                embedLink = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
             }
 
-            document.getElementById('detailsModal').classList.replace('hidden', 'flex');
+            document.getElementById('playerTitle').innerText = title;
+            frame.src = embedLink;
+            modal.classList.remove('hidden');
         }
-        
-        function closeDetailsModal() { document.getElementById('detailsModal').classList.replace('flex', 'hidden'); }
-        function handleSearch(val) { searchTerm = val; renderNovels(); }
+
+        function closePlayer() {
+            const modal = document.getElementById('playerModal');
+            const frame = document.getElementById('videoFrame');
+            modal.classList.add('hidden');
+            frame.src = '';
+        }
     </script>
 </body>
 </html>
