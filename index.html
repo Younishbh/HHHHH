@@ -3,96 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- PWA Settings -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0f0f0f">
+
     <title>YOUNIS MOVIES 🍿</title>
     
-    <!-- الخطوط -->
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
     
-    <!-- المكتبات -->
+    <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-
-    <!-- HLS.js -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
 
-    <!-- Plyr Player -->
+    <!-- Plyr -->
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 
-    <!-- Tailwind Config -->
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { 
-                        sans: ['Cairo', 'sans-serif'],
-                        en: ['Outfit', 'sans-serif']
+                    fontFamily: { sans: ['Cairo', 'sans-serif'], en: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { red: '#E50914', gold: '#FFD700' } },
+                    animation: {
+                        'zoom-out': 'zoomOut 2.5s ease-out forwards',
+                        'slide-up': 'slideUp 0.3s ease-out'
                     },
-                    colors: {
-                        brand: { red: '#E50914' }
+                    keyframes: {
+                        zoomOut: { '0%': { transform: 'scale(1.2)', opacity: '0' }, '20%': { opacity: '1' }, '100%': { transform: 'scale(1)', opacity: '1' } },
+                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } }
                     }
                 }
             }
         }
     </script>
     
-    <!-- CSS -->
     <style>
-        body {
-            background-color: #0f0f0f !important;
-            color: #e5e5e5;
-            min-height: 100vh;
-            -webkit-tap-highlight-color: transparent;
-            overflow-x: hidden;
-        }
+        body { background-color: #0f0f0f !important; color: #e5e5e5; min-height: 100vh; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
         
-        /* الخلفية المتفاعلة */
         #dynamicBackdrop {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
-            z-index: -1; filter: blur(20px) brightness(0.3);
+            z-index: -1; filter: blur(25px) brightness(0.25);
             transition: background-image 0.5s ease-in-out;
             background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #0f0f0f 80%);
         }
 
-        .glass {
-            background: rgba(15, 15, 15, 0.9);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
+        .glass { background: rgba(15, 15, 15, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .hide-scroll::-webkit-scrollbar { display: none; }
         .cat-btn.active { background-color: #E50914; color: white; border-color: #E50914; }
         
-        /* شريط الأخبار */
-        .news-ticker-container {
-            background: #E50914; color: white; font-size: 12px; font-weight: bold;
-            padding: 6px 0; overflow: hidden; position: fixed; top: 0; width: 100%; z-index: 60;
+        /* 5. Intro Animation */
+        #intro-screen {
+            position: fixed; inset: 0; background-color: #000; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
         }
-        .news-ticker-content {
-            display: inline-block; white-space: nowrap; animation: scroll-left 20s linear infinite;
-        }
-        @keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        
+        /* 4. Toast Notification */
+        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-col: column; gap: 10px; }
+        .toast { background: rgba(30, 30, 30, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 12px 24px; rounded-full; font-size: 14px; font-weight: bold; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 8px; animation: slideUp 0.3s ease-out; }
 
-        /* قائمة البحث الفوري */
-        .search-dropdown {
-            position: absolute; top: 100%; left: 0; right: 0;
-            background: #1a1a1a; border: 1px solid #333;
-            border-radius: 8px; margin-top: 5px;
-            max-height: 300px; overflow-y: auto;
-            z-index: 100; display: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .search-item:hover { background: #333; }
+        /* Badges */
+        .badge-4k { background: linear-gradient(45deg, #FFD700, #FFA500); color: black; font-weight: 900; }
+        .badge-fhd { background: #E50914; color: white; }
+        .badge-hd { background: rgba(255,255,255,0.2); color: white; }
 
-        /* Plyr Customization */
+        /* Plyr */
         :root { --plyr-color-main: #E50914; --plyr-video-background: #000; }
-        .plyr { font-family: 'Outfit', sans-serif !important; height: 100%; width: 100%; border-radius: 8px; }
-        .plyr__controls { background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.6), rgba(0,0,0,0.9)) !important; padding-bottom: 25px !important; padding-top: 50px !important; }
+        .plyr { font-family: 'Outfit', sans-serif !important; border-radius: 8px; }
+        .plyr__controls { background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.6), rgba(0,0,0,0.9)) !important; padding: 20px !important; }
         .plyr__control { color: #fff !important; }
         .plyr__control:hover { color: #E50914 !important; }
-        .plyr--fullscreen-active video { object-fit: contain; width: 100% !important; height: 100% !important; }
         .video-cover video { object-fit: cover !important; }
         @media (min-width: 768px) { .mobile-only-btn { display: none !important; } }
         .iframe-container { width: 100%; height: 100%; border: none; background: #000; }
@@ -102,13 +89,25 @@
 
 <body class="flex flex-col">
 
-    <!-- الخلفية المتفاعلة -->
+    <!-- 5. شاشة الترحيب السينمائية -->
+    <div id="intro-screen">
+        <div class="text-center animate-zoom-out">
+            <h1 class="font-en text-5xl md:text-7xl font-black tracking-tighter text-white mb-2">
+                YOUNIS <span class="text-brand-red">MOVIES</span>
+            </h1>
+            <p class="text-gray-400 text-sm tracking-widest uppercase">Premium Cinema Experience</p>
+        </div>
+    </div>
+
+    <!-- 4. حاوية الإشعارات -->
+    <div id="toast-container"></div>
+
     <div id="dynamicBackdrop"></div>
 
-    <!-- شريط الأخبار -->
-    <div class="news-ticker-container">
-        <div id="newsTicker" class="news-ticker-content">جاري تحميل أحدث الأفلام...</div>
+    <div class="news-ticker-container" style="background: #E50914; color: white; font-size: 12px; font-weight: bold; padding: 6px 0; overflow: hidden; position: fixed; top: 0; width: 100%; z-index: 60;">
+        <div id="newsTicker" style="display: inline-block; white-space: nowrap; animation: scroll-left 20s linear infinite;">جاري تحميل أحدث الأفلام...</div>
     </div>
+    <style>@keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }</style>
 
     <!-- Navbar -->
     <header class="fixed w-full z-50">
@@ -119,15 +118,13 @@
                         YOUNIS <span class="text-brand-red">MOVIES</span>
                     </h1>
                 </div>
-                <!-- البحث الفوري -->
                 <div class="flex items-center gap-3 relative">
+                    <button onclick="showFavorites()" class="p-2 text-white hover:text-brand-red transition" title="المفضلة"><i data-lucide="heart" class="w-6 h-6"></i></button>
                      <div class="relative group">
                         <input type="text" id="searchInput" placeholder="بحث..." 
-                            class="bg-white/10 border border-white/10 text-white text-sm px-3 py-1.5 rounded-full w-32 focus:w-56 transition-all outline-none"
+                            class="bg-white/10 border border-white/10 text-white text-sm px-3 py-1.5 rounded-full w-28 focus:w-56 transition-all outline-none"
                             oninput="handleInstantSearch(this.value)" onblur="setTimeout(()=>document.getElementById('searchDropdown').style.display='none', 200)">
-                        
-                        <!-- قائمة النتائج -->
-                        <div id="searchDropdown" class="search-dropdown hide-scroll"></div>
+                        <div id="searchDropdown" class="absolute top-full left-0 right-0 bg-[#1a1a1a] border border-white/10 rounded-lg mt-2 max-h-60 overflow-y-auto hidden z-50 shadow-xl"></div>
                     </div>
                 </div>
             </div>
@@ -144,7 +141,7 @@
             <span class="bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase shadow-lg">New Release</span>
             <h2 id="heroTitle" class="font-en text-4xl md:text-6xl font-black leading-tight my-2 text-white drop-shadow-xl"></h2>
             <div class="flex items-center gap-3 text-xs text-gray-300 mb-4 font-en font-bold">
-                <span id="heroYear"></span> • <span id="heroCategory"></span> • HD
+                <span id="heroYear"></span> • <span id="heroCategory"></span> • <span id="heroBadge" class="px-2 py-0.5 rounded bg-white/20 text-white">HD</span>
             </div>
             <p id="heroDesc" class="text-gray-300 text-sm md:text-base line-clamp-3 mb-6 max-w-xl"></p>
             <button id="heroPlayBtn" class="bg-brand-red text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:bg-red-700 transition">
@@ -157,47 +154,54 @@
     <main class="container mx-auto px-4 pb-20 pt-28 md:pt-12">
         <div id="categoriesContainer" class="flex gap-2 overflow-x-auto hide-scroll mb-6 pb-2"></div>
         <h3 id="listTitle" class="text-xl font-bold text-white mb-4 flex items-center gap-2 border-r-4 border-brand-red pr-3">المكتبة</h3>
+        
         <div id="loading" class="flex flex-col items-center justify-center py-20">
             <div class="w-10 h-10 border-4 border-brand-red border-t-transparent rounded-full animate-spin"></div>
         </div>
+        
         <div id="moviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-6"></div>
+        
         <div id="emptyState" class="hidden flex-col items-center justify-center py-20 opacity-50">
             <i data-lucide="film" class="w-12 h-12 text-gray-400 mb-2"></i>
             <p class="text-sm font-bold">لا توجد أفلام</p>
         </div>
     </main>
 
-    <!-- (New) Movie Details Modal -->
-    <div id="detailsModal" class="fixed inset-0 z-[90] hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <!-- Details Modal -->
+    <div id="detailsModal" class="fixed inset-0 z-[90] hidden bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-[#141414] w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl border border-white/10 relative flex flex-col md:flex-row max-h-[90vh]">
-            <button onclick="closeDetailsModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full hover:bg-white/20 text-white">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
+            <button onclick="closeDetailsModal()" class="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full hover:bg-white/20 text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
             
-            <!-- Poster -->
-            <div class="w-full md:w-2/5 h-64 md:h-auto relative">
+            <div class="w-full md:w-2/5 h-64 md:h-auto relative group">
                 <img id="modalPoster" src="" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent md:hidden"></div>
             </div>
             
-            <!-- Info -->
-            <div class="w-full md:w-3/5 p-6 md:p-10 flex flex-col overflow-y-auto">
-                <h2 id="modalTitleText" class="text-3xl md:text-4xl font-bold text-white mb-2 font-en"></h2>
-                <div class="flex items-center gap-3 text-sm text-gray-400 mb-6">
-                    <span id="modalYear" class="border border-gray-600 px-2 rounded"></span>
-                    <span id="modalCategory" class="text-brand-red font-bold"></span>
-                    <span>HD</span>
+            <div class="w-full md:w-3/5 p-6 md:p-8 flex flex-col overflow-y-auto">
+                <h2 id="modalTitleText" class="text-3xl md:text-4xl font-bold text-white mb-2 font-en leading-tight"></h2>
+                <div class="flex items-center gap-3 text-sm text-gray-400 mb-4 font-bold">
+                    <span id="modalYear" class="border border-gray-600 px-2 py-0.5 rounded"></span>
+                    <span id="modalCategory" class="text-brand-red"></span>
+                    <span id="modalBadge" class="bg-white/10 px-2 py-0.5 rounded text-[10px]">HD</span>
                 </div>
                 
-                <p id="modalDescText" class="text-gray-300 text-sm leading-relaxed mb-8 flex-1"></p>
+                <p id="modalDescText" class="text-gray-300 text-sm leading-relaxed mb-6 flex-1 border-l-2 border-brand-red/30 pl-3"></p>
                 
-                <div class="flex flex-col gap-3 mt-auto">
-                    <button id="modalPlayBtn" class="w-full bg-brand-red hover:bg-red-700 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-lg transition shadow-lg shadow-red-900/30">
+                <div class="flex flex-col gap-3">
+                    <button id="modalPlayBtn" class="w-full bg-brand-red hover:bg-red-700 text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 text-lg transition shadow-lg shadow-red-900/30">
                         <i data-lucide="play" class="w-6 h-6 fill-white"></i> مشاهدة الفيلم
                     </button>
-                    <button onclick="shareMovie()" class="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition">
-                        <i data-lucide="share-2" class="w-5 h-5"></i> مشاركة الرابط
-                    </button>
+                    <div class="grid grid-cols-4 gap-2">
+                        <a id="downloadBtn" href="#" target="_blank" class="hidden col-span-1 bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl flex items-center justify-center transition"><i data-lucide="download" class="w-5 h-5"></i></a>
+                        <button onclick="shareTo('whatsapp')" class="col-span-1 bg-green-900/30 hover:bg-green-900/50 text-green-500 py-3 rounded-xl flex items-center justify-center transition"><i data-lucide="message-circle" class="w-5 h-5"></i></button>
+                        <button onclick="shareTo('copy')" class="col-span-1 bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl flex items-center justify-center transition"><i data-lucide="copy" class="w-5 h-5"></i></button>
+                        <button onclick="reportMovie()" class="col-span-1 bg-red-900/20 hover:bg-red-900/40 text-red-500 py-3 rounded-xl flex items-center justify-center transition"><i data-lucide="alert-triangle" class="w-5 h-5"></i></button>
+                    </div>
+                </div>
+
+                <div id="relatedSection" class="mt-6 pt-4 border-t border-white/10 hidden">
+                    <h4 class="text-gray-400 font-bold mb-3 text-xs uppercase tracking-wider">قد يعجبك أيضاً</h4>
+                    <div id="relatedGrid" class="grid grid-cols-3 gap-3"></div>
                 </div>
             </div>
         </div>
@@ -210,23 +214,35 @@
                 <h3 id="playerTitle" class="font-bold text-base text-white truncate max-w-[200px]"></h3>
                 <p class="text-[10px] text-brand-red font-bold tracking-widest">YOUNIS PLAYER</p>
             </div>
-            <button onclick="closePlayer()" class="bg-white/10 p-2 rounded-full hover:bg-white/20 transition">
-                <i data-lucide="x" class="w-5 h-5 text-white"></i>
-            </button>
+            <button onclick="closePlayer()" class="bg-white/10 p-2 rounded-full hover:bg-white/20 transition"><i data-lucide="x" class="w-5 h-5 text-white"></i></button>
         </div>
         <div class="flex-1 bg-black flex items-center justify-center relative w-full h-full">
             <div id="playerWrapper" class="w-full h-full bg-black relative flex items-center justify-center"></div>
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <!-- Script -->
     <script>
         const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn9dyAUgn8HOEIsOE8O9y_UJ1CJ9IuSdGIFpSawVta28mee1fFTKqoKZ2vo2t8nCPh0vUCduSZ8KxP/pub?output=csv";
+        const ADMIN_PHONE = "9640000000000"; 
+
         let allMovies = [];
         let plyrInstance = null;
         let hlsInstance = null;
         let isVideoFit = true;
         let currentCategory = 'الكل';
+        let currentMovieKey = '';
+        let favorites = JSON.parse(localStorage.getItem('younisFavorites')) || [];
+        let history = JSON.parse(localStorage.getItem('younisHistory')) || [];
+
+        // 5. Intro Logic
+        window.onload = () => {
+            setTimeout(() => {
+                const intro = document.getElementById('intro-screen');
+                intro.style.opacity = '0';
+                setTimeout(() => intro.style.visibility = 'hidden', 800);
+            }, 2500); // 2.5 ثانية
+        };
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
@@ -235,7 +251,6 @@
 
         function fetchMovies() {
             const freshUrl = SHEET_URL + "&t=" + Date.now();
-            
             Papa.parse(freshUrl, {
                 download: true, header: true, skipEmptyLines: true,
                 complete: function(results) {
@@ -246,154 +261,87 @@
                         allMovies.forEach((movie, index) => { if (index < 10) movie.isNew = true; });
 
                         const latestMovie = allMovies[0];
-                        document.getElementById('newsTicker').innerText = `🔥 وصل حديثاً: فيلم ${latestMovie.Title} (${latestMovie.Year}) - شاهده الآن بجودة عالية! 🔥`;
+                        document.getElementById('newsTicker').innerText = `🔥 وصل حديثاً: فيلم ${latestMovie.Title} (${latestMovie.Year}) 🔥`;
                         updateBackdrop(latestMovie.Cover);
 
                         setupHero(latestMovie);
                         setupCategories();
                         renderMovies(allMovies);
-
-                        // التحقق من الرابط المباشر (Deep Linking)
                         checkDeepLink();
                     } else {
                         document.getElementById('emptyState').classList.remove('hidden');
                         document.getElementById('emptyState').classList.add('flex');
                     }
                 },
-                error: function(err) {
-                    document.getElementById('loading').innerHTML = '<p class="text-red-500">خطأ في الاتصال</p>';
-                }
+                error: function(err) { document.getElementById('loading').innerHTML = '<p class="text-red-500">خطأ في الاتصال</p>'; }
             });
         }
 
-        // ========================
-        // 1. Deep Linking System
-        // ========================
-        function checkDeepLink() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const movieName = urlParams.get('movie');
+        // 3. Auto Badges Logic
+        function getQualityBadge(movie) {
+            if (movie.Link_4K || (movie.Link && movie.Link.toLowerCase().includes('4k'))) return '<span class="badge-4k text-[9px] px-1.5 py-0.5 rounded">4K</span>';
+            if (movie.Link_1080) return '<span class="badge-fhd text-[9px] px-1.5 py-0.5 rounded">FHD</span>';
+            return '<span class="badge-hd text-[9px] px-1.5 py-0.5 rounded">HD</span>';
+        }
+
+        // 4. Toast Notification System
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const icon = type === 'success' ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>' : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
             
-            if (movieName) {
-                // البحث عن الفيلم بالاسم
-                const targetMovie = allMovies.find(m => m.Title === movieName);
-                if (targetMovie) {
-                    openDetails(targetMovie);
-                }
-            }
-        }
-
-        function updateUrl(movieTitle) {
-            if (history.pushState) {
-                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?movie=' + encodeURIComponent(movieTitle);
-                window.history.pushState({path:newUrl},'',newUrl);
-            }
-        }
-
-        function clearUrl() {
-            if (history.pushState) {
-                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                window.history.pushState({path:newUrl},'',newUrl);
-            }
-        }
-
-        // ========================
-        // 2. Movie Details Modal
-        // ========================
-        function openDetails(movie) {
-            updateUrl(movie.Title); // تحديث الرابط في الأعلى
+            toast.className = 'toast';
+            toast.innerHTML = `${icon} <span>${message}</span>`;
             
-            const modal = document.getElementById('detailsModal');
-            document.getElementById('modalPoster').src = movie.Cover;
-            document.getElementById('modalTitleText').innerText = movie.Title;
-            document.getElementById('modalYear').innerText = movie.Year || 'N/A';
-            document.getElementById('modalCategory').innerText = movie.Category;
-            document.getElementById('modalDescText').innerText = movie.Description || 'لا يتوفر وصف لهذا الفيلم حالياً.';
+            container.appendChild(toast);
             
-            const playBtn = document.getElementById('modalPlayBtn');
-            playBtn.onclick = () => {
-                closeDetailsModal(false); // إغلاق التفاصيل بدون مسح الرابط
-                openPlayer(movie); // فتح المشغل
-            };
-
-            modal.classList.remove('hidden');
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+                toast.style.transition = 'all 0.5s';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
         }
 
-        function closeDetailsModal(clear = true) {
-            document.getElementById('detailsModal').classList.add('hidden');
-            if(clear) clearUrl(); // مسح الرابط عند الإغلاق اليدوي
+        // 1. History System
+        function addToHistory(movie) {
+            // حذف الفيلم إذا كان موجوداً مسبقاً (لإضافته في البداية)
+            history = history.filter(t => t !== movie.Title);
+            history.unshift(movie.Title);
+            if (history.length > 20) history.pop(); // الاحتفاظ بآخر 20 فيلم فقط
+            localStorage.setItem('younisHistory', JSON.stringify(history));
         }
 
-        function shareMovie() {
-            if (navigator.share) {
-                navigator.share({
-                    title: document.getElementById('modalTitleText').innerText,
-                    url: window.location.href
-                });
+        function showHistory() {
+            currentCategory = 'history';
+            document.getElementById('listTitle').innerText = 'سجل المشاهدة 🕒';
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('historyBtn').classList.add('active'); // تظليل الزر
+
+            // ترتيب الأفلام حسب الترتيب في السجل
+            const historyMovies = history.map(title => allMovies.find(m => m.Title === title)).filter(m => m);
+            
+            if(historyMovies.length === 0) {
+                document.getElementById('moviesGrid').innerHTML = '';
+                document.getElementById('emptyState').classList.remove('hidden');
+                document.getElementById('emptyState').classList.add('flex');
             } else {
-                navigator.clipboard.writeText(window.location.href);
-                alert('تم نسخ رابط الفيلم!');
+                renderMovies(historyMovies);
             }
-        }
-
-        // ========================
-        // 3. Instant Search
-        // ========================
-        function handleInstantSearch(query) {
-            const dropdown = document.getElementById('searchDropdown');
-            dropdown.innerHTML = '';
-            
-            if (!query.trim()) {
-                dropdown.style.display = 'none';
-                renderMovies(allMovies); // إعادة القائمة الأصلية
-                return;
-            }
-
-            const filtered = allMovies.filter(m => m.Title.toLowerCase().includes(query.toLowerCase()));
-            
-            // تحديث الشبكة الرئيسية أيضاً
-            renderMovies(filtered);
-
-            // تحديث القائمة المنسدلة
-            if (filtered.length > 0) {
-                dropdown.style.display = 'block';
-                filtered.slice(0, 5).forEach(movie => {
-                    const item = document.createElement('div');
-                    item.className = 'search-item flex items-center gap-3 p-2 cursor-pointer transition border-b border-white/5';
-                    item.innerHTML = `
-                        <img src="${movie.Cover}" class="w-10 h-14 object-cover rounded">
-                        <div>
-                            <h4 class="text-white text-sm font-bold">${movie.Title}</h4>
-                            <p class="text-gray-400 text-xs">${movie.Year}</p>
-                        </div>
-                    `;
-                    item.onclick = () => {
-                        document.getElementById('searchInput').value = '';
-                        dropdown.style.display = 'none';
-                        openDetails(movie);
-                    };
-                    dropdown.appendChild(item);
-                });
-            } else {
-                dropdown.style.display = 'none';
-            }
-        }
-
-        // ========================
-        // Core Functions
-        // ========================
-        function updateBackdrop(imageUrl) {
-            if(imageUrl) document.getElementById('dynamicBackdrop').style.backgroundImage = `url('${imageUrl}')`;
         }
 
         function setupCategories() {
             const container = document.getElementById('categoriesContainer');
             const categories = ['الكل', ...new Set(allMovies.map(m => m.Category).filter(c => c))];
-            container.innerHTML = categories.map(cat => `
-                <button onclick="filterMovies('${cat}')" 
-                    class="cat-btn ${cat === 'الكل' ? 'active' : ''} bg-white/10 border border-white/10 text-white px-4 py-1.5 rounded-full text-xs whitespace-nowrap transition">
-                    ${cat}
-                </button>
+            
+            let html = categories.map(cat => `
+                <button onclick="filterMovies('${cat}')" class="cat-btn ${cat === 'الكل' ? 'active' : ''} bg-white/10 border border-white/10 text-white px-4 py-1.5 rounded-full text-xs whitespace-nowrap transition">${cat}</button>
             `).join('');
+            
+            // إضافة زر سجل المشاهدة في النهاية
+            html += `<button id="historyBtn" onclick="showHistory()" class="cat-btn bg-white/10 border border-white/10 text-white px-4 py-1.5 rounded-full text-xs whitespace-nowrap transition">سجل المشاهدة</button>`;
+            
+            container.innerHTML = html;
         }
 
         function setupHero(movie) {
@@ -405,7 +353,8 @@
             document.getElementById('heroDesc').innerText = movie.Description || "شاهد هذا الفيلم الآن.";
             document.getElementById('heroYear').innerText = movie.Year || "2024";
             document.getElementById('heroCategory').innerText = movie.Category;
-            document.getElementById('heroPlayBtn').onclick = () => openDetails(movie); // Changed to openDetails
+            document.getElementById('heroBadge').innerHTML = getQualityBadge(movie); // Dynamic Badge
+            document.getElementById('heroPlayBtn').onclick = () => openDetails(movie);
         }
 
         function renderMovies(movies) {
@@ -423,16 +372,18 @@
                 const card = document.createElement('div');
                 card.className = 'group relative aspect-[2/3] bg-[#1a1a1a] rounded-lg overflow-hidden cursor-pointer shadow-lg hover:shadow-brand-red/20 transition-all duration-300';
                 card.onmouseenter = () => updateBackdrop(movie.Cover);
-                card.onclick = () => openDetails(movie); // Changed to openDetails
+                card.onclick = () => openDetails(movie);
                 
-                const newBadge = movie.isNew ? 
-                    `<div class="absolute top-2 left-2 bg-green-600 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-lg animate-pulse">جديد 🔥</div>` : '';
+                const newBadge = movie.isNew ? `<div class="absolute top-2 left-2 bg-green-600 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-lg animate-pulse z-10">جديد</div>` : '';
+                const isFav = favorites.includes(movie.Title) ? 'active' : '';
+                const qualityBadge = getQualityBadge(movie);
 
                 card.innerHTML = `
                     <img src="${movie.Cover}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500" loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-100"></div>
-                    <div class="absolute top-2 right-2 bg-brand-red text-white text-[9px] font-bold px-1.5 py-0.5 rounded">HD</div>
+                    <button class="fav-btn ${isFav}" onclick="toggleFavorite('${movie.Title}', event)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
                     ${newBadge}
+                    <div class="absolute top-2 right-2">${qualityBadge}</div>
                     <div class="absolute bottom-0 p-3 w-full">
                         <h4 class="font-bold text-sm text-white truncate mb-1">${movie.Title}</h4>
                         <div class="flex justify-between items-center text-[10px] text-gray-400">
@@ -445,37 +396,138 @@
             });
         }
 
+        // Functions
         function filterMovies(cat) {
             currentCategory = cat;
             document.getElementById('listTitle').innerText = cat === 'الكل' ? 'المكتبة' : cat;
             document.querySelectorAll('.cat-btn').forEach(btn => {
-                if(btn.innerText === cat) btn.classList.add('active');
-                else btn.classList.remove('active');
+                if(btn.innerText === cat) btn.classList.add('active'); else btn.classList.remove('active');
             });
             const filtered = cat === 'الكل' ? allMovies : allMovies.filter(m => m.Category && m.Category.includes(cat));
             renderMovies(filtered);
         }
 
-        // ===========================================
-        //  PLAYER LOGIC
-        // ===========================================
+        function toggleFavorite(movieTitle, event) {
+            event.stopPropagation();
+            const btn = event.currentTarget;
+            if (favorites.includes(movieTitle)) {
+                favorites = favorites.filter(t => t !== movieTitle);
+                btn.classList.remove('active');
+                showToast("تمت الإزالة من المفضلة", "error");
+            } else {
+                favorites.push(movieTitle);
+                btn.classList.add('active');
+                showToast("تمت الإضافة للمفضلة ❤️");
+            }
+            localStorage.setItem('younisFavorites', JSON.stringify(favorites));
+            if(currentCategory === 'favorites') showFavorites();
+        }
+
+        function showFavorites() {
+            currentCategory = 'favorites';
+            document.getElementById('listTitle').innerText = 'قائمتي المفضلة ❤️';
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            const favMovies = allMovies.filter(m => favorites.includes(m.Title));
+            if(favMovies.length === 0) {
+                document.getElementById('moviesGrid').innerHTML = '';
+                document.getElementById('emptyState').classList.remove('hidden');
+                document.getElementById('emptyState').classList.add('flex');
+            } else { renderMovies(favMovies); }
+        }
+
+        function openDetails(movie) {
+            updateUrl(movie.Title);
+            const modal = document.getElementById('detailsModal');
+            document.getElementById('modalPoster').src = movie.Cover;
+            document.getElementById('modalTitleText').innerText = movie.Title;
+            document.getElementById('modalYear').innerText = movie.Year || 'N/A';
+            document.getElementById('modalCategory').innerText = movie.Category;
+            document.getElementById('modalDescText').innerText = movie.Description || 'لا يتوفر وصف.';
+            document.getElementById('modalBadge').innerHTML = getQualityBadge(movie); // Dynamic Badge inside modal
+
+            const downloadBtn = document.getElementById('downloadBtn');
+            const isDownloadable = movie.Link.includes('.mp4') || movie.Link.includes('.mkv');
+            if(isDownloadable) { downloadBtn.href = movie.Link; downloadBtn.classList.remove('hidden'); downloadBtn.classList.add('col-span-1'); } 
+            else { downloadBtn.classList.add('hidden'); }
+
+            document.getElementById('modalPlayBtn').onclick = () => { closeDetailsModal(false); openPlayer(movie); };
+
+            const relatedGrid = document.getElementById('relatedGrid');
+            const relatedSection = document.getElementById('relatedSection');
+            const relatedMovies = allMovies.filter(m => m.Category === movie.Category && m.Title !== movie.Title).slice(0, 3);
+            if (relatedMovies.length > 0) {
+                relatedSection.classList.remove('hidden');
+                relatedGrid.innerHTML = relatedMovies.map(m => `
+                    <div class="cursor-pointer group" onclick='switchRelated("${m.Title}")'>
+                        <div class="h-24 rounded-lg overflow-hidden relative"><img src="${m.Cover}" class="w-full h-full object-cover group-hover:scale-110 transition"></div>
+                        <p class="text-[10px] text-gray-300 mt-1 truncate">${m.Title}</p>
+                    </div>
+                `).join('');
+            } else { relatedSection.classList.add('hidden'); }
+
+            modal.classList.remove('hidden');
+        }
+
+        window.switchRelated = function(title) { const movie = allMovies.find(m => m.Title === title); if(movie) openDetails(movie); }
+        function closeDetailsModal(clear = true) { document.getElementById('detailsModal').classList.add('hidden'); if(clear) clearUrl(); }
+
+        function shareTo(platform) {
+            const url = window.location.href;
+            const title = document.getElementById('modalTitleText').innerText;
+            if(platform === 'whatsapp') window.open(`https://wa.me/?text=${encodeURIComponent('شاهد فيلم ' + title + ' على منصة يونس: ' + url)}`, '_blank');
+            if(platform === 'copy') { navigator.clipboard.writeText(url); showToast("تم نسخ رابط الفيلم بنجاح ✅"); }
+        }
+
+        function reportMovie() {
+            const title = document.getElementById('modalTitleText').innerText;
+            window.open(`https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent('تبليغ: فيلم ' + title + ' لا يعمل.')}`, '_blank');
+        }
+
+        function checkDeepLink() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieName = urlParams.get('movie');
+            if (movieName) { const targetMovie = allMovies.find(m => m.Title === movieName); if (targetMovie) openDetails(targetMovie); }
+        }
+        function updateUrl(t) { if (history.pushState) { const u = window.location.pathname + '?movie=' + encodeURIComponent(t); window.history.pushState({path:u},'',u); } }
+        function clearUrl() { if (history.pushState) { const u = window.location.pathname; window.history.pushState({path:u},'',u); } }
+        function updateBackdrop(u) { if(u) document.getElementById('dynamicBackdrop').style.backgroundImage = `url('${u}')`; }
+        function handleInstantSearch(q) {
+            const d = document.getElementById('searchDropdown'); d.innerHTML = '';
+            if (!q.trim()) { d.style.display = 'none'; renderMovies(allMovies); return; }
+            const f = allMovies.filter(m => m.Title.toLowerCase().includes(q.toLowerCase()));
+            renderMovies(f);
+            if (f.length > 0) {
+                d.style.display = 'block';
+                f.slice(0, 5).forEach(m => {
+                    const i = document.createElement('div');
+                    i.className = 'flex items-center gap-3 p-2 cursor-pointer hover:bg-white/10 transition border-b border-white/5';
+                    i.innerHTML = `<img src="${m.Cover}" class="w-8 h-12 object-cover rounded"><div><h4 class="text-white text-xs font-bold">${m.Title}</h4></div>`;
+                    i.onclick = () => { document.getElementById('searchInput').value = ''; d.style.display = 'none'; openDetails(m); };
+                    d.appendChild(i);
+                });
+            } else { d.style.display = 'none'; }
+        }
+
+        // --- Player ---
         function openPlayer(movie) {
+            // إضافة للسجل
+            addToHistory(movie);
+
             const link = movie.Link;
             const title = movie.Title;
+            currentMovieKey = 'resume_' + title.replace(/\s/g, ''); 
+
             const modal = document.getElementById('playerModal');
             const wrapper = document.getElementById('playerWrapper');
             document.getElementById('playerTitle').innerText = title;
 
             if (plyrInstance) { plyrInstance.destroy(); plyrInstance = null; }
             if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-            wrapper.innerHTML = '';
-            isVideoFit = true;
-            modal.classList.remove('hidden');
+            wrapper.innerHTML = ''; isVideoFit = true; modal.classList.remove('hidden');
 
             const isYoutube = link.includes('youtube.com') || link.includes('youtu.be');
             const isM3U8 = link.includes('.m3u8');
-            const q1080 = movie.Link_1080 && movie.Link_1080.trim() !== "";
-            const hasMultipleQualities = q1080 || (movie.Link_720 && movie.Link_720.trim() !== "");
+            const hasMultipleQualities = (movie.Link_1080 || movie.Link_720);
 
             if (isYoutube) {
                 const videoId = link.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/))([^&?]*)/)?.[1];
@@ -486,49 +538,43 @@
                 const video = document.getElementById('newPlayer');
                 if (Hls.isSupported()) {
                     hlsInstance = new Hls({xhrSetup: function(xhr, url) { xhr.withCredentials = false; }});
-                    hlsInstance.loadSource(link);
-                    hlsInstance.attachMedia(video);
+                    hlsInstance.loadSource(link); hlsInstance.attachMedia(video);
                     hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() { initPlyr(video); });
                     hlsInstance.on(Hls.Events.ERROR, function (event, data) { if (data.fatal) loadIframeFallback(wrapper, link); });
-                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                    video.src = link; initPlyr(video);
-                } else { loadIframeFallback(wrapper, link); }
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) { video.src = link; initPlyr(video); } 
+                else { loadIframeFallback(wrapper, link); }
             } else if (hasMultipleQualities) {
-                let sources = [];
-                sources.push({ src: link, type: 'video/mp4', size: 1080 }); 
+                let sources = [{ src: link, type: 'video/mp4', size: 1080 }];
                 if(movie.Link_1080) sources.push({ src: movie.Link_1080, type: 'video/mp4', size: 1080 });
                 if(movie.Link_720) sources.push({ src: movie.Link_720, type: 'video/mp4', size: 720 });
                 if(movie.Link_480) sources.push({ src: movie.Link_480, type: 'video/mp4', size: 480 });
-                if(movie.Link_360) sources.push({ src: movie.Link_360, type: 'video/mp4', size: 360 });
                 wrapper.innerHTML = `<video id="newPlayer" playsinline controls class="w-full h-full"></video>`;
                 initPlyr(document.getElementById('newPlayer'), sources);
             } else if (link.includes('.mp4') || link.includes('.mkv')) {
                 wrapper.innerHTML = `<video id="newPlayer" playsinline controls class="w-full h-full" src="${link}"></video>`;
                 initPlyr('#newPlayer');
-            } else {
-                loadIframeFallback(wrapper, link);
-            }
+            } else { loadIframeFallback(wrapper, link); }
         }
 
         function loadIframeFallback(wrapper, link) {
-            const proxyPlayer = `https://ipcim.com/en/m3u8-player/index.html?source=${link}`;
-            wrapper.innerHTML = `<iframe src="${proxyPlayer}" class="iframe-container" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+            wrapper.innerHTML = `<iframe src="https://ipcim.com/en/m3u8-player/index.html?source=${link}" class="iframe-container" allowfullscreen></iframe>`;
         }
 
         function initPlyr(element, sources = null) {
             const options = {
                 controls: ['play-large', 'rewind', 'play', 'fast-forward', 'progress', 'current-time', 'mute', 'volume', 'settings', 'pip', 'fullscreen'],
-                settings: ['quality', 'speed'],
-                seekTime: 5,
-                autoplay: true,
-                resetOnEnd: true,
+                settings: ['quality', 'speed'], seekTime: 5, autoplay: true, resetOnEnd: true,
             };
             plyrInstance = new Plyr(element, options);
-            if (sources) { plyrInstance.source = { type: 'video', sources: sources }; }
+            if (sources) plyrInstance.source = { type: 'video', sources: sources };
+
             plyrInstance.on('ready', () => {
                 addCustomButtons(plyrInstance);
+                const savedTime = localStorage.getItem(currentMovieKey);
+                if(savedTime) { plyrInstance.currentTime = parseFloat(savedTime); showToast("تم استكمال المشاهدة 🕒"); }
                 plyrInstance.play().catch(e => console.log("Autoplay blocked"));
             });
+            plyrInstance.on('timeupdate', event => { localStorage.setItem(currentMovieKey, plyrInstance.currentTime); });
         }
 
         function addCustomButtons(player) {
@@ -536,53 +582,24 @@
             const controls = document.querySelector('.plyr__controls');
             if(!controls || document.querySelector('.mobile-only-btn')) return;
 
-            const scaleBtn = document.createElement('button');
-            scaleBtn.className = 'plyr__controls__item plyr__control mobile-only-btn';
+            const scaleBtn = document.createElement('button'); scaleBtn.className = 'plyr__controls__item plyr__control mobile-only-btn';
             scaleBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`;
-            scaleBtn.onclick = () => {
-                const plyrContainer = document.querySelector('.plyr');
-                if(isVideoFit) {
-                    plyrContainer.classList.add('video-cover');
-                    scaleBtn.style.color = '#E50914';
-                } else {
-                    plyrContainer.classList.remove('video-cover');
-                    scaleBtn.style.color = '#fff';
-                }
-                isVideoFit = !isVideoFit;
-            };
+            scaleBtn.onclick = () => { const c = document.querySelector('.plyr'); if(isVideoFit) { c.classList.add('video-cover'); scaleBtn.style.color = '#E50914'; } else { c.classList.remove('video-cover'); scaleBtn.style.color = '#fff'; } isVideoFit = !isVideoFit; };
 
-            const rotateBtn = document.createElement('button');
-            rotateBtn.className = 'plyr__controls__item plyr__control mobile-only-btn';
+            const rotateBtn = document.createElement('button'); rotateBtn.className = 'plyr__controls__item plyr__control mobile-only-btn';
             rotateBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`;
-            rotateBtn.onclick = () => {
-                if(player.fullscreen.active) {
-                    player.fullscreen.exit();
-                    if(screen.orientation) screen.orientation.unlock();
-                } else {
-                    player.fullscreen.enter();
-                    if(screen.orientation) screen.orientation.lock('landscape').catch(()=>{});
-                }
-            };
+            rotateBtn.onclick = () => { if(player.fullscreen.active) { player.fullscreen.exit(); if(screen.orientation) screen.orientation.unlock(); } else { player.fullscreen.enter(); if(screen.orientation) screen.orientation.lock('landscape').catch(()=>{}); } };
             
             const fsBtn = controls.querySelector('[data-plyr="fullscreen"]');
-            if(fsBtn) {
-                controls.insertBefore(scaleBtn, fsBtn);
-                controls.insertBefore(rotateBtn, fsBtn);
-            } else {
-                controls.appendChild(scaleBtn);
-                controls.appendChild(rotateBtn);
-            }
+            if(fsBtn) { controls.insertBefore(scaleBtn, fsBtn); controls.insertBefore(rotateBtn, fsBtn); } 
+            else { controls.appendChild(scaleBtn); controls.appendChild(rotateBtn); }
         }
 
         function closePlayer() {
             const modal = document.getElementById('playerModal');
             const wrapper = document.getElementById('playerWrapper');
             modal.classList.add('hidden');
-            if (plyrInstance) {
-                if(document.fullscreenElement) document.exitFullscreen();
-                plyrInstance.destroy();
-                plyrInstance = null;
-            }
+            if (plyrInstance) { if(document.fullscreenElement) document.exitFullscreen(); plyrInstance.destroy(); plyrInstance = null; }
             if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
             wrapper.innerHTML = '';
         }
