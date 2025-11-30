@@ -1,7 +1,157 @@
-<script>
-        // رابط ملف البيانات الخاص بك
-        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn9dyAUgn8HOEIsOE8O9y_UJ1CJ9IuSdGIFpSawVta28mee1fFTKqoKZ2vo2t8nCPh0vUCduSZ8KxP/pub?output=csv";
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOUNIS MOVIES 🍿</title>
+    
+    <!-- الخطوط -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- المكتبات -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
+    <!-- Plyr Player -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+
+    <!-- إعدادات Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Cairo', 'sans-serif'],
+                        en: ['Outfit', 'sans-serif']
+                    },
+                    colors: {
+                        brand: { red: '#E50914' }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- ستايل CSS إجباري -->
+    <style>
+        body {
+            background-color: #0f0f0f !important; /* حل مشكلة الشاشة البيضاء */
+            color: #e5e5e5;
+            background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #0f0f0f 80%);
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        
+        /* تخصيص المشغل */
+        .plyr {
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif !important;
+            --plyr-color-main: #E50914;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col">
+
+    <!-- Navbar -->
+    <header class="fixed top-0 w-full z-50">
+        <div class="glass">
+            <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-1 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <h1 class="font-en text-2xl font-black text-white">
+                        YOUNIS <span class="text-brand-red">MOVIES</span>
+                    </h1>
+                </div>
+                <!-- قائمة الموبايل والبحث -->
+                <div class="flex items-center gap-3">
+                     <div class="relative">
+                        <input type="text" placeholder="بحث..." 
+                            class="bg-white/10 border border-white/10 text-white text-sm px-3 py-1.5 rounded-full w-28 focus:w-40 transition-all outline-none"
+                            oninput="handleSearch(this.value)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div id="heroSection" class="relative h-[85vh] w-full hidden mt-0">
+        <div class="absolute inset-0">
+            <img id="heroImage" src="" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-black/40 to-transparent"></div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full px-6 pb-16 z-10 max-w-3xl">
+            <span class="bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Featured</span>
+            <h2 id="heroTitle" class="font-en text-4xl md:text-6xl font-black leading-tight my-2 text-white drop-shadow-xl"></h2>
+            <div class="flex items-center gap-3 text-xs text-gray-300 mb-4 font-en font-bold">
+                <span id="heroYear"></span> • <span id="heroCategory"></span> • HD
+            </div>
+            <p id="heroDesc" class="text-gray-300 text-sm md:text-base line-clamp-3 mb-6 max-w-xl"></p>
+            <button id="heroPlayBtn" class="bg-brand-red text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:bg-red-700 transition">
+                <i data-lucide="play" class="w-5 h-5 fill-white"></i> مشاهدة الآن
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pb-20 pt-24 md:pt-4">
+        
+        <!-- Mobile Filters -->
+        <div class="md:hidden flex gap-2 overflow-x-auto hide-scroll mb-6 pb-2">
+            <button onclick="filterMovies('الكل')" class="bg-white text-black px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap">الكل</button>
+            <button onclick="filterMovies('أكشن')" class="bg-white/10 border border-white/10 text-white px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap">أكشن</button>
+            <button onclick="filterMovies('دراما')" class="bg-white/10 border border-white/10 text-white px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap">دراما</button>
+        </div>
+
+        <h3 id="listTitle" class="text-xl font-bold text-white mb-4 flex items-center gap-2 border-r-4 border-brand-red pr-3">المكتبة</h3>
+
+        <!-- Loading -->
+        <div id="loading" class="flex flex-col items-center justify-center py-20">
+            <div class="w-10 h-10 border-4 border-brand-red border-t-transparent rounded-full animate-spin"></div>
+            <p class="text-gray-500 mt-4 text-sm">جاري التحميل...</p>
+        </div>
+
+        <!-- Grid -->
+        <div id="moviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-6"></div>
+
+        <!-- Empty -->
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 opacity-50">
+            <i data-lucide="film" class="w-12 h-12 text-gray-400 mb-2"></i>
+            <p class="text-sm font-bold">لا توجد أفلام</p>
+        </div>
+    </main>
+
+    <!-- Player Modal -->
+    <div id="playerModal" class="fixed inset-0 z-[100] hidden bg-black flex flex-col">
+        <div class="flex items-center justify-between px-4 py-3 bg-[#111] border-b border-white/10">
+            <div>
+                <h3 id="playerTitle" class="font-bold text-base text-white truncate max-w-[200px]"></h3>
+                <p class="text-[10px] text-brand-red font-bold tracking-widest">YOUNIS PLAYER</p>
+            </div>
+            <button onclick="closePlayer()" class="bg-white/10 p-2 rounded-full hover:bg-white/20 transition">
+                <i data-lucide="x" class="w-5 h-5 text-white"></i>
+            </button>
+        </div>
+        
+        <!-- Video Wrapper -->
+        <div class="flex-1 bg-black flex items-center justify-center relative">
+            <div id="playerWrapper" class="w-full h-full max-w-5xl max-h-[80vh] bg-black relative flex items-center justify-center">
+                <!-- Video injects here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn9dyAUgn8HOEIsOE8O9y_UJ1CJ9IuSdGIFpSawVta28mee1fFTKqoKZ2vo2t8nCPh0vUCduSZ8KxP/pub?output=csv";
         let allMovies = [];
         let plyrInstance = null;
 
@@ -10,7 +160,6 @@
             fetchMovies();
         });
 
-        // 1. جلب البيانات
         function fetchMovies() {
             Papa.parse(SHEET_URL, {
                 download: true,
@@ -20,32 +169,35 @@
                     allMovies = results.data;
                     document.getElementById('loading').style.display = 'none';
                     if(allMovies.length > 0) {
-                        setupHero(allMovies[0]); 
+                        setupHero(allMovies[0]);
                         renderMovies(allMovies);
                     } else {
                         document.getElementById('emptyState').classList.remove('hidden');
                         document.getElementById('emptyState').classList.add('flex');
                     }
                 },
-                error: function() {
-                    document.getElementById('loading').innerHTML = '<p class="text-red-500">حدث خطأ في الاتصال</p>';
+                error: function(err) {
+                    console.error("Error:", err);
+                    document.getElementById('loading').innerHTML = '<p class="text-red-500">خطأ في الاتصال</p>';
                 }
             });
         }
 
-        // 2. إعداد الهيرو
         function setupHero(movie) {
             if(!movie) return;
-            document.getElementById('heroSection').classList.remove('hidden');
+            const heroSection = document.getElementById('heroSection');
+            heroSection.classList.remove('hidden');
+            // إزالة المارجن العلوي للمحتوى الرئيسي إذا ظهر الهيرو
+            document.querySelector('main').classList.remove('pt-24');
+            
             document.getElementById('heroImage').src = movie.Cover;
             document.getElementById('heroTitle').innerText = movie.Title;
-            document.getElementById('heroDesc').innerText = movie.Description || "شاهد هذا العمل السينمائي المميز حصرياً.";
+            document.getElementById('heroDesc').innerText = movie.Description || "شاهد هذا الفيلم الآن.";
             document.getElementById('heroYear').innerText = movie.Year || "2024";
             document.getElementById('heroCategory').innerText = movie.Category;
             document.getElementById('heroPlayBtn').onclick = () => openPlayer(movie.Link, movie.Title);
         }
 
-        // 3. عرض الأفلام
         function renderMovies(movies) {
             const grid = document.getElementById('moviesGrid');
             grid.innerHTML = '';
@@ -55,22 +207,21 @@
                 document.getElementById('emptyState').classList.add('flex');
                 return;
             }
-            
             document.getElementById('emptyState').classList.add('hidden');
             document.getElementById('emptyState').classList.remove('flex');
 
-            movies.forEach((movie) => {
+            movies.forEach(movie => {
                 const card = document.createElement('div');
-                card.className = 'group relative aspect-[2/3] bg-[#1a1a1a] rounded-lg overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2';
+                card.className = 'group relative aspect-[2/3] bg-[#1a1a1a] rounded-lg overflow-hidden cursor-pointer shadow-lg hover:shadow-brand-red/20 transition-all duration-300';
                 card.onclick = () => openPlayer(movie.Link, movie.Title);
                 
                 card.innerHTML = `
-                    <img src="${movie.Cover}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500 transform group-hover:scale-110" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=No+Cover'">
-                    <div class="absolute inset-0 bg-card-gradient opacity-90"></div>
-                    <div class="absolute top-2 right-2 bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition duration-300">HD</div>
-                    <div class="absolute bottom-0 p-4 w-full translate-y-2 group-hover:translate-y-0 transition duration-300">
-                        <h4 class="font-bold text-base text-white truncate mb-1">${movie.Title}</h4>
-                        <div class="flex justify-between items-center text-xs text-gray-400 group-hover:text-gray-200">
+                    <img src="${movie.Cover}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500" loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-100"></div>
+                    <div class="absolute top-2 right-2 bg-brand-red text-white text-[9px] font-bold px-1.5 py-0.5 rounded">HD</div>
+                    <div class="absolute bottom-0 p-3 w-full">
+                        <h4 class="font-bold text-sm text-white truncate mb-1">${movie.Title}</h4>
+                        <div class="flex justify-between items-center text-[10px] text-gray-400">
                             <span>${movie.Category}</span>
                             <span>${movie.Year || ''}</span>
                         </div>
@@ -80,138 +231,92 @@
             });
         }
 
-        function filterMovies(category) {
-            document.getElementById('listTitle').innerText = category === 'الكل' ? 'أحدث الإضافات' : category;
-            if(category === 'الكل') {
-                renderMovies(allMovies);
-            } else {
-                const filtered = allMovies.filter(m => m.Category && m.Category.includes(category));
-                renderMovies(filtered);
-            }
-        }
-
-        function handleSearch(query) {
-            const lowerQuery = query.toLowerCase();
-            const filtered = allMovies.filter(m => m.Title.toLowerCase().includes(lowerQuery));
+        function filterMovies(cat) {
+            document.getElementById('listTitle').innerText = cat === 'الكل' ? 'المكتبة' : cat;
+            const filtered = cat === 'الكل' ? allMovies : allMovies.filter(m => m.Category && m.Category.includes(cat));
             renderMovies(filtered);
         }
 
-        // ==========================================
-        //  وظيفة زر التدوير (Screen Rotate)
-        // ==========================================
-        function addRotateButton(player) {
-            if(window.innerWidth > 768) return; // للموبايل فقط
-
-            const controls = document.querySelector('.plyr__controls');
-            if(!controls) return;
-
-            // التأكد من عدم وجود الزر مسبقاً
-            if(document.querySelector('.rotate-icon-btn')) return;
-
-            const rotateBtn = document.createElement('button');
-            rotateBtn.type = 'button';
-            rotateBtn.className = 'plyr__controls__item plyr__control rotate-icon-btn';
-            rotateBtn.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                    <path d="M3 3v5h5"/>
-                </svg>
-            `;
-            
-            // إضافته قبل زر ملء الشاشة
-            const fullscreenBtn = controls.querySelector('[data-plyr="fullscreen"]');
-            if (fullscreenBtn) {
-                controls.insertBefore(rotateBtn, fullscreenBtn);
-            } else {
-                controls.appendChild(rotateBtn);
-            }
-
-            rotateBtn.addEventListener('click', async () => {
-                try {
-                    if (player.fullscreen.active) {
-                        player.fullscreen.exit();
-                        screen.orientation.unlock();
-                    } else {
-                        player.fullscreen.enter();
-                        await screen.orientation.lock('landscape');
-                    }
-                } catch (err) {
-                    // في حال فشل القفل (بعض المتصفحات)، نقوم بملء الشاشة فقط
-                    player.fullscreen.toggle();
-                }
-            });
+        function handleSearch(val) {
+            const filtered = allMovies.filter(m => m.Title.toLowerCase().includes(val.toLowerCase()));
+            renderMovies(filtered);
         }
 
-        // ==========================================
-        //  فتح المشغل (Clean Build Method)
-        // ==========================================
+        // --- PLAYER LOGIC (FIXED) ---
         function openPlayer(link, title) {
             const modal = document.getElementById('playerModal');
             const wrapper = document.getElementById('playerWrapper');
             
             document.getElementById('playerTitle').innerText = title;
 
-            // 1. تدمير المشغل القديم إذا وجد
+            // 1. تنظيف المشغل القديم بالكامل
             if (plyrInstance) {
                 plyrInstance.destroy();
                 plyrInstance = null;
             }
+            wrapper.innerHTML = ''; // تفريغ الـ HTML
 
-            // 2. تنظيف الحاوية بالكامل (هذا يحل مشكلة ظهور الفيديو القديم)
-            wrapper.innerHTML = '';
-
-            // 3. إنشاء عنصر جديد بناءً على نوع الرابط
-            let newElementHTML = '';
-            
+            // 2. إنشاء عنصر فيديو جديد
+            let elementHtml = '';
             if (link.includes('youtube.com') || link.includes('youtu.be')) {
-                // يوتيوب
-                const videoId = getYoutubeId(link);
-                newElementHTML = `<div id="uniquePlayer" data-plyr-provider="youtube" data-plyr-embed-id="${videoId}"></div>`;
+                const videoId = link.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/))([^&?]*)/)?.[1];
+                elementHtml = `<div id="newPlayer" data-plyr-provider="youtube" data-plyr-embed-id="${videoId}"></div>`;
             } else {
-                // MP4 (شبكتي)
-                newElementHTML = `<video id="uniquePlayer" playsinline controls class="w-full h-full" src="${link}"></video>`;
+                elementHtml = `<video id="newPlayer" playsinline controls class="w-full h-full" src="${link}"></video>`;
             }
 
-            // حقن العنصر الجديد
-            wrapper.innerHTML = newElementHTML;
-
-            // 4. إظهار النافذة
+            wrapper.innerHTML = elementHtml;
             modal.classList.remove('hidden');
 
-            // 5. تهيئة Plyr على العنصر الجديد
-            const playerElement = document.getElementById('uniquePlayer');
-            
+            // 3. تهيئة Plyr من جديد
+            const playerElement = document.getElementById('newPlayer');
             plyrInstance = new Plyr(playerElement, {
                 controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'pip', 'fullscreen'],
-                settings: ['quality', 'speed'],
                 autoplay: true
             });
 
-            // 6. إضافة زر التدوير بمجرد جاهزية المشغل
+            // 4. زر التدوير
             plyrInstance.on('ready', () => {
-                addRotateButton(plyrInstance);
-                plyrInstance.play().catch(() => console.log("Autoplay blocked"));
+                addRotateBtn(plyrInstance);
+                plyrInstance.play().catch(e => console.log("Autoplay prevented"));
             });
+        }
+
+        function addRotateBtn(player) {
+            if(window.innerWidth > 768) return; 
+            const controls = document.querySelector('.plyr__controls');
+            if(!controls || document.querySelector('.rotate-btn')) return;
+
+            const btn = document.createElement('button');
+            btn.className = 'plyr__controls__item plyr__control rotate-btn';
+            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`;
+            
+            // إضافة قبل زر ملء الشاشة
+            const fsBtn = controls.querySelector('[data-plyr="fullscreen"]');
+            if(fsBtn) controls.insertBefore(btn, fsBtn);
+            else controls.appendChild(btn);
+
+            btn.onclick = () => {
+                if(player.fullscreen.active) {
+                    player.fullscreen.exit();
+                    if(screen.orientation) screen.orientation.unlock();
+                } else {
+                    player.fullscreen.enter();
+                    if(screen.orientation) screen.orientation.lock('landscape').catch(()=>{});
+                }
+            };
         }
 
         function closePlayer() {
             const modal = document.getElementById('playerModal');
             const wrapper = document.getElementById('playerWrapper');
-            
             modal.classList.add('hidden');
             
-            // تنظيف وإيقاف
             if (plyrInstance) {
                 plyrInstance.destroy();
                 plyrInstance = null;
             }
-            wrapper.innerHTML = ''; // مسح المحتوى تماماً
-        }
-
-        function getYoutubeId(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
+            wrapper.innerHTML = '';
         }
     </script>
 </body>
