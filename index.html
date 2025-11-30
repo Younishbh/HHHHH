@@ -8,10 +8,14 @@
     <!-- الخطوط -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
     
-    <!-- المكتبات -->
+    <!-- مكتبات التنسيق والأيقونات -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <!-- مكتبة المشغل الاحترافي Plyr -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 
     <!-- إعدادات Tailwind -->
     <script>
@@ -27,7 +31,6 @@
                         brand: {
                             red: '#E50914',
                             dark: '#0f0f0f',
-                            accent: '#B81D24'
                         }
                     },
                     backgroundImage: {
@@ -39,24 +42,19 @@
         }
     </script>
     <style>
-        /* خلفية احترافية */
+        /* خلفية الموقع */
         body {
             background-color: #0f0f0f;
-            background-image: radial-gradient(circle at 50% 0%, #2a1010 0%, #0f0f0f 70%);
+            background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #0f0f0f 80%);
             color: #e5e5e5;
             overflow-x: hidden;
         }
-        
         .hide-scroll::-webkit-scrollbar { display: none; }
-        
-        /* تأثير الزجاج */
         .glass {
             background: rgba(15, 15, 15, 0.7);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-
-        /* لودر التحميل */
         .loader {
             width: 48px; height: 48px;
             border: 3px solid #FFF;
@@ -67,6 +65,52 @@
             animation: rotation 1s linear infinite;
         }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* =========================================
+           تخصيص المشغل ليكون مثل شبكتي (الصورة)
+           ========================================= */
+        :root {
+            --plyr-color-main: #E50914; /* لون الشريط الرئيسي */
+            --plyr-video-background: #000;
+            --plyr-menu-background: rgba(20, 20, 20, 0.9);
+            --plyr-menu-color: #fff;
+            --plyr-range-track-height: 4px;
+            --plyr-range-thumb-height: 12px;
+            --plyr-range-thumb-background: #fff;
+            --plyr-control-icon-size: 18px;
+        }
+
+        /* تحسين شكل شريط التحكم */
+        .plyr__controls {
+            background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.8)) !important;
+            padding-bottom: 20px !important;
+            padding-top: 40px !important;
+        }
+        
+        /* جعل الأيقونات بيضاء وواضحة */
+        .plyr__control {
+            color: #fff !important;
+        }
+        .plyr__control:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #E50914 !important;
+        }
+
+        /* تكبير زر التشغيل في المنتصف */
+        .plyr__control--overlaid {
+            background: rgba(229, 9, 20, 0.9) !important;
+            color: white !important;
+        }
+        .plyr__control--overlaid:hover {
+            background: #E50914 !important;
+        }
+        
+        /* الخط داخل المشغل */
+        .plyr {
+            font-family: 'Outfit', sans-serif !important;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
 
@@ -76,22 +120,16 @@
     <header class="fixed top-0 w-full z-50 transition-all duration-500" id="navbar">
         <div class="glass">
             <div class="container mx-auto px-6 py-4 flex items-center justify-between">
-                <!-- الشعار -->
                 <div class="flex items-center gap-1 cursor-pointer" onclick="window.scrollTo(0,0)">
                     <h1 class="font-en text-2xl md:text-3xl font-black tracking-tighter text-white">
                         YOUNIS <span class="text-brand-red">MOVIES</span>
                     </h1>
                 </div>
-                
-                <!-- القائمة (سطح المكتب) -->
                 <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-400">
                     <a href="#" class="hover:text-white transition-colors" onclick="filterMovies('الكل')">الرئيسية</a>
                     <a href="#" class="hover:text-white transition-colors" onclick="filterMovies('أكشن')">أفلام أكشن</a>
                     <a href="#" class="hover:text-white transition-colors" onclick="filterMovies('دراما')">دراما</a>
-                    <a href="#" class="hover:text-white transition-colors" onclick="filterMovies('رعب')">رعب</a>
                 </nav>
-
-                <!-- البحث -->
                 <div class="flex items-center gap-4">
                     <div class="relative group">
                         <input type="text" placeholder="بحث..." 
@@ -104,21 +142,18 @@
         </div>
     </header>
 
-    <!-- Hero Section (الواجهة الرئيسية) -->
+    <!-- Hero Section -->
     <div id="heroSection" class="relative h-[90vh] w-full hidden">
         <div class="absolute inset-0 select-none">
             <img id="heroImage" src="" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-hero-gradient"></div>
         </div>
-        
         <div class="absolute bottom-0 left-0 w-full px-6 md:px-16 pb-24 z-10 max-w-3xl flex flex-col items-start animate-[fadeIn_1s_ease-out]">
             <div class="flex items-center gap-2 mb-4">
-                <span class="bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded tracking-widest uppercase">New Release</span>
+                <span class="bg-brand-red text-white text-[10px] font-bold px-2 py-0.5 rounded tracking-widest uppercase">New</span>
                 <span class="text-gray-300 text-sm font-bold flex items-center gap-1"><i data-lucide="star" class="w-3 h-3 text-yellow-500 fill-current"></i> Top Rated</span>
             </div>
-            
             <h2 id="heroTitle" class="font-en text-5xl md:text-7xl font-black leading-tight mb-4 text-white drop-shadow-2xl"></h2>
-            
             <div class="flex flex-wrap items-center gap-4 text-sm text-gray-300 mb-6 font-en">
                 <span id="heroYear" class="text-white font-bold"></span>
                 <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
@@ -126,9 +161,7 @@
                 <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
                 <span class="border border-gray-600 px-2 rounded text-xs">HD</span>
             </div>
-
             <p id="heroDesc" class="text-gray-300 text-lg line-clamp-3 mb-8 max-w-2xl leading-relaxed"></p>
-            
             <div class="flex items-center gap-4">
                 <button id="heroPlayBtn" class="bg-brand-red hover:bg-red-700 text-white px-8 py-3.5 rounded-lg font-bold flex items-center gap-3 text-lg transition-transform hover:scale-105 shadow-lg shadow-red-900/50">
                     <i data-lucide="play" class="w-5 h-5 fill-current"></i> مشاهدة الفيلم
@@ -139,7 +172,6 @@
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 md:px-16 -mt-10 relative z-20 pb-20">
-        
         <!-- فلاتر الموبايل -->
         <div class="md:hidden flex gap-3 overflow-x-auto hide-scroll mb-8 pb-2">
             <button onclick="filterMovies('الكل')" class="bg-white text-black px-5 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-lg">الكل</button>
@@ -151,40 +183,44 @@
             <h3 id="listTitle" class="text-2xl font-bold text-white flex items-center gap-2 border-r-4 border-brand-red pr-3">أحدث الإضافات</h3>
         </div>
 
-        <!-- Loader -->
         <div id="loading" class="flex flex-col items-center justify-center py-32">
             <span class="loader mb-4"></span>
             <p class="text-gray-500 animate-pulse">جاري تحميل مكتبة يونس...</p>
         </div>
 
-        <!-- Grid -->
         <div id="moviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-8">
-            <!-- Movies injected here -->
+            <!-- Movies -->
         </div>
 
-        <!-- Empty State -->
         <div id="emptyState" class="hidden flex-col items-center justify-center py-32 text-center opacity-60">
             <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-4">
                 <i data-lucide="film" class="w-8 h-8 text-gray-400"></i>
             </div>
-            <p class="text-xl font-bold text-white">لا توجد أفلام في القائمة</p>
+            <p class="text-xl font-bold text-white">لا توجد أفلام</p>
         </div>
     </main>
 
-    <!-- Player Modal (مشغل الفيديو المتطور) -->
+    <!-- مشغل الفيديو الاحترافي (Plyr Modal) -->
     <div id="playerModal" class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-xl flex flex-col animate-[fadeIn_0.3s_ease-out]">
+        <!-- شريط علوي للمشغل -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0f0f0f]">
             <div>
                 <h3 id="playerTitle" class="font-bold text-lg text-white"></h3>
-                <p class="text-xs text-brand-red font-en font-bold tracking-widest">YOUNIS PLAYER</p>
+                <p class="text-xs text-brand-red font-en font-bold tracking-widest">NOW PLAYING</p>
             </div>
             <button onclick="closePlayer()" class="text-gray-400 hover:text-white hover:bg-white/10 transition p-2 rounded-full">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
         </div>
-        <div class="flex-1 flex items-center justify-center relative p-0 md:p-4">
-            <div id="videoContainer" class="w-full h-full max-w-6xl max-h-[80vh] bg-black rounded-none md:rounded-xl overflow-hidden shadow-2xl border-0 md:border border-white/10 flex items-center justify-center">
-                <!-- سيتم حقن الفيديو هنا ديناميكياً -->
+        
+        <!-- حاوية الفيديو -->
+        <div class="flex-1 flex items-center justify-center relative p-0 md:p-4 bg-black">
+            <div class="w-full h-full max-w-6xl max-h-[85vh] rounded-none md:rounded-xl overflow-hidden shadow-2xl relative flex items-center justify-center">
+                <!-- عنصر الفيديو الذي سيتم تحويله إلى Plyr -->
+                <video id="player" playsinline controls class="w-full h-full"></video>
+                
+                <!-- حاوية بديلة لليوتيوب -->
+                <div id="youtubeContainer" class="w-full h-full hidden"></div>
             </div>
         </div>
     </div>
@@ -193,26 +229,22 @@
     <footer class="mt-auto py-12 bg-[#0a0a0a] border-t border-white/5">
         <div class="container mx-auto text-center">
             <h2 class="font-en text-2xl font-black text-white mb-6 tracking-tight">YOUNIS <span class="text-brand-red">MOVIES</span></h2>
-            <div class="flex justify-center gap-6 mb-8 text-gray-400">
-                <a href="#" class="hover:text-brand-red transition"><i data-lucide="facebook" class="w-5 h-5"></i></a>
-                <a href="#" class="hover:text-brand-red transition"><i data-lucide="instagram" class="w-5 h-5"></i></a>
-            </div>
             <p class="text-gray-600 text-sm">© 2024 Younis Movies. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        // ✅ رابط Google Sheet الخاص بك
+        // رابط ملف البيانات الخاص بك
         const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn9dyAUgn8HOEIsOE8O9y_UJ1CJ9IuSdGIFpSawVta28mee1fFTKqoKZ2vo2t8nCPh0vUCduSZ8KxP/pub?output=csv";
 
         let allMovies = [];
+        let plyrInstance = null; // متغير لحفظ نسخة المشغل
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             fetchMovies();
         });
 
-        // 1. جلب البيانات
         function fetchMovies() {
             Papa.parse(SHEET_URL, {
                 download: true,
@@ -221,7 +253,6 @@
                 complete: function(results) {
                     allMovies = results.data;
                     document.getElementById('loading').style.display = 'none';
-                    
                     if(allMovies.length > 0) {
                         setupHero(allMovies[0]); 
                         renderMovies(allMovies);
@@ -231,24 +262,22 @@
                     }
                 },
                 error: function() {
-                    document.getElementById('loading').innerHTML = '<p class="text-red-500">حدث خطأ في جلب البيانات</p>';
+                    document.getElementById('loading').innerHTML = '<p class="text-red-500">حدث خطأ</p>';
                 }
             });
         }
 
-        // 2. إعداد الهيرو
         function setupHero(movie) {
             if(!movie) return;
             document.getElementById('heroSection').classList.remove('hidden');
             document.getElementById('heroImage').src = movie.Cover;
             document.getElementById('heroTitle').innerText = movie.Title;
-            document.getElementById('heroDesc').innerText = movie.Description || "شاهد هذا العمل السينمائي المميز حصرياً على منصة يونس.";
+            document.getElementById('heroDesc').innerText = movie.Description || "شاهد هذا العمل السينمائي المميز حصرياً.";
             document.getElementById('heroYear').innerText = movie.Year || "2024";
             document.getElementById('heroCategory').innerText = movie.Category;
             document.getElementById('heroPlayBtn').onclick = () => openPlayer(movie.Link, movie.Title);
         }
 
-        // 3. عرض القائمة
         function renderMovies(movies) {
             const grid = document.getElementById('moviesGrid');
             grid.innerHTML = '';
@@ -264,7 +293,7 @@
 
             movies.forEach((movie) => {
                 const card = document.createElement('div');
-                card.className = 'group relative aspect-[2/3] bg-[#1a1a1a] rounded-lg overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-brand-red/10 transition-all duration-500 hover:-translate-y-2';
+                card.className = 'group relative aspect-[2/3] bg-[#1a1a1a] rounded-lg overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2';
                 card.onclick = () => openPlayer(movie.Link, movie.Title);
                 
                 card.innerHTML = `
@@ -278,15 +307,9 @@
                             <span>${movie.Year || ''}</span>
                         </div>
                     </div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
-                        <div class="w-14 h-14 bg-brand-red rounded-full flex items-center justify-center shadow-lg transform scale-50 group-hover:scale-100 transition duration-300">
-                            <i data-lucide="play" class="w-6 h-6 fill-white text-white ml-1"></i>
-                        </div>
-                    </div>
                 `;
                 grid.appendChild(card);
             });
-            lucide.createIcons();
         }
 
         function filterMovies(category) {
@@ -305,50 +328,73 @@
             renderMovies(filtered);
         }
 
-        // 4. مشغل الفيديو الذكي (يدعم يوتيوب + MP4)
+        // ==========================================
+        //  إعداد المشغل الاحترافي (Plyr Setup)
+        // ==========================================
         function openPlayer(link, title) {
             const modal = document.getElementById('playerModal');
-            const container = document.getElementById('videoContainer');
+            const videoElement = document.getElementById('player');
+            const youtubeContainer = document.getElementById('youtubeContainer');
             
             document.getElementById('playerTitle').innerText = title;
-            container.innerHTML = ''; // تنظيف المشغل القديم
 
-            if (link.includes('.mp4')) {
-                // ✅ إذا كان رابط MP4 (مثل شبكتي)
-                const video = document.createElement('video');
-                video.src = link;
-                video.controls = true;
-                video.autoplay = true;
-                video.className = "w-full h-full object-contain";
-                container.appendChild(video);
-            } else {
-                // ✅ إذا كان يوتيوب أو غيره
-                let embedLink = link;
-                if (link.includes('youtube.com/watch?v=')) {
-                    const videoId = link.split('v=')[1].split('&')[0];
-                    embedLink = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-                } else if (link.includes('youtu.be/')) {
-                    const videoId = link.split('youtu.be/')[1];
-                    embedLink = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-                }
-                
-                const iframe = document.createElement('iframe');
-                iframe.src = embedLink;
-                iframe.className = "w-full h-full";
-                iframe.frameBorder = "0";
-                iframe.allow = "autoplay; encrypted-media; fullscreen";
-                iframe.allowFullscreen = true;
-                container.appendChild(iframe);
+            // إعادة تعيين المشغل القديم إذا وجد
+            if (plyrInstance) {
+                plyrInstance.destroy();
+                plyrInstance = null;
             }
 
             modal.classList.remove('hidden');
+
+            // التحقق من نوع الرابط
+            if (link.includes('youtube.com') || link.includes('youtu.be')) {
+                // إعداد يوتيوب
+                videoElement.style.display = 'none';
+                youtubeContainer.style.display = 'block';
+                youtubeContainer.innerHTML = `<div id="youtubePlayer" data-plyr-provider="youtube" data-plyr-embed-id="${getYoutubeId(link)}"></div>`;
+                
+                plyrInstance = new Plyr('#youtubePlayer', {
+                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'],
+                    settings: ['quality', 'speed']
+                });
+
+            } else {
+                // إعداد MP4 (روابط شبكتي أو ملفات مباشرة)
+                youtubeContainer.style.display = 'none';
+                videoElement.style.display = 'block';
+                videoElement.src = link;
+                
+                plyrInstance = new Plyr(videoElement, {
+                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'pip', 'fullscreen'],
+                    settings: ['speed']
+                });
+                
+                // تشغيل تلقائي
+                setTimeout(() => {
+                    const playPromise = plyrInstance.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => console.log("Auto-play prevented"));
+                    }
+                }, 500);
+            }
         }
 
         function closePlayer() {
             const modal = document.getElementById('playerModal');
-            const container = document.getElementById('videoContainer');
             modal.classList.add('hidden');
-            container.innerHTML = ''; // إيقاف الفيديو تماماً
+            
+            if (plyrInstance) {
+                plyrInstance.stop();
+            }
+            document.getElementById('player').src = '';
+            document.getElementById('youtubeContainer').innerHTML = '';
+        }
+
+        // استخراج معرف اليوتيوب
+        function getYoutubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
         }
     </script>
 </body>
