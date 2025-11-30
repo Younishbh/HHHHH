@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0f0f0f">
 
-    <title>YOUNIS MOVIES 🍿</title>
+    <title>YS Cinema 🍿</title>
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -58,14 +58,14 @@
         .hide-scroll::-webkit-scrollbar { display: none; }
         .cat-btn.active { background-color: #E50914; color: white; border-color: #E50914; }
         
-        /* 5. Intro Animation */
+        /* Intro Animation */
         #intro-screen {
             position: fixed; inset: 0; background-color: #000; z-index: 9999;
             display: flex; justify-content: center; align-items: center;
             transition: opacity 0.8s ease-out, visibility 0.8s;
         }
         
-        /* 4. Toast Notification */
+        /* Toast Notification */
         #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-col: column; gap: 10px; }
         .toast { background: rgba(30, 30, 30, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 12px 24px; rounded-full; font-size: 14px; font-weight: bold; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 8px; animation: slideUp 0.3s ease-out; }
 
@@ -89,13 +89,20 @@
 
 <body class="flex flex-col">
 
-    <!-- 5. شاشة الترحيب السينمائية -->
+    <!-- 5. شاشة الترحيب (تنسيق احترافي ومسافة موزونة) -->
     <div id="intro-screen">
-        <div class="text-center animate-zoom-out">
-            <h1 class="font-en text-5xl md:text-7xl font-black tracking-tighter text-white mb-2">
-                YOUNIS <span class="text-brand-red">MOVIES</span>
+        <div class="text-center animate-zoom-out flex flex-col items-center">
+            <h1 class="flex items-center justify-center gap-6 mb-2"> <!-- Gap-6 creates the perfect space -->
+                <!-- كتلة اللوجو YS -->
+                <div class="flex items-center relative font-black text-7xl md:text-8xl tracking-tighter leading-none select-none">
+                    <span class="text-brand-red relative z-10">Y</span>
+                    <span class="text-white relative -ml-4 z-0">S</span>
+                </div>
+                
+                <!-- كتلة النص CINEMA -->
+                <span class="text-white text-5xl md:text-7xl font-en font-bold tracking-[0.1em]">CINEMA</span>
             </h1>
-            <p class="text-gray-400 text-sm tracking-widest uppercase">Premium Cinema Experience</p>
+            <p class="text-gray-400 text-sm tracking-[0.5em] uppercase font-en mt-2">Premium Experience</p>
         </div>
     </div>
 
@@ -109,15 +116,24 @@
     </div>
     <style>@keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }</style>
 
-    <!-- Navbar -->
+    <!-- Navbar (تصميم احترافي للوجو) -->
     <header class="fixed w-full z-50">
         <div class="glass">
             <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-                <div class="flex items-center gap-1 cursor-pointer" onclick="window.location.href = window.location.pathname">
-                    <h1 class="font-en text-2xl font-black text-white">
-                        YOUNIS <span class="text-brand-red">MOVIES</span>
-                    </h1>
+                <div class="flex items-center gap-5 cursor-pointer group" onclick="window.location.href = window.location.pathname">
+                    <!-- كتلة اللوجو (Logo Mark) -->
+                    <div class="flex items-center font-en font-black text-3xl tracking-tighter leading-none select-none transition-transform group-hover:scale-105">
+                        <span class="text-brand-red relative z-10">Y</span>
+                        <span class="text-white relative -ml-2.5 z-0">S</span>
+                    </div>
+                    
+                    <!-- فاصل عمودي شفاف (اختياري، يضيف لمسة احترافية) -->
+                    <div class="h-6 w-px bg-white/20"></div>
+
+                    <!-- كتلة الاسم (Word Mark) -->
+                    <span class="font-en font-bold text-white text-xl tracking-[0.2em]">CINEMA</span>
                 </div>
+
                 <div class="flex items-center gap-3 relative">
                     <button onclick="showFavorites()" class="p-2 text-white hover:text-brand-red transition" title="المفضلة"><i data-lucide="heart" class="w-6 h-6"></i></button>
                      <div class="relative group">
@@ -212,7 +228,8 @@
         <div class="flex items-center justify-between px-4 py-3 bg-[#111] border-b border-white/10 relative z-50">
             <div>
                 <h3 id="playerTitle" class="font-bold text-base text-white truncate max-w-[200px]"></h3>
-                <p class="text-[10px] text-brand-red font-bold tracking-widest">YOUNIS PLAYER</p>
+                <!-- تغيير اسم المشغل -->
+                <p class="text-[10px] text-brand-red font-bold tracking-widest">YS PLAYER</p>
             </div>
             <button onclick="closePlayer()" class="bg-white/10 p-2 rounded-full hover:bg-white/20 transition"><i data-lucide="x" class="w-5 h-5 text-white"></i></button>
         </div>
@@ -305,10 +322,9 @@
 
         // 1. History System
         function addToHistory(movie) {
-            // حذف الفيلم إذا كان موجوداً مسبقاً (لإضافته في البداية)
             history = history.filter(t => t !== movie.Title);
             history.unshift(movie.Title);
-            if (history.length > 20) history.pop(); // الاحتفاظ بآخر 20 فيلم فقط
+            if (history.length > 20) history.pop(); 
             localStorage.setItem('younisHistory', JSON.stringify(history));
         }
 
@@ -316,9 +332,8 @@
             currentCategory = 'history';
             document.getElementById('listTitle').innerText = 'سجل المشاهدة 🕒';
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('historyBtn').classList.add('active'); // تظليل الزر
+            document.getElementById('historyBtn').classList.add('active'); 
 
-            // ترتيب الأفلام حسب الترتيب في السجل
             const historyMovies = history.map(title => allMovies.find(m => m.Title === title)).filter(m => m);
             
             if(historyMovies.length === 0) {
@@ -338,7 +353,6 @@
                 <button onclick="filterMovies('${cat}')" class="cat-btn ${cat === 'الكل' ? 'active' : ''} bg-white/10 border border-white/10 text-white px-4 py-1.5 rounded-full text-xs whitespace-nowrap transition">${cat}</button>
             `).join('');
             
-            // إضافة زر سجل المشاهدة في النهاية
             html += `<button id="historyBtn" onclick="showHistory()" class="cat-btn bg-white/10 border border-white/10 text-white px-4 py-1.5 rounded-full text-xs whitespace-nowrap transition">سجل المشاهدة</button>`;
             
             container.innerHTML = html;
@@ -353,7 +367,7 @@
             document.getElementById('heroDesc').innerText = movie.Description || "شاهد هذا الفيلم الآن.";
             document.getElementById('heroYear').innerText = movie.Year || "2024";
             document.getElementById('heroCategory').innerText = movie.Category;
-            document.getElementById('heroBadge').innerHTML = getQualityBadge(movie); // Dynamic Badge
+            document.getElementById('heroBadge').innerHTML = getQualityBadge(movie); 
             document.getElementById('heroPlayBtn').onclick = () => openDetails(movie);
         }
 
@@ -443,7 +457,7 @@
             document.getElementById('modalYear').innerText = movie.Year || 'N/A';
             document.getElementById('modalCategory').innerText = movie.Category;
             document.getElementById('modalDescText').innerText = movie.Description || 'لا يتوفر وصف.';
-            document.getElementById('modalBadge').innerHTML = getQualityBadge(movie); // Dynamic Badge inside modal
+            document.getElementById('modalBadge').innerHTML = getQualityBadge(movie); 
 
             const downloadBtn = document.getElementById('downloadBtn');
             const isDownloadable = movie.Link.includes('.mp4') || movie.Link.includes('.mkv');
@@ -474,7 +488,7 @@
         function shareTo(platform) {
             const url = window.location.href;
             const title = document.getElementById('modalTitleText').innerText;
-            if(platform === 'whatsapp') window.open(`https://wa.me/?text=${encodeURIComponent('شاهد فيلم ' + title + ' على منصة يونس: ' + url)}`, '_blank');
+            if(platform === 'whatsapp') window.open(`https://wa.me/?text=${encodeURIComponent('شاهد فيلم ' + title + ' على منصة YS Cinema: ' + url)}`, '_blank');
             if(platform === 'copy') { navigator.clipboard.writeText(url); showToast("تم نسخ رابط الفيلم بنجاح ✅"); }
         }
 
@@ -510,7 +524,6 @@
 
         // --- Player ---
         function openPlayer(movie) {
-            // إضافة للسجل
             addToHistory(movie);
 
             const link = movie.Link;
