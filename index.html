@@ -2,7 +2,7 @@
 <html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>YOUNIS MOVIES 🍿</title>
     
     <!-- الخطوط -->
@@ -13,7 +13,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
-    <!-- Plyr Player (أحدث نسخة) -->
+    <!-- Plyr Player -->
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 
@@ -42,6 +42,7 @@
             color: #e5e5e5;
             background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #0f0f0f 80%);
             min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
         }
         .glass {
             background: rgba(15, 15, 15, 0.9);
@@ -51,38 +52,62 @@
         .hide-scroll::-webkit-scrollbar { display: none; }
         
         /* ============================
-           تخصيص المشغل (شبكتي ستايل)
+           تخصيص المشغل الاحترافي
            ============================ */
         :root {
             --plyr-color-main: #E50914;
             --plyr-video-background: #000;
+            --plyr-menu-background: rgba(20, 20, 20, 0.95);
+            --plyr-menu-color: #fff;
+            --plyr-range-thumb-height: 14px;
+            --plyr-range-track-height: 4px;
         }
+        
         .plyr {
             font-family: 'Outfit', sans-serif !important;
-            border-radius: 8px;
             height: 100%;
             width: 100%;
         }
+
+        /* تحسين شريط التحكم */
         .plyr__controls {
-            background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.9)) !important;
-            padding-bottom: 15px !important;
-            padding-top: 40px !important;
+            background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.6), rgba(0,0,0,0.9)) !important;
+            padding-bottom: 25px !important;
+            padding-top: 50px !important;
+            padding-left: 20px !important;
+            padding-right: 20px !important;
         }
-        /* أيقونات بيضاء وتصبح حمراء عند اللمس */
-        .plyr__control { color: #fff !important; }
+
+        /* الأيقونات */
+        .plyr__control { color: #fff !important; transition: all 0.2s; }
         .plyr__control:hover {
-            background: rgba(255,255,255,0.1) !important;
+            background: rgba(255,255,255,0.15) !important;
             color: #E50914 !important;
+            transform: scale(1.1);
         }
+        
         /* زر التشغيل الكبير */
         .plyr__control--overlaid {
             background: rgba(229, 9, 20, 0.9) !important;
+            border: 2px solid white;
         }
-        .plyr__control--overlaid:hover { background: #E50914 !important; }
+        .plyr__control--overlaid:hover { background: #E50914 !important; border-color: #E50914; }
 
-        /* إخفاء زر التدوير على الكمبيوتر */
+        /* تنسيق الفيديو في وضع ملء الشاشة */
+        .plyr--fullscreen-active video {
+            object-fit: contain; /* الافتراضي: إظهار كامل الصورة */
+            width: 100% !important;
+            height: 100% !important;
+        }
+        
+        /* كلاس لتكبير الفيديو (Fill Mode) */
+        .video-cover video {
+            object-fit: cover !important; /* ملء الشاشة بدون حواف سوداء */
+        }
+
+        /* إخفاء زر التدوير وتكبير الشاشة على الكمبيوتر */
         @media (min-width: 768px) {
-            .rotate-btn-custom { display: none !important; }
+            .mobile-only-btn { display: none !important; }
         }
     </style>
 </head>
@@ -130,7 +155,6 @@
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 pb-20 pt-24 md:pt-4">
-        <!-- Filters -->
         <div class="md:hidden flex gap-2 overflow-x-auto hide-scroll mb-6 pb-2">
             <button onclick="filterMovies('الكل')" class="bg-white text-black px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap">الكل</button>
             <button onclick="filterMovies('أكشن')" class="bg-white/10 border border-white/10 text-white px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap">أكشن</button>
@@ -139,15 +163,12 @@
 
         <h3 id="listTitle" class="text-xl font-bold text-white mb-4 flex items-center gap-2 border-r-4 border-brand-red pr-3">المكتبة</h3>
 
-        <!-- Loading -->
         <div id="loading" class="flex flex-col items-center justify-center py-20">
             <div class="w-10 h-10 border-4 border-brand-red border-t-transparent rounded-full animate-spin"></div>
         </div>
 
-        <!-- Grid -->
         <div id="moviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-6"></div>
 
-        <!-- Empty -->
         <div id="emptyState" class="hidden flex-col items-center justify-center py-20 opacity-50">
             <i data-lucide="film" class="w-12 h-12 text-gray-400 mb-2"></i>
             <p class="text-sm font-bold">لا توجد أفلام</p>
@@ -156,7 +177,7 @@
 
     <!-- Player Modal -->
     <div id="playerModal" class="fixed inset-0 z-[100] hidden bg-black flex flex-col">
-        <div class="flex items-center justify-between px-4 py-3 bg-[#111] border-b border-white/10">
+        <div class="flex items-center justify-between px-4 py-3 bg-[#111] border-b border-white/10 relative z-50">
             <div>
                 <h3 id="playerTitle" class="font-bold text-base text-white truncate max-w-[200px]"></h3>
                 <p class="text-[10px] text-brand-red font-bold tracking-widest">YOUNIS PLAYER</p>
@@ -166,9 +187,8 @@
             </button>
         </div>
         
-        <!-- Video Container -->
-        <div class="flex-1 bg-black flex items-center justify-center relative">
-            <div id="playerWrapper" class="w-full h-full max-w-6xl max-h-[80vh] bg-black relative flex items-center justify-center">
+        <div class="flex-1 bg-black flex items-center justify-center relative w-full h-full">
+            <div id="playerWrapper" class="w-full h-full bg-black relative flex items-center justify-center">
                 <!-- Video injects here -->
             </div>
         </div>
@@ -179,6 +199,7 @@
         const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn9dyAUgn8HOEIsOE8O9y_UJ1CJ9IuSdGIFpSawVta28mee1fFTKqoKZ2vo2t8nCPh0vUCduSZ8KxP/pub?output=csv";
         let allMovies = [];
         let plyrInstance = null;
+        let isVideoFit = true; // للتحكم في أبعاد الفيديو
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
@@ -211,7 +232,7 @@
             if(!movie) return;
             const heroSection = document.getElementById('heroSection');
             heroSection.classList.remove('hidden');
-            document.querySelector('main').classList.remove('pt-24'); // Adjust padding
+            document.querySelector('main').classList.remove('pt-24');
             
             document.getElementById('heroImage').src = movie.Cover;
             document.getElementById('heroTitle').innerText = movie.Title;
@@ -266,21 +287,22 @@
         }
 
         // ===========================================
-        //  PLAYER LOGIC (NEW: Rotate + Seek Buttons)
+        //  إعداد المشغل الاحترافي + أدوات التحكم
         // ===========================================
         function openPlayer(link, title) {
             const modal = document.getElementById('playerModal');
             const wrapper = document.getElementById('playerWrapper');
             document.getElementById('playerTitle').innerText = title;
 
-            // 1. Destroy old player
+            // إعادة تعيين المشغل
             if (plyrInstance) {
                 plyrInstance.destroy();
                 plyrInstance = null;
             }
             wrapper.innerHTML = '';
+            isVideoFit = true; // إعادة تعيين وضع العرض
 
-            // 2. Create element
+            // إنشاء العنصر
             let elementHtml = '';
             let isYoutube = link.includes('youtube.com') || link.includes('youtu.be');
             
@@ -293,62 +315,65 @@
             wrapper.innerHTML = elementHtml;
             modal.classList.remove('hidden');
 
-            // 3. Initialize Plyr with Custom Controls
-            // Notice 'rewind' and 'fast-forward' are added here
+            // تهيئة Plyr
             const playerElement = document.getElementById('newPlayer');
             plyrInstance = new Plyr(playerElement, {
                 controls: [
-                    'play-large', // زر التشغيل الكبير
-                    'rewind', // رجوع 5 ثواني
-                    'play', // تشغيل/إيقاف
-                    'fast-forward', // تقديم 5 ثواني
-                    'progress', // شريط التقدم
-                    'current-time', // الوقت
-                    'mute', 
-                    'volume',
+                    'play-large',
+                    'rewind',
+                    'play',
+                    'fast-forward',
+                    'progress',
+                    'current-time',
+                    'mute',
                     'settings', 
-                    'pip',
                     'fullscreen'
                 ],
-                seekTime: 5, // ضبط وقت التقديم/التأخير على 5 ثواني
-                autoplay: true
+                seekTime: 5,
+                autoplay: true,
+                resetOnEnd: true,
             });
 
-            // 4. Add Rotate Button
+            // إضافة الأزرار المخصصة عند الجاهزية
             plyrInstance.on('ready', () => {
-                addRotateBtn(plyrInstance);
+                addCustomButtons(plyrInstance);
                 plyrInstance.play().catch(e => console.log("Autoplay blocked"));
             });
         }
 
-        function addRotateBtn(player) {
-            // Only for mobile
+        function addCustomButtons(player) {
             if(window.innerWidth > 768) return; 
 
             const controls = document.querySelector('.plyr__controls');
-            if(!controls || document.querySelector('.rotate-btn-custom')) return;
+            if(!controls || document.querySelector('.mobile-only-btn')) return;
 
-            // Create button
-            const btn = document.createElement('button');
-            btn.className = 'plyr__controls__item plyr__control rotate-btn-custom';
-            btn.type = 'button';
-            btn.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                    <path d="M3 3v5h5"/>
-                </svg>
+            // 1. زر التكبير/الاحتواء (Scale/Fit) - لحل مشكلة الصورة الصغيرة
+            const scaleBtn = document.createElement('button');
+            scaleBtn.className = 'plyr__controls__item plyr__control mobile-only-btn';
+            scaleBtn.type = 'button';
+            scaleBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
             `;
-            
-            // Insert before fullscreen button
-            const fsBtn = controls.querySelector('[data-plyr="fullscreen"]');
-            if(fsBtn) {
-                controls.insertBefore(btn, fsBtn);
-            } else {
-                controls.appendChild(btn);
-            }
+            scaleBtn.onclick = () => {
+                const plyrContainer = document.querySelector('.plyr');
+                if(isVideoFit) {
+                    plyrContainer.classList.add('video-cover');
+                    scaleBtn.style.color = '#E50914'; // تلوين الزر ليدل على التفعيل
+                } else {
+                    plyrContainer.classList.remove('video-cover');
+                    scaleBtn.style.color = '#fff';
+                }
+                isVideoFit = !isVideoFit;
+            };
 
-            // Logic
-            btn.onclick = () => {
+            // 2. زر تدوير الشاشة (Rotate)
+            const rotateBtn = document.createElement('button');
+            rotateBtn.className = 'plyr__controls__item plyr__control mobile-only-btn';
+            rotateBtn.type = 'button';
+            rotateBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            `;
+            rotateBtn.onclick = () => {
                 if(player.fullscreen.active) {
                     player.fullscreen.exit();
                     if(screen.orientation) screen.orientation.unlock();
@@ -357,6 +382,16 @@
                     if(screen.orientation) screen.orientation.lock('landscape').catch(()=>{});
                 }
             };
+            
+            // إضافة الأزرار قبل زر ملء الشاشة
+            const fsBtn = controls.querySelector('[data-plyr="fullscreen"]');
+            if(fsBtn) {
+                controls.insertBefore(scaleBtn, fsBtn); // زر التكبير أولاً
+                controls.insertBefore(rotateBtn, fsBtn); // ثم زر التدوير
+            } else {
+                controls.appendChild(scaleBtn);
+                controls.appendChild(rotateBtn);
+            }
         }
 
         function closePlayer() {
@@ -365,6 +400,7 @@
             modal.classList.add('hidden');
             
             if (plyrInstance) {
+                if(document.fullscreenElement) document.exitFullscreen(); // خروج من ملء الشاشة إذا كان مفعلاً
                 plyrInstance.destroy();
                 plyrInstance = null;
             }
