@@ -51,9 +51,7 @@
         }
         .hide-scroll::-webkit-scrollbar { display: none; }
         
-        /* ============================
-           تخصيص المشغل الاحترافي
-           ============================ */
+        /* Plyr Customization */
         :root {
             --plyr-color-main: #E50914;
             --plyr-video-background: #000;
@@ -62,53 +60,32 @@
             --plyr-range-thumb-height: 14px;
             --plyr-range-track-height: 4px;
         }
-        
         .plyr {
             font-family: 'Outfit', sans-serif !important;
-            height: 100%;
-            width: 100%;
+            height: 100%; width: 100%;
         }
-
-        /* تحسين شريط التحكم */
         .plyr__controls {
             background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.6), rgba(0,0,0,0.9)) !important;
             padding-bottom: 25px !important;
             padding-top: 50px !important;
-            padding-left: 20px !important;
-            padding-right: 20px !important;
         }
-
-        /* الأيقونات */
         .plyr__control { color: #fff !important; transition: all 0.2s; }
         .plyr__control:hover {
             background: rgba(255,255,255,0.15) !important;
             color: #E50914 !important;
             transform: scale(1.1);
         }
-        
-        /* زر التشغيل الكبير */
         .plyr__control--overlaid {
             background: rgba(229, 9, 20, 0.9) !important;
             border: 2px solid white;
         }
         .plyr__control--overlaid:hover { background: #E50914 !important; border-color: #E50914; }
-
-        /* تنسيق الفيديو في وضع ملء الشاشة */
         .plyr--fullscreen-active video {
-            object-fit: contain; /* الافتراضي: إظهار كامل الصورة */
-            width: 100% !important;
-            height: 100% !important;
+            object-fit: contain; width: 100% !important; height: 100% !important;
         }
-        
-        /* كلاس لتكبير الفيديو (Fill Mode) */
-        .video-cover video {
-            object-fit: cover !important; /* ملء الشاشة بدون حواف سوداء */
-        }
+        .video-cover video { object-fit: cover !important; }
 
-        /* إخفاء زر التدوير وتكبير الشاشة على الكمبيوتر */
-        @media (min-width: 768px) {
-            .mobile-only-btn { display: none !important; }
-        }
+        @media (min-width: 768px) { .mobile-only-btn { display: none !important; } }
     </style>
 </head>
 
@@ -188,9 +165,7 @@
         </div>
         
         <div class="flex-1 bg-black flex items-center justify-center relative w-full h-full">
-            <div id="playerWrapper" class="w-full h-full bg-black relative flex items-center justify-center">
-                <!-- Video injects here -->
-            </div>
+            <div id="playerWrapper" class="w-full h-full bg-black relative flex items-center justify-center"></div>
         </div>
     </div>
 
@@ -199,7 +174,7 @@
         const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTn9dyAUgn8HOEIsOE8O9y_UJ1CJ9IuSdGIFpSawVta28mee1fFTKqoKZ2vo2t8nCPh0vUCduSZ8KxP/pub?output=csv";
         let allMovies = [];
         let plyrInstance = null;
-        let isVideoFit = true; // للتحكم في أبعاد الفيديو
+        let isVideoFit = true;
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
@@ -207,7 +182,10 @@
         });
 
         function fetchMovies() {
-            Papa.parse(SHEET_URL, {
+            // إضافة رقم عشوائي للرابط لتجاوز الكاش (Cache Busting)
+            const freshUrl = SHEET_URL + "&t=" + Date.now();
+            
+            Papa.parse(freshUrl, {
                 download: true,
                 header: true,
                 skipEmptyLines: true,
@@ -215,6 +193,8 @@
                     allMovies = results.data;
                     document.getElementById('loading').style.display = 'none';
                     if(allMovies.length > 0) {
+                        // عكس المصفوفة لإظهار الأحدث أولاً
+                        allMovies.reverse();
                         setupHero(allMovies[0]);
                         renderMovies(allMovies);
                     } else {
@@ -294,15 +274,13 @@
             const wrapper = document.getElementById('playerWrapper');
             document.getElementById('playerTitle').innerText = title;
 
-            // إعادة تعيين المشغل
             if (plyrInstance) {
                 plyrInstance.destroy();
                 plyrInstance = null;
             }
             wrapper.innerHTML = '';
-            isVideoFit = true; // إعادة تعيين وضع العرض
+            isVideoFit = true;
 
-            // إنشاء العنصر
             let elementHtml = '';
             let isYoutube = link.includes('youtube.com') || link.includes('youtu.be');
             
@@ -315,26 +293,14 @@
             wrapper.innerHTML = elementHtml;
             modal.classList.remove('hidden');
 
-            // تهيئة Plyr
             const playerElement = document.getElementById('newPlayer');
             plyrInstance = new Plyr(playerElement, {
-                controls: [
-                    'play-large',
-                    'rewind',
-                    'play',
-                    'fast-forward',
-                    'progress',
-                    'current-time',
-                    'mute',
-                    'settings', 
-                    'fullscreen'
-                ],
+                controls: ['play-large', 'rewind', 'play', 'fast-forward', 'progress', 'current-time', 'mute', 'settings', 'fullscreen'],
                 seekTime: 5,
                 autoplay: true,
                 resetOnEnd: true,
             });
 
-            // إضافة الأزرار المخصصة عند الجاهزية
             plyrInstance.on('ready', () => {
                 addCustomButtons(plyrInstance);
                 plyrInstance.play().catch(e => console.log("Autoplay blocked"));
@@ -347,18 +313,16 @@
             const controls = document.querySelector('.plyr__controls');
             if(!controls || document.querySelector('.mobile-only-btn')) return;
 
-            // 1. زر التكبير/الاحتواء (Scale/Fit) - لحل مشكلة الصورة الصغيرة
+            // 1. زر التكبير/الاحتواء
             const scaleBtn = document.createElement('button');
             scaleBtn.className = 'plyr__controls__item plyr__control mobile-only-btn';
             scaleBtn.type = 'button';
-            scaleBtn.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-            `;
+            scaleBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`;
             scaleBtn.onclick = () => {
                 const plyrContainer = document.querySelector('.plyr');
                 if(isVideoFit) {
                     plyrContainer.classList.add('video-cover');
-                    scaleBtn.style.color = '#E50914'; // تلوين الزر ليدل على التفعيل
+                    scaleBtn.style.color = '#E50914';
                 } else {
                     plyrContainer.classList.remove('video-cover');
                     scaleBtn.style.color = '#fff';
@@ -366,13 +330,11 @@
                 isVideoFit = !isVideoFit;
             };
 
-            // 2. زر تدوير الشاشة (Rotate)
+            // 2. زر التدوير
             const rotateBtn = document.createElement('button');
             rotateBtn.className = 'plyr__controls__item plyr__control mobile-only-btn';
             rotateBtn.type = 'button';
-            rotateBtn.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-            `;
+            rotateBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`;
             rotateBtn.onclick = () => {
                 if(player.fullscreen.active) {
                     player.fullscreen.exit();
@@ -383,11 +345,10 @@
                 }
             };
             
-            // إضافة الأزرار قبل زر ملء الشاشة
             const fsBtn = controls.querySelector('[data-plyr="fullscreen"]');
             if(fsBtn) {
-                controls.insertBefore(scaleBtn, fsBtn); // زر التكبير أولاً
-                controls.insertBefore(rotateBtn, fsBtn); // ثم زر التدوير
+                controls.insertBefore(scaleBtn, fsBtn);
+                controls.insertBefore(rotateBtn, fsBtn);
             } else {
                 controls.appendChild(scaleBtn);
                 controls.appendChild(rotateBtn);
@@ -398,9 +359,8 @@
             const modal = document.getElementById('playerModal');
             const wrapper = document.getElementById('playerWrapper');
             modal.classList.add('hidden');
-            
             if (plyrInstance) {
-                if(document.fullscreenElement) document.exitFullscreen(); // خروج من ملء الشاشة إذا كان مفعلاً
+                if(document.fullscreenElement) document.exitFullscreen();
                 plyrInstance.destroy();
                 plyrInstance = null;
             }
